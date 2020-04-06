@@ -1,2 +1,0 @@
-Origin 2048 features with SVM (C = 1.0, kernel = 'rbf', gamma='auto'): 
-acc = 0.928260
