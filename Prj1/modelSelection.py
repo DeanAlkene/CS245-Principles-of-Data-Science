@@ -13,7 +13,7 @@ col_name = ['feature' + str(i) for i in range(2048)]
 X_data = pd.read_csv(X_file_name, sep=' ', names=col_name)
 y_data = pd.read_csv(y_file_name, names=['label'])
 
-def fineTuning(X, y, k=10):
+def fineTuning(X, y, k=5):
     Cs = [0.1 * i for i in range(1, 21)]
     cv_scores = []
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
