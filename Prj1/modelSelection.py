@@ -18,6 +18,7 @@ def fineTuning(X, y, k=10):
     cv_scores = []
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=0)
     for c in Cs:
+        print("/nCross-Validation: C=%0.2f/n"%(c))
         model = SVC(C=c, kernel='rbf', gamma='auto', verbose=False)
         score = cross_val_score(model, X_train, y_train, cv=k, scoring='accuracy')
         cv_scores.append(score.mean())
