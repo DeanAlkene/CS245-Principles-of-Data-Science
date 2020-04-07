@@ -9,10 +9,10 @@ from sklearn.svm import SVC
 X_file_name = "Animals_with_Attributes2/Features/ResNet101/AwA2-features.txt"
 y_file_name = "Animals_with_Attributes2/Features/ResNet101/AwA2-labels.txt"
 col_name = ['feature' + str(i) for i in range(2048)]
-X_data = pd.read_csv(X_file_name, sep=' ', nrows=2000, names=col_name)
-y_data = pd.read_csv(y_file_name, nrows=2000, names=['label'])
-#X_data = pd.read_csv(X_file_name, sep=' ', names=col_name)
-#y_data = pd.read_csv(y_file_name, names=['label'])
+# X_data = pd.read_csv(X_file_name, sep=' ', nrows=2000, names=col_name)
+# y_data = pd.read_csv(y_file_name, nrows=2000, names=['label'])
+X_data = pd.read_csv(X_file_name, sep=' ', names=col_name)
+y_data = pd.read_csv(y_file_name, names=['label'])
 
 class tuningThread(threading.Thread):
     def __init__(self, X_train, X_test, y_train, y_test, C_range, Kernel, k, tag):
