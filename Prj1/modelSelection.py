@@ -5,14 +5,7 @@ import matplotlib.pyplot as plt
 import sklearn
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.svm import SVC
-
-X_file_name = "Animals_with_Attributes2/Features/ResNet101/AwA2-features.txt"
-y_file_name = "Animals_with_Attributes2/Features/ResNet101/AwA2-labels.txt"
-col_name = ['feature' + str(i) for i in range(2048)]
-# X_data = pd.read_csv(X_file_name, sep=' ', nrows=2000, names=col_name)
-# y_data = pd.read_csv(y_file_name, nrows=2000, names=['label'])
-X_data = pd.read_csv(X_file_name, sep=' ', names=col_name)
-y_data = pd.read_csv(y_file_name, names=['label'])
+from processData import loadDataDivided
 
 class tuningThread(threading.Thread):
     def __init__(self, X_train, X_test, y_train, y_test, C_range, Kernel, k, tag):
@@ -53,9 +46,9 @@ class tuningThread(threading.Thread):
             f.write(self.Kernel + ": Best C = %f\n"%(bestC))
             f.write(self.Kernel + ": acc = %f\n"%(bestAcc))
     
-def coarseTuning(X, y, k=5):
+def coarseTuning(k=5):
     C_range = np.logspace(-5, 5, 11)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4)
+    X_train, X_test, y_train, y_test = loadDataDivided()
     rbfT = tuningThread(X_train, X_test, y_train, y_test, C_range, 'rbf', k, 'coarse')
     linearT = tuningThread(X_train, X_test, y_train, y_test, C_range, 'linear', k, 'coarse')
 
@@ -64,11 +57,11 @@ def coarseTuning(X, y, k=5):
     rbfT.join()
     linearT.join()
 
-def fineTuning(X, y, k=5):
+def fineTuning(k=5):
     pass
 
 def main():
-    coarseTuning(X_data, y_data)
+    coarseTuning()
 
 if __name__ == '__main__':
     main()
