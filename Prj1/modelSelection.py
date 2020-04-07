@@ -1,3 +1,4 @@
+import threading
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -13,58 +14,55 @@ y_data = pd.read_csv(y_file_name, nrows=2000, names=['label'])
 #X_data = pd.read_csv(X_file_name, sep=' ', names=col_name)
 #y_data = pd.read_csv(y_file_name, names=['label'])
 
+class tuningThread(threading.Thread):
+    def __init__(self, X_train, X_test, y_train, y_test, C_range, Kernel, k, tag):
+        threading.Thread.__init__(self)
+        self.X_train = X_train
+        self.X_test = X_test
+        self.y_train = y_train
+        self.y_test = y_test
+        self.C_range = C_range
+        self.Kernel = Kernel
+        self.k = k
+        self.tag = tag
+    def run(self):
+        cv_scores = []
+        for c in self.C_range:
+            print("\nCross-Validation " + self.Kernel + ": C=%f\n"%(c))
+            model = SVC(C=c, kernel=self.Kernel, gamma='auto', verbose=False)
+            score = cross_val_score(model, self.X_train, self.y_train, cv=self.k, scoring='accuracy')
+            cv_scores.append(score.mean())
+            
+        plt.figure()
+        plt.plot(self.C_range, cv_scores, 'bo-', linewidth=2)
+        plt.title('SVM with ' + self.Kernel + ' kernel')
+        plt.xlabel('C')
+        plt.xscale('log')
+        plt.xticks(np.logspace(-6, 6, 13))
+        plt.ylabel('Accuracy')
+        plt.savefig(self.tag + 'TuningParam_' + self.Kernel + '.jpg')
+
+        bestC = self.C_range[cv_scores.index(max(cv_scores))]
+        bestModel = SVC(C=bestC, kernel=self.Kernel, gamma='auto', verbose=False)
+        bestModel.fit(self.X_train, self.y_train)
+        bestAcc = bestModel.score(self.X_test, self.y_test)
+
+        with open('res_' + self.tag + '_' + self.Kernel + '.txt', 'w') as f:
+            for i in range(len(self.C_range)):
+                f.write(self.Kernel + ": C = %f, acc = %f\n"%(self.C_range[i], cv_scores[i]))
+            f.write(self.Kernel + ": Best C = %f\n"%(bestC))
+            f.write(self.Kernel + ": acc = %f\n"%(bestAcc))
+    
 def coarseTuning(X, y, k=5):
     C_range = np.logspace(-5, 5, 11)
-    cv_scores_rbf = []
-    cv_scores_linear = []
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4)
+    rbfT = tuningThread(X_train, X_test, y_train, y_test, C_range, 'rbf', k, 'coarse')
+    linearT = tuningThread(X_train, X_test, y_train, y_test, C_range, 'linear', k, 'coarse')
 
-    for c in C_range:
-        print("\nCross-Validation rbf: C=%f\n"%(c))
-        model = SVC(C=c, kernel='rbf', gamma='auto', verbose=False)
-        score = cross_val_score(model, X_train, y_train, cv=k, scoring='accuracy')
-        cv_scores_rbf.append(score.mean())
-    bestC_rbf = C_range[cv_scores_rbf.index(max(cv_scores_rbf))]
-    rbfPlt = plt.plot(C_range, cv_scores_rbf, 'bo-', linewidth=2)
-    rbfPlt.title('SVM with rbf kernel')
-    rbfPlt.xlabel('C')
-    rbfPlt.xscale('log')
-    rbfPlt.xticks(np.logspace(-6, 6, 13))
-    rbfPlt.ylabel('Accuracy')
-    rbfPlt.savefig('CoarseTuningParam_rbf.jpg')
-
-    for c in C_range:
-        print("\nCross-Validation linear: C=%f\n"%(c))
-        model = SVC(C=c, kernel='linear', gamma='auto', verbose=False)
-        score = cross_val_score(model, X_train, y_train, cv=k, scoring='accuracy')
-        cv_scores_linear.append(score.mean())
-    bestC_linear = C_range[cv_scores_linear.index(max(cv_scores_linear))]
-    linearPlt = plt.plot(C_range, cv_scores_linear, 'bo-', linewidth=2)
-    linearPlt.title('SVM with linear kernel')
-    linearPlt.xlabel('C')
-    linearPlt.xscale('log')
-    linearPlt.xticks(np.logspace(-6, 6, 13))
-    linearPlt.ylabel('Accuracy')
-    linearPlt.savefig('CoarseTuningParam_linear.jpg')
-
-    bestModel_rbf = SVC(C=bestC_rbf, kernel='rbf', gamma='auto', verbose=False)
-    bestModel_rbf.fit(X_train, y_train)
-    bestAcc_rbf = bestModel_rbf.score(X_test, y_test)
-
-    bestModel_linear = SVC(C=bestC_linear, kernel='linear', gamma='auto', verbose=False)
-    bestModel_linear.fit(X_train, y_train)
-    bestAcc_linear = bestModel_linear.score(X_test, y_test)
-
-    with open('res_coarse.txt', 'w') as f:
-        f.write("rbf:\n")
-        for i in range(len(C_range)):
-            f.write("rbf: C = %f, acc = %f\n"%(C_range[i], cv_scores_rbf[i]))
-        f.write("rbf: Best C = %f\n"%(bestC_rbf))
-        f.write("rbf: acc = %f\n"%(bestAcc_rbf))
-        for i in range(len(C_range)):
-            f.write("linear: C = %f, acc = %f\n"%(C_range[i], cv_scores_linear[i]))
-        f.write("linear: Best C = %f\n"%(bestC_linear))
-        f.write("linear: acc = %f\n"%(bestAcc_linear))
+    rbfT.start()
+    linearT.start()
+    rbfT.join()
+    linearT.join()
 
 def fineTuning(X, y, k=5):
     pass
