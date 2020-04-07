@@ -36,5 +36,5 @@ def loadData(size='full'):
     return X_data, y_data
 
 if __name__ == '__main__':
-    divideData('small')
+    divideData('full')
 
