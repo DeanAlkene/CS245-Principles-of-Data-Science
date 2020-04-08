@@ -30,8 +30,11 @@ class tuningThread(threading.Thread):
         plt.plot(self.C_range, cv_scores, 'bo-', linewidth=2)
         plt.title('SVM with ' + self.Kernel + ' kernel')
         plt.xlabel('C')
-        plt.xscale('log')
-        plt.xticks(np.logspace(-6, 6, 13))
+        if self.tag == 'coarse':
+            plt.xscale('log')
+            plt.xticks(np.logspace(-6, 6, 13))
+        else:
+            plt.xticks([C_range[0] * i for i in range(12)])
         plt.ylabel('Accuracy')
         plt.savefig(self.tag + 'TuningParam_' + self.Kernel + '.jpg')
 
@@ -58,10 +61,20 @@ def coarseTuning(k=5):
     linearT.join()
 
 def fineTuning(k=5):
-    pass
+    C_range_rbf = [5.0, 10.0, 20.0, 50.0]
+    C_range_linear = [0.0005, 0.001, 0.002, 0.005]
+    X_train, X_test, y_train, y_test = loadDataDivided()
+    rbfT = tuningThread(X_train, X_test, y_train, y_test, C_range_rbf, 'rbf', k, 'fine')
+    linearT = tuningThread(X_train, X_test, y_train, y_test, C_range_linear, 'linear', k, 'fine')
+
+    rbfT.start()
+    linearT.start()
+    rbfT.join()
+    linearT.join()
 
 def main():
-    coarseTuning()
+    # coarseTuning()
+    fineTuning()
 
 if __name__ == '__main__':
     main()
