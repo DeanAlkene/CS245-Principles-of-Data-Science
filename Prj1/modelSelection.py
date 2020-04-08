@@ -25,18 +25,6 @@ class tuningThread(threading.Thread):
             model = SVC(C=c, kernel=self.Kernel, gamma='auto', verbose=False)
             score = cross_val_score(model, self.X_train, self.y_train, cv=self.k, scoring='accuracy')
             cv_scores.append(score.mean())
-            
-        plt.figure()
-        plt.plot(self.C_range, cv_scores, 'bo-', linewidth=2)
-        plt.title('SVM with ' + self.Kernel + ' kernel')
-        plt.xlabel('C')
-        if self.tag == 'coarse':
-            plt.xscale('log')
-            plt.xticks(np.logspace(-6, 6, 13))
-        else:
-            plt.xticks([C_range[0] * i for i in range(12)])
-        plt.ylabel('Accuracy')
-        plt.savefig(self.tag + 'TuningParam_' + self.Kernel + '.jpg')
 
         bestC = self.C_range[cv_scores.index(max(cv_scores))]
         bestModel = SVC(C=bestC, kernel=self.Kernel, gamma='auto', verbose=False)
@@ -48,6 +36,18 @@ class tuningThread(threading.Thread):
                 f.write(self.Kernel + ": C = %f, acc = %f\n"%(self.C_range[i], cv_scores[i]))
             f.write(self.Kernel + ": Best C = %f\n"%(bestC))
             f.write(self.Kernel + ": acc = %f\n"%(bestAcc))
+
+        plt.figure()
+        plt.plot(self.C_range, cv_scores, 'bo-', linewidth=2)
+        plt.title('SVM with ' + self.Kernel + ' kernel')
+        plt.xlabel('C')
+        if self.tag == 'coarse':
+            plt.xscale('log')
+            plt.xticks(np.logspace(-6, 6, 13))
+        else:
+            plt.xticks([C_range[0] * i for i in range(12)])
+        plt.ylabel('Accuracy')
+        plt.savefig(self.tag + 'TuningParam_' + self.Kernel + '.jpg')
     
 def coarseTuning(k=5):
     C_range = np.logspace(-5, 5, 11)
