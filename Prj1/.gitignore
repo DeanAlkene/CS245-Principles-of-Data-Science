@@ -11,3 +11,5 @@ Projection/X_test_proj_2d_linear.npy
 Projection/X_test_proj_2d_rbf.npy
 Projection/X_train_proj_2d_linear.npy
 Projection/X_train_proj_2d_rbf.npy
+Projection/X_train_proj_2d_LDA.npy
+Projection/X_test_proj_2d_LDA.npy
