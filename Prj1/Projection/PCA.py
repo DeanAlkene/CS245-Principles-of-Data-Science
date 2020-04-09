@@ -25,6 +25,7 @@ class PCAThread(threading.Thread):
     def run(self):
         scores = []
         for n_comp in self.comp_range:
+            print("\nn_comp=%d\n"%(n_comp))
             transformer = KernelPCA(n_components=n_comp, kernel=self.Kernel)
             transformer.fit(self.X_train)
             X_train_proj = transformer.transform(self.X_train)
