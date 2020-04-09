@@ -19,14 +19,20 @@ def divideData(size='full'):
     np.save('y_train', y_train)
     np.save('y_test', y_test)
 
-def loadDataDivided():
-    X_train = np.load('X_train.npy')
-    X_test = np.load('X_test.npy')
-    y_train = np.load('y_train.npy')
-    y_test = np.load('y_test.npy')
+def loadDataDivided(ifSubDir=False):
+    if ifSubDir:
+        X_train = np.load('../X_train.npy')
+        X_test = np.load('../X_test.npy')
+        y_train = np.load('../y_train.npy')
+        y_test = np.load('../y_test.npy')
+    else:
+        X_train = np.load('X_train.npy')
+        X_test = np.load('X_test.npy')
+        y_train = np.load('y_train.npy')
+        y_test = np.load('y_test.npy')
     return X_train, X_test, y_train, y_test
 
-def loadData(size='full'):
+def loadOriginData(size='full'):
     if size == 'full':
         X_data = pd.read_csv(X_file_name, sep=' ', names=col_name)
         y_data = pd.read_csv(y_file_name, names=['label'])
@@ -36,5 +42,6 @@ def loadData(size='full'):
     return X_data, y_data
 
 if __name__ == '__main__':
+    # divideData('small')
     divideData('full')
 

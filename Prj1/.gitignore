@@ -7,3 +7,11 @@ Report/Report.aux
 Report/Report.log
 Report/Report.out
 Report/Report.synctex.gz
+Projection/scores_2_linear.npy
+Projection/scores_2_rbf.npy
+Projection/scores_500_linear.npy
+Projection/scores_500_rbf.npy
+Projection/X_test_proj_2d_linear.npy
+Projection/X_test_proj_2d_rbf.npy
+Projection/X_train_proj_2d_linear.npy
+Projection/X_train_proj_2d_rbf.npy
