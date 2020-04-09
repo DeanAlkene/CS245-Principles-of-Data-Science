@@ -45,7 +45,7 @@ class tuningThread(threading.Thread):
             plt.xscale('log')
             plt.xticks(np.logspace(-6, 6, 13))
         else:
-            plt.xticks([C_range[0] * i for i in range(12)])
+            plt.xticks([self.C_range[0] * i for i in range(12)])
         plt.ylabel('Accuracy')
         plt.savefig(self.tag + 'TuningParam_' + self.Kernel + '.jpg')
     
