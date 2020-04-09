@@ -35,7 +35,7 @@ class PCAThread(threading.Thread):
                 np.save('X_test_proj_2d_' + self.Kernel, X_test_proj)
             score = model.runSVM(X_train_proj, X_test_proj, self.y_train, self.y_test, self.C, self.Kernel)
             scores.append(score.mean())
-        np.save('scores_' + str(self.comp_range[0]) + '_' + self.Kernel, scores)
+        np.save('PCA_scores_' + self.Kernel, scores)
 
 def draw(comp_range, scores, kernel):
     bestIdx = np.argmax(scores)
@@ -55,30 +55,18 @@ def draw(comp_range, scores, kernel):
     plt.savefig('PCA_' + kernel + '.jpg')
 
 def main():
-    comp_range1 = [2, 5, 10, 20, 50, 100, 200]
-    comp_range2 = [500, 750, 1000, 1200, 1500, 1750, 2000]
+    comp_range = [2, 5, 10, 20, 50, 100, 200, 500, 750, 1000, 1200, 1500, 1750, 2000]
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True)
-    t1 = PCAThread(X_train, X_test, y_train, y_test, comp_range1, 'rbf')
-    t2 = PCAThread(X_train, X_test, y_train, y_test, comp_range2, 'rbf')
-    t3 = PCAThread(X_train, X_test, y_train, y_test, comp_range1, 'linear')
-    t4 = PCAThread(X_train, X_test, y_train, y_test, comp_range2, 'linear')
+    t1 = PCAThread(X_train, X_test, y_train, y_test, comp_range, 'rbf')
+    t2 = PCAThread(X_train, X_test, y_train, y_test, comp_range, 'linear')
 
     t1.start()
     t2.start()
-    t3.start()
-    t4.start()
     t1.join()
     t2.join()
-    t3.join()
-    t4.join()
 
-    rbf1 = np.load('scores_2_rbf.npy')
-    rbf2 = np.load('scores_500_rbf.npy')
-    linear1 = np.load('scores_2_linear.npy')
-    linear2 = np.load('scores_500_linear.npy')
-    rbf_scores = np.concatenate((rbf1, rbf2))
-    linear_scores = np.concatenate((linear1, linear2))
-    comp_range = comp_range1 + comp_range2
+    rbf_scores = np.load('PCA_scores_rbf.npy')
+    linear_scores = np.load('PCA_scores_linear.npy')
     draw(comp_range, rbf_scores, 'rbf')
     draw(comp_range, linear_scores, 'linear')
 
