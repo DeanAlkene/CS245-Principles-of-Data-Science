@@ -40,7 +40,7 @@ def draw(comp_range, scores, kernel):
 
     plt.figure()
     plt.plot(comp_range, scores, 'bo-', linewidth=2)
-    plt.title('LDA with ' + kernel + ' kernel')
+    plt.title('LDA with SVM ' + kernel + ' kernel')
     plt.xlabel('n_components')
     plt.ylabel('Accuracy')
     plt.savefig('LDA_' + kernel + '.jpg')

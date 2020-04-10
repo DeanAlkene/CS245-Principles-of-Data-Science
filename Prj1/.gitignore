@@ -1,4 +1,5 @@
 Animals_with_Attributes2
+__pycache__
 X_test.npy
 X_train.npy
 y_test.npy
@@ -13,3 +14,13 @@ Projection/X_train_proj_2d_linear.npy
 Projection/X_train_proj_2d_rbf.npy
 Projection/X_train_proj_2d_LDA.npy
 Projection/X_test_proj_2d_LDA.npy
+Learning/X_test_proj_2d_TSNE_10.0.npy
+Learning/X_test_proj_2d_TSNE_20.0.npy
+Learning/X_test_proj_2d_TSNE_30.0.npy
+Learning/X_test_proj_2d_TSNE_40.0.npy
+Learning/X_test_proj_2d_TSNE_50.0.npy
+Learning/X_train_proj_2d_TSNE_10.0.npy
+Learning/X_train_proj_2d_TSNE_20.0.npy
+Learning/X_train_proj_2d_TSNE_30.0.npy
+Learning/X_train_proj_2d_TSNE_40.0.npy
+Learning/X_train_proj_2d_TSNE_50.0.npy
