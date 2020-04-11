@@ -137,7 +137,7 @@ def draw(comp_range, scores, kernel):
     plt.savefig('AE_' + kernel + '.jpg')
 
 def main():
-    comp_range = [2]#, 64, 128, 256, 512, 1024]
+    comp_range = [2, 64, 128, 256, 512, 1024]
     rbf_scores, linear_scores = runAE(comp_range)
     draw(comp_range, rbf_scores, 'rbf')
     draw(comp_range, linear_scores, 'linear')
