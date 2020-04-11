@@ -48,8 +48,8 @@ def draw(comp_range, scores, kernel, ppl, m):
         plt.savefig('TSNE_' + kernel + '_' + str(ppl) + '.jpg')
 
 def main():
-    comp_range_bh = [2]#, 3]
-    ppl_range = [10.0, 20.0]#, 30.0, 40.0, 50.0]
+    comp_range_bh = [2, 3]
+    ppl_range = [10.0, 20.0, 30.0, 40.0, 50.0]
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True)
     for ppl in ppl_range:
         print("\nppl=%0.2d\n"%(ppl))
