@@ -16,13 +16,13 @@ def draw(suffix):
 
     plt.figure()
     for i, label in enumerate(train_categories):
-        plt.scatter(train_2d.loc[train_2d.label==label].x, train_2d.loc[train_2d.label==label].y, s=5, cmap=train_colors[i], alpha=0.6)
+        plt.scatter(train_2d.loc[train_2d.label==label].x, train_2d.loc[train_2d.label==label].y, s=2, cmap=train_colors[i], alpha=0.5)
     plt.title('X_train')
     plt.savefig('X_train_scatter_2d_' + suffix + '.jpg')
 
     plt.figure()
     for i, label in enumerate(test_categories):
-        plt.scatter(test_2d.loc[test_2d.label==label].x, test_2d.loc[test_2d.label==label].y, s=5, cmap=test_colors[i])
+        plt.scatter(test_2d.loc[test_2d.label==label].x, test_2d.loc[test_2d.label==label].y, s=2, cmap=test_colors[i], alpha=0.5)
     plt.title('X_test')
     plt.savefig('X_test_scatter_2d_' + suffix + '.jpg')
 
