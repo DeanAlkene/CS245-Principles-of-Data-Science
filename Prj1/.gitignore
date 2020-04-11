@@ -14,6 +14,8 @@ Projection/X_train_proj_2d_linear.npy
 Projection/X_train_proj_2d_rbf.npy
 Projection/X_train_proj_2d_LDA.npy
 Projection/X_test_proj_2d_LDA.npy
+Projection/X_train_proj_2d_AE.npy
+Projection/X_test_proj_2d_AE.npy
 Learning/X_test_proj_2d_TSNE_10.0.npy
 Learning/X_test_proj_2d_TSNE_20.0.npy
 Learning/X_test_proj_2d_TSNE_30.0.npy
