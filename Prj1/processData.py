@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.preprocessing import StandardScaler
 
 X_file_name = "Animals_with_Attributes2/Features/ResNet101/AwA2-features.txt"
 y_file_name = "Animals_with_Attributes2/Features/ResNet101/AwA2-labels.txt"
@@ -30,6 +31,9 @@ def loadDataDivided(ifSubDir=False):
         X_test = np.load('X_test.npy')
         y_train = np.load('y_train.npy')
         y_test = np.load('y_test.npy')
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.fit_transform(X_test)
     return X_train, X_test, y_train, y_test
 
 def loadOriginData(size='full'):

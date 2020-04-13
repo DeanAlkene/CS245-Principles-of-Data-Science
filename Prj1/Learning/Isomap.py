@@ -5,6 +5,7 @@ import sklearn
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.manifold import Isomap
 from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
 import sys
 sys.path.append("..")
 from processData import loadDataDivided

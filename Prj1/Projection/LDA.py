@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import sklearn
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 import sys
 sys.path.append("..")

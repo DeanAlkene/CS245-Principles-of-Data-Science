@@ -5,6 +5,7 @@ import sklearn
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.decomposition import KernelPCA
 from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
 import sys
 sys.path.append("..")
 from processData import loadDataDivided
@@ -24,6 +25,7 @@ def runPCA(X_train, X_test, y_train, y_test, comp_range, Kernel):
             np.save('X_test_proj_2d_' + Kernel, X_test_proj)
         score = SVMmodel.runSVM(X_train_proj, X_test_proj, y_train, y_test, C, Kernel)
         scores.append(score.mean())
+        print(scores)
     return scores
 
 def draw(comp_range, scores, kernel):
@@ -38,7 +40,7 @@ def draw(comp_range, scores, kernel):
 
     plt.figure()
     plt.plot(comp_range, scores, 'bo-', linewidth=2)
-    plt.title('PCA with ' + kernel + ' kernel')
+    plt.title('PCA with ' + kernel)
     plt.xlabel('n_components')
     plt.ylabel('Accuracy')
     plt.savefig('PCA_' + kernel + '.jpg')

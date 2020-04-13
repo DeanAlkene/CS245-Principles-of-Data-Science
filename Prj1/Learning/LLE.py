@@ -5,6 +5,7 @@ import sklearn
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.manifold import LocallyLinearEmbedding
 from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
 import sys
 sys.path.append("..")
 from processData import loadDataDivided
@@ -15,7 +16,7 @@ def runLLE(X_train, X_test, y_train, y_test, comp_range, n_neigh):
     linear_scores = []
     for n_comp in comp_range:
         print("\nn_comp=%d\n"%(n_comp))
-        transformer = LocallyLinearEmbedding(n_neighbors=n_neigh, n_components=n_comp, n_jobs=8)
+        transformer = LocallyLinearEmbedding(n_neighbors=n_neigh, n_components=n_comp, eigen_solver='dense', n_jobs=8)
         transformer.fit(X_train)
         X_train_proj = transformer.transform(X_train)
         X_test_proj = transformer.transform(X_test)

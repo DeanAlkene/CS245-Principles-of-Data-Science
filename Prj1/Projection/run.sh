@@ -1,8 +1,8 @@
-echo "Running LDA"
-python LDA.py
 cd ../Learning
-echo "Running tSNE"
-python tSNE.py
+echo "Running LLE"
+python LLE.py
+echo "Running Isomap"
+python Isomap.py
 cd ../Projection
 echo "Re-running PCA with RBF kernel"
 python PCA.py
