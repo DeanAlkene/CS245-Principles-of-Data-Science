@@ -8,6 +8,7 @@ def runSVM(X_train, X_test, y_train, y_test, C, kernel):
     model = SVC(C=C, kernel=kernel, gamma=0.001, verbose=False)
     model.fit(X_train, y_train)
     score = model.score(X_test, y_test)
+    print("score=%f"%(score))
     return score
 
 def getBestParam(kernel):

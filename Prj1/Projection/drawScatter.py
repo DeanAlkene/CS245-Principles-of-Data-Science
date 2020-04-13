@@ -27,9 +27,10 @@ def draw(suffix):
     plt.savefig('X_test_scatter_2d_' + suffix + '.jpg')
 
 def main():
-    draw('linear')
-    draw('rbf')
-    draw('LDA')
+    draw('AE')
+    #draw('linear')
+    #draw('rbf')
+    #draw('LDA')
 
 if __name__ == '__main__':
     main()

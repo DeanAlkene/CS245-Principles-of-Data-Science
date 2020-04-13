@@ -9,8 +9,8 @@ import SVMmodel
 
 X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True)
 X_train_size = X_train.shape[0]
-lr = 0.01
-epochs = 1000
+lr = 0.001
+epochs = 500
 batch_size = 256
 display_step = 1
 n_input = 2048
@@ -32,28 +32,28 @@ def getHiddenLayerSettings(n_output):
     elif n_output == 512:
         return [1024, 512]
     elif n_output == 256:
-        return [1024, 256]
+        return [1024, 512, 256]
     elif n_output == 128:
-        return [1024, 256, 128]
+        return [1024, 512, 256, 128]
     elif n_output == 64:
-        return [1024, 256, 64]
+        return [1024, 512, 256, 128, 64]
     elif n_output == 2:
-        return [1024, 256, 64, 2]
+        return [1024, 512, 256, 128, 64, 16, 2]
     else:
         return []
 
 def encoder(x, n_output):
     hidden_layers = getHiddenLayerSettings(n_output)
-    layer = tf.nn.relu(tf.add(tf.matmul(x, weights['encoder_h1']), biases['encoder_b1']))
+    layer = tf.nn.sigmoid(tf.add(tf.matmul(x, weights['encoder_h1']), biases['encoder_b1']))
     for i in range(2, len(hidden_layers)+1):
-        layer = tf.nn.relu(tf.add(tf.matmul(layer, weights['encoder_h'+str(i)]), biases['encoder_b'+str(i)]))
+        layer = tf.nn.sigmoid(tf.add(tf.matmul(layer, weights['encoder_h'+str(i)]), biases['encoder_b'+str(i)]))
     return layer
 
 def decoder(x, n_output):
     hidden_layers = getHiddenLayerSettings(n_output)
-    layer = tf.nn.relu(tf.add(tf.matmul(x, weights['decoder_h1']), biases['decoder_b1']))
+    layer = tf.nn.sigmoid(tf.add(tf.matmul(x, weights['decoder_h1']), biases['decoder_b1']))
     for i in range(2, len(hidden_layers)+1):
-        layer = tf.nn.relu(tf.add(tf.matmul(layer, weights['decoder_h'+str(i)]), biases['decoder_b'+str(i)]))
+        layer = tf.nn.sigmoid(tf.add(tf.matmul(layer, weights['decoder_h'+str(i)]), biases['decoder_b'+str(i)]))
     return layer
 
 def AutoEncoder(n_output):
@@ -94,6 +94,8 @@ def AutoEncoder(n_output):
         total_batch = int(X_train_size / batch_size)
 
         for epoch in range(epochs):
+            global data_pointer
+            data_pointer = 0
             for i in range(total_batch):
                 X_batch, y_batch = getNextBatch(batch_size)
                 _, c = sess.run([optimizer, cost], feed_dict={X : X_batch})
@@ -109,6 +111,7 @@ def runAE(comp_range):
     linear_scores = []
     for n_comp in comp_range:
         print("\nn_comp=%d\n"%(n_comp))
+        data_pointer = 0
         X_train_proj, X_test_proj = AutoEncoder(n_comp)
         if n_comp == 2:
             np.save('X_train_proj_2d_AE', X_train_proj)

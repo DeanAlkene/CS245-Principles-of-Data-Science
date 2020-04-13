@@ -31,9 +31,10 @@ def loadDataDivided(ifSubDir=False):
         X_test = np.load('X_test.npy')
         y_train = np.load('y_train.npy')
         y_test = np.load('y_test.npy')
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.fit_transform(X_test)
+    # scaler = StandardScaler()
+    # X_train_scaled = scaler.fit_transform(X_train)
+    # X_test_scaled = scaler.fit_transform(X_test)
+    # return X_train_scaled, X_test_scaled, y_train, y_test
     return X_train, X_test, y_train, y_test
 
 def loadOriginData(size='full'):
