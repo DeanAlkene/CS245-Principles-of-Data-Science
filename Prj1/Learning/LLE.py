@@ -16,7 +16,8 @@ def runLLE(X_train, X_test, y_train, y_test, comp_range, n_neigh):
     linear_scores = []
     for n_comp in comp_range:
         print("\nn_comp=%d\n"%(n_comp))
-        transformer = LocallyLinearEmbedding(n_neighbors=n_neigh, n_components=n_comp, eigen_solver='dense', n_jobs=8)
+        # transformer = LocallyLinearEmbedding(n_neighbors=n_neigh, n_components=n_comp, eigen_solver='dense', n_jobs=8)
+        transformer = LocallyLinearEmbedding(n_neighbors=n_neigh, n_components=n_comp, n_jobs=8)
         transformer.fit(X_train)
         X_train_proj = transformer.transform(X_train)
         X_test_proj = transformer.transform(X_test)
@@ -59,8 +60,8 @@ def draw(comp_range, neigh_range, scoresS, kernel):
 def main():
     rbf_scoresS = []
     linear_scoresS = []
-    comp_range = [2, 3, 10, 20, 50, 100, 200, 500, 1000, 2000]
-    neigh_range = [2, 4, 8, 16]
+    comp_range = [2, 3, 50, 100, 500, 1000, 2000]
+    neigh_range = [4, 8, 16]
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True)
     for n_neigh in neigh_range:
         print('n_neigh=%d'%(n_neigh))
