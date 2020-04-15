@@ -1,4 +1,4 @@
-cd ../Projection
+cd Projection
 echo "Running PCA"
 python PCA.py
 echo "Running LDA"
