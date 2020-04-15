@@ -49,9 +49,9 @@ def main():
     comp_range = [2, 5, 10, 20, 50, 100, 200, 500, 750, 1000, 1200, 1500, 2000]
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True)
     rbf_scores = runPCA(X_train, X_test, y_train, y_test, comp_range, 'rbf')
-    # linear_scores = runPCA(X_train, X_test, y_train, y_test, comp_range, 'linear')
+    linear_scores = runPCA(X_train, X_test, y_train, y_test, comp_range, 'linear')
     draw(comp_range, rbf_scores, 'rbf')
-    # draw(comp_range, linear_scores, 'linear')
+    draw(comp_range, linear_scores, 'linear')
 
 if __name__ == '__main__':
     main()
