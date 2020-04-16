@@ -27,13 +27,14 @@ def draw(suffix):
     plt.savefig('X_test_scatter_2d_' + suffix + '.jpg')
 
 def main():
-    draw('LLE_2')
     draw('LLE_4')
-    #draw('TSNE_10.0')
-    #draw('TSNE_20.0')
-    #draw('TSNE_30.0')
-    #draw('TSNE_40.0')
-    #draw('TSNE_50.0')
+    draw('LLE_8')
+    draw('LLE_16')
+    draw('TSNE_10.0')
+    draw('TSNE_20.0')
+    draw('TSNE_30.0')
+    draw('TSNE_40.0')
+    draw('TSNE_50.0')
 
 if __name__ == '__main__':
     main()
