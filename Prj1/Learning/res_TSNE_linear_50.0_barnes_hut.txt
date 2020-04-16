@@ -1,4 +1,0 @@
-linear: n_comp = 2.000000, acc = 0.103691
-linear: n_comp = 3.000000, acc = 0.015071
-linear: Best n_comp = 2.000000
-linear: acc = 0.103691
