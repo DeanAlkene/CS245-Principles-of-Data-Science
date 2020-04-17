@@ -8,6 +8,8 @@ Report/Report.aux
 Report/Report.log
 Report/Report.out
 Report/Report.synctex.gz
+Selection/X_test_proj_2d_SelectKBest.npy
+Selection/X_train_proj_2d_SelectKBest.npy
 Projection/X_test_proj_2d_linear.npy
 Projection/X_test_proj_2d_rbf.npy
 Projection/X_train_proj_2d_linear.npy

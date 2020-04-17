@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import sklearn
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.feature_selection import SelectFromModel
 from sklearn.preprocessing import StandardScaler
@@ -22,8 +21,8 @@ def runTreeBasedSelection(X_train, X_test, y_train, y_test, comp_range):
         print("\nn_comp=%f\n"%(n_comp))
 
         clf = ExtraTreesClassifier(n_estimators=n_comp)
-        clf = clf.fit(X_train, y_train)
-        model = SelectFromModel(clf, prefit=True)
+        model = SelectFromModel(estimator=clf)
+        model.fit(X_train, y_train)
         X_train_sel = model.transform(X_train)
         X_test_sel = model.transform(X_test)
 
@@ -50,12 +49,12 @@ def draw(comp_range, scores, dimension, kernel):
     plt.figure()
     plt.plot(comp_range, scores, 'bo-', linewidth=2)
     plt.title('TreeBasedSelection with SVM ' + kernel + ' kernel')
-    plt.xlabel('n_components')
+    plt.xlabel('n_estimators')
     plt.ylabel('Accuracy')
     plt.savefig('TreeBasedSelection_' + kernel + '.jpg')
 
 def main():
-    comp_range = [1, 2, 4, 8, 16, 32]
+    comp_range = [2, 4, 8, 16, 32, 64]
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True)
     rbf_scores, linear_scores, dimension = runTreeBasedSelection(X_train, X_test, y_train, y_test, comp_range)
     draw(comp_range, rbf_scores, dimension, 'rbf')

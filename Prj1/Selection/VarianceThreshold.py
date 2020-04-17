@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import sklearn
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
@@ -21,7 +20,7 @@ def runVarianceThreshold(X_train, X_test, y_train, y_test, comp_range):
         print("\nn_comp=%f\n"%(n_comp))
 
         selector = VarianceThreshold(threshold=n_comp)
-        selector.fit(X_train, y_train)
+        selector.fit(X_train)
         X_train_sel = selector.transform(X_train)
         X_test_sel = selector.transform(X_test)
 
@@ -48,7 +47,7 @@ def draw(comp_range, scores, dimension, kernel):
     plt.figure()
     plt.plot(comp_range, scores, 'bo-', linewidth=2)
     plt.title('VarianceThreshold with SVM ' + kernel + ' kernel')
-    plt.xlabel('n_components')
+    plt.xlabel('threshold')
     plt.ylabel('Accuracy')
     plt.savefig('VarianceThreshold_' + kernel + '.jpg')
 
