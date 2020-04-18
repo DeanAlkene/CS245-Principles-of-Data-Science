@@ -125,15 +125,90 @@ We can see that $v$ is the eigenvector of $XX^T$, and $\lambda$ is the correspon
 \indent In general, principal components analysis is suitable for linear dimensionality reduction of data. Kernel PCA can achieve nonlinear dimensionality reduction of data and is used to process linear inseparable data sets.\\
 \indent The general idea of KPCA is: for the matrix in the input space, we first use a non-linear mapping to map all samples in a high-dimensional or even infinite-dimensional space, and then perform PCA dimensionality reduction in this high-dimensional space.
 \subsubsection{LDA}
-TODO: Xuanrui Hong\\
-
+\indent Linear discriminate analysis is commonly used as dimensionality reduction technique. Its main idea is to project the samples on a straight line so that the projections of similar samples are as close as possible, and the projection points of heterogeneous samples are as far as possible. 
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[scale=0.3]{figures/LDA.png}
+		\caption{Two-dimensional illustration of LDA.}
+		\label{fig:LDA}
+	\end{figure}\cite{zhihuazhou2016ml}\par
+\indent The key step of LDA:
+\begin{itemize}
+		\item Standardize d-dimensional data (d is the number of features).
+		
+		\item For each category, calculate the d-dimensional mean vector.
+		
+		\item Construct inter-class scatter matrix $S_B$ and intra-class scatter matrix $S_W$.
+		
+		\item Calculate the eigenvalues and corresponding eigenvectors of the matrix $S^{-1}_WS_B$.
+		
+		\item Select the eigenvectors corresponding to the first $k$ eigenvalues to construct a $d × k$ dimension transformation matrix $W$, where the eigenvectors are arranged in columns.
+		
+		\item Use the transformation matrix $W$ to map the samples to the new feature subspace.
+		
+\end{itemize}
+\subsubsection{AutoEncoder}
+\indent An autoencoder is a type of artificial neural network used to learn efficient data codings in an unsupervised manner.\cite{kramer1991nonlinear}The purpose of autoencoder is to train a neural network for sample dimensionality reduction, and the sample after dimensionality reduction can reconstruct the original sampel well. \par
+\indent It contains encoder and decoder. The coding network belongs to the dimension reduction part, and the role is to reduce the high-dimensional original data to a low-dimensional nested structure with a certain number of dimensions; the decoding network belongs to the reconstruction part, which can be regarded as the reverse process of the coding network. There is also an intersection between the encoding network and the decoding network, called the "code layer", which is the core of the entire self-encoding network  and can determine the essential dimensions of high-dimensional datasets.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.2]{figures/Autoencoder.jpg}
+	\caption{Autoencoder.}
+	\label{fig:autoencoder}
+\end{figure}\par
 \subsection{Feature Learning}
 \subsubsection{t-SNE}
-TODO: Xuanrui Hong\\
+\indent T-distributed stochastic neighbor embedding is a machine learning algorithm for dimensionality reduction, proposed by Laurens van der Maaten and Geoffrey Hinton in 2008.\cite{maaten2008visualizing}It is a nonlinear dimensionality reduction technique. T-SNE obtains $\tilde{x}$ from $x$ and maintains the relative distance as much as possible. Its main steps are:
+\begin{itemize}
+	\item  Evaluate the similarity of data point $x_i$ and data point $x_j$ by
+	\begin{eqnarray}
+	p_{j|i}=\frac{(1+\Vert x_i-x_j \Vert^2)^-1}{\sum_{k\neq i}(1+\Vert x_i-x_k \Vert^2)^-1}
+	\end{eqnarray}
+	
+	\item  Meature similarity of data point $\tilde{x_i}$ and data point $\tilde{x_j}$ by
+	\begin{eqnarray}
+	q_{j|i}=\frac{(1+\Vert \tilde{x_i}-\tilde{x_j} \Vert^2)^-1}{\sum_{k\neq i}(1+\Vert \tilde{x_i}-\tilde{x_k} \Vert^2)^-1}
+	\end{eqnarray}
+	
+	\item  Minimize the $Kullback-Leibler divergence$ of the distribution $Q$ from the distribution $P$, that is
+	\begin{eqnarray}
+	L = \sum_{i}KL(P_i\Vert Q_i)=\sum_{i}\sum_{j}p(i|j)log\frac{p_{j|i}}{q_{j|i}}
+	\end{eqnarray}
+\end{itemize}
+
+\indent Besides, t-SNE is the deformation of SNE. The difference is that t-SNE uses t-distribution while SNE uses Gaussian distribution.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.3]{figures/SNE.jpg}
+	\caption{t-SNE and SNE.}
+	\label{fig:SNE}
+\end{figure}\par
+
 \subsubsection{LLE}
-TODO: Xuanrui Hong\\
-\subsubsection{AutoEncoder}
-TODO: Xuanrui Hong\\
+Locally Linear Embedding (LLE) is a member of the manifold learning algorithm and is a nonlinear dimensionality reduction method. LLE was invented in 2000 and published in the journal Sience.\cite{roweis2000nonlinear}LLE algorithm tries to maintain the linear relationship between samples in the neighborhood. As shown in figure 3，the sample $x_i$ in the high-dimensional space can be reconstructed from its neighbor sample $x_j,x_k,x_l$ through linear combination, ie
+\begin{eqnarray}
+x_i = w_{ij}x_j+w_{ik}x_k+x_{il}x_l
+\end{eqnarray}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.3]{figures/LLE.png}
+	\caption{LLE.}
+	\label{fig:LLE}
+\end{figure}\par
+\indent Its main steps are:
+\begin{itemize}
+	\item Learn the linear relation $W$ between each sample and its neighbors, which can be formalized as:
+	\begin{eqnarray}
+	W = \mathop{\arg\min}_{W}\sum_{i=1}^{m}\Vert x_i-\sum_{j\in N(i)}w_{ij}x_j\Vert^2 
+	\end{eqnarray}
+	where $N(i)$ is the k-nearest neighbors of $x_i$
+	
+	\item  Reconstruct the low-dimensional features:
+	\begin{eqnarray}
+	Z = \mathop{\arg\min}_{Z}\sum_{i=1}^{m}\Vert z_i-\sum_{j\in N(i)}w_{ij}z_j\Vert^2 
+	\end{eqnarray}
+	where $z_i$ is the sample after dimensionality reduction of $x_i$
+\end{itemize}
 
 \section{Experiment}
 \subsection{Baseline}
