@@ -312,7 +312,44 @@ We give the 2-components scattering figure of different kernel and dataset in Fi
 \end{figure}
 
 \subsubsection{LDA}
-TODO: Qilin Chen\\
+
+Linear discriminate analysis (LDA) is a dimension reduction technique that is closely related to principal component analysis (PCA) and factor analysis in that they both look for linear combinations of variables which best explain the data. However, in contrast, LDA explicitly attempts to model the difference between the classes of data. In this section, we use LDA model to project features into [2, 3, 5, 10, 20, 30, 40] components and respectively combine RBF SVM and Linear SVM to finish the classification task. We adopt classifiction accuracy as metric in this section.
+
+We summarize the experimental results of kernel PCA in Tab. \ref{baseline1} and Fig. \ref{Fig3}. As is shown, linear kernel PCA model and RBF kernel PCA model expectively exhibit the best performances at 200 components and 750 components, reaching $92.20\%$ and $92.50\%$ on the classification task. We can compare the result with the simple linear SVM and simple RBF SVM, find the kernel PCA model's performance is worse than the baselines, and we deem the reason is that compoents reduction of PCA remove some effective feature as it remove the most noisy feature. And we can find RBF kernel have better performance than linear kernel in PCA tasks and none-PCA tasks, it proves the provided dataset have some features which can't be handled merely by linear kernel. Besides, in kernel PCA tasks, we can find if we have less components, RBF kernel have better performance than linear kernel.
+
+We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Fig4}, which can support the result that RBF kernel have better performance than linear kernel since the RBF figure can be better splited. What's more, if we compare the trainset and testset, we can find the dataset is randomly splited.
+
+\begin{center}
+\begin{figure}[htbp]
+\centering
+\subfigure[metric accuracy comparison on LDA with linear SVM]{
+\includegraphics[width=6.5cm]{figure/LDA_linear.jpg}
+%\caption{fig1}
+}
+\quad
+\subfigure[metric accuracy comparison on LDA with RBF SVM]{
+\includegraphics[width=6.5cm]{figure/LDA_rbf.jpg}
+}
+\caption{LDA performance on linear kernel SVM and RBF kernel SVM}
+\label{Fig3}
+\end{figure}
+\end{center}
+
+\begin{center}
+\begin{figure}[htbp]
+\centering
+\subfigure[Trainset 2D scatter with LDA]{
+\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_LDA.jpg}
+%\caption{fig1}
+}
+\quad
+\subfigure[Testset 2D scatter with LDA]{
+\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_LDA.jpg}
+}
+\caption{Dataset 2-components scatter with LDA}
+\label{Fig4}
+\end{figure}
+\end{center}
 
 \subsection{Feature Learning}
 \subsubsection{t-SNE}
