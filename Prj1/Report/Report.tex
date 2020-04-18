@@ -315,9 +315,40 @@ We give the 2-components scattering figure of different kernel and dataset in Fi
 
 Linear discriminate analysis (LDA) is a dimension reduction technique that is closely related to principal component analysis (PCA) and factor analysis in that they both look for linear combinations of variables which best explain the data. However, in contrast, LDA explicitly attempts to model the difference between the classes of data. In this section, we use LDA model to project features into [2, 3, 5, 10, 20, 30, 40] components and respectively combine RBF SVM and Linear SVM to finish the classification task. We adopt classifiction accuracy as metric in this section.
 
-We summarize the experimental results of kernel PCA in Tab. \ref{baseline1} and Fig. \ref{Fig3}. As is shown, linear kernel PCA model and RBF kernel PCA model expectively exhibit the best performances at 200 components and 750 components, reaching $92.20\%$ and $92.50\%$ on the classification task. We can compare the result with the simple linear SVM and simple RBF SVM, find the kernel PCA model's performance is worse than the baselines, and we deem the reason is that compoents reduction of PCA remove some effective feature as it remove the most noisy feature. And we can find RBF kernel have better performance than linear kernel in PCA tasks and none-PCA tasks, it proves the provided dataset have some features which can't be handled merely by linear kernel. Besides, in kernel PCA tasks, we can find if we have less components, RBF kernel have better performance than linear kernel.
+We summarize the experimental results of LDA-based model in Tab. \ref{baseline2} and Fig. \ref{Fig3}. As is shown, based on LDA method, Linear kernel SVM and RBF kernel SVM have better performance as the compoents number increase and reach accuracy of $90.56\%$ and $91.47\%$ respectively. As PCA-based method, some components loss may occur while we reduce the data dimension, but with the components number increase, we can find the accuracy nearly closed to the traditional SVM model. Besides, we can find RBF kernel have better performance than linear kernel in LDA tasks and none-LDA tasks, it proves the provided dataset have some features which can't be handled merely by linear kernel. Especially, in LDA tasks, we can find if we have less components, RBF kernel have much better performance than linear kernel.
 
-We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Fig4}, which can support the result that RBF kernel have better performance than linear kernel since the RBF figure can be better splited. What's more, if we compare the trainset and testset, we can find the dataset is randomly splited.
+We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Fig4}. Compared with Fig. \ref{Fig2}, we can conclude LDA have better classes distance than PCA, which supports the correctness of the experiment. And we can find the random splitness of the dataset is covered.
+
+\begin{table}
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.1}
+	\caption{Comparison of LDA-based SVM and baslines in Classification Task}
+	\label{baseline2}%
+	\resizebox{\linewidth}{!}{
+	\begin{tabular}{c|c|c|c|c}
+		\hline
+		Model &\multicolumn{2}{c|}{LDA+SVM}&\multicolumn{2}{c}{SVM}\\
+		\hline
+		{components number} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+		\cline{2-5}
+		\hline
+		2   & 16.02 & 30.39 & 93.28 & 93.52\\
+		\hline
+		3   & 19.63 & 39.80 & 93.28 & 93.52\\
+		\hline
+		5   & 38.93 & 57.69 & 93.28 & 93.52\\
+		\hline
+		10   & 58.08 & 71.36 & 93.28 & 93.52\\
+		\hline
+		20   & 77.61 & 82.75 & 93.28 & 93.52\\
+		\hline
+		30   & 87.80 & 89.75 & 93.28 & 93.52\\
+		\hline
+		40   & 90.56 & 91.47 & 93.28 & 93.52\\
+		\hline
+	\end{tabular}}
+\end{table}
 
 \begin{center}
 \begin{figure}[htbp]
@@ -350,6 +381,7 @@ We give the 2-components scattering figure of different kernel and dataset in Fi
 \label{Fig4}
 \end{figure}
 \end{center}
+
 
 TODO: Qilin Chen\\
 \subsubsection{AutoEncoder}
