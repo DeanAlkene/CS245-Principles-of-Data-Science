@@ -1,10 +1,7 @@
-cd Projection
-echo "Running PCA"
-python PCA.py
-echo "Running LDA"
-python LDA.py
-cd ../Learning
-echo "Running tSNE"
-python tSNE.py
-echo "Running LLE"
-python LLE.py
+cd Selection
+echo "Running Select k Best"
+python SelectKBest.py
+echo "Running Tree-based Selection"
+python TreeBasedSelection.py
+echo "Running Variance Threshold"
+python VarianceThreshold.py
