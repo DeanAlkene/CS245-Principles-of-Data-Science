@@ -1,14 +1,14 @@
 # Fdb version 3
-["bibtex Report"] 1587215752 "Report.aux" "Report.bbl" "Report" 1587216166
+["bibtex Report"] 1587221158 "Report.aux" "Report.bbl" "Report" 1587221159
   "/usr/local/texlive/2018/texmf-dist/bibtex/bst/base/unsrt.bst" 1480098433 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "Report.aux" 1587216165 4978 0055ca3308dbe776837902678acb7f8a ""
+  "Report.aux" 1587221158 4978 b5393c1dd6e3cd329e126ad1ce9f825f ""
   "bibfile.bib" 1587207415 324 f6c4ad8d4a2ba7034496cc36963861a2 ""
   (generated)
   "Report.bbl"
   "Report.blg"
-["pdflatex"] 1587216164 "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.tex" "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.pdf" "Report" 1587216166
-  "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.aux" 1587216165 4978 0055ca3308dbe776837902678acb7f8a ""
-  "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.tex" 1587216163 11056 e06aa6bf621f062b0e5025a581f306ea ""
+["pdflatex"] 1587221158 "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.tex" "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.pdf" "Report" 1587221159
+  "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.aux" 1587221158 4978 b5393c1dd6e3cd329e126ad1ce9f825f ""
+  "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.tex" 1587221154 12276 759a028a33cc2b906f9aca746c2a141e ""
   "/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc" 1480098666 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1480098666 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2018/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
@@ -108,10 +108,10 @@
   "/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1523934492 2717033 f61a5287d9c22a39a74f1979fe3f905c ""
   "/usr/local/texlive/2018/texmf-var/web2c/pdftex/pdflatex.fmt" 1555076125 4220280 422b7f84c94c9aa1d43282e72a70482c ""
   "/usr/local/texlive/2018/texmf.cnf" 1523934483 577 0b39adfd7c93507ff20c9c14c2f1a33f ""
-  "Report.aux" 1587216165 4978 0055ca3308dbe776837902678acb7f8a ""
-  "Report.bbl" 1587215752 296 e17cb5b72b50017affa2c25990020d3c "bibtex Report"
-  "Report.out" 1587216165 1767 31a02667cca43065585420f6b3167285 ""
-  "Report.tex" 1587216163 11056 e06aa6bf621f062b0e5025a581f306ea ""
+  "Report.aux" 1587221158 4978 b5393c1dd6e3cd329e126ad1ce9f825f ""
+  "Report.bbl" 1587221158 296 e17cb5b72b50017affa2c25990020d3c "bibtex Report"
+  "Report.out" 1587221158 1767 31a02667cca43065585420f6b3167285 ""
+  "Report.tex" 1587221154 12276 759a028a33cc2b906f9aca746c2a141e ""
   "figure/PCA_linear.jpg" 1587207415 32338 c36ca834a865256115daa50fbeff5da4 ""
   "figure/PCA_rbf.jpg" 1587207415 32241 ed29c6d341a7283913dd10b8e2a042ff ""
   "figure/X_test_scatter_2d_linear.jpg" 1587207415 89762 01e8a19a564969c654d1ba2c422a1ef3 ""
@@ -120,9 +120,9 @@
   "figure/X_train_scatter_2d_rbf.jpg" 1587207415 110168 2da5b9272dfda62fa66040d2b66f97f4 ""
   "neurips_2020.sty" 1587207415 11686 5c69aeccc214c62c60de35bbc5bcdf16 ""
   (generated)
-  "Report.pdf"
   "Report.out"
-  "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.pdf"
   "Report.log"
   "Report.aux"
   "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.log"
+  "Report.pdf"
+  "/Users/kylinchan/learningmt/CS245-Projects/Prj1/Report/Report.pdf"
