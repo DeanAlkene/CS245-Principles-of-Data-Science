@@ -25,6 +25,8 @@
 \usepackage{microtype}      % microtypography
 \usepackage{multicol}
 \usepackage{xeCJK}
+\usepackage{indentfirst}
+\setlength{\parindent}{2em}
 
 \title{Principles of Data Science Project 1\\
         Dimension Reduction}
@@ -55,6 +57,7 @@
 \newcommand{\new}{\marginpar{NEW}}
 
 \begin{document}
+\bibliographystyle{unsrt}
 
 \maketitle
 
@@ -92,15 +95,32 @@
 \section{Method}
 \subsection{Feature Selection}
 \subsubsection{Select-k-best}
-TODO: Xuanrui Hong\\
+\indent SelectKBest is one of the methods of univariate feature selection, which works by selecting the best features based on univariate statistical tests. It removes all but the $k$ highest scoring features.
 \subsubsection{Variance Threshold}
-TODO: Xuanrui Hong\\
+\indent VarianceThreshold is a simple approach to feature selection. It removes all features whose variance doesn’t meet some threshold. The principle is that features with small variance often contain less data information.
 \subsubsection{Tree-based Selection}
-TODO: Xuanrui Hong\\
+\indent Tree-based feature selection combines SelectFromModel and ExtraTreesClassifier. SelectFromModel is a meta-transformer that can be used along with any estimator that has a $coef\_$ or $feature\_importances\_$ attribute after fitting. The features whose $coef\_$ or $feature\_importances\_$ values are below the provided threshold parameterare are considered unimportant and removed. ExtraTreesClassifier can be used to compute feature importances, which happens to cooperate with SelectFromModel to discard irrelevant features.
 
 \subsection{Feature Projection}
 \subsubsection{PCA}
-TODO: Xuanrui Hong\\
+\indent Principal component analysis is one of the most widely used data dimensionality reduction algorithms. It performs a linear mapping of the data to a lower-dimensional space in such a way that the variance of the data in the low-dimensional representation is maximized.\cite{pearson1901liii}
+Formally, the optimization goal is
+\begin{eqnarray}
+\centering
+\max_v \frac{1}{n}\sum_{i=1}^{n}(v^Tx_i)^2=\frac{1}{n}v^TXX^Tv
+\end{eqnarray}
+where $v$ is the new axis.
+\begin{eqnarray}
+s.t.\quad v^Tv=1
+\end{eqnarray}
+Using lagrange Multiplier we can get
+\begin{eqnarray}
+XX^Tv=\lambda v
+\end{eqnarray}
+We can see that $v$ is the eigenvector of $XX^T$, and $\lambda$ is the corresponding eigenvalue. Therefore, $v$ can be calculated by performing eigenvalue decomposition to the co-variance matrix $XX^T$. Then we can get the data after dimensionality reduction.
+\subsubsection{Kernel PCA}
+\indent In general, principal components analysis is suitable for linear dimensionality reduction of data. Kernel PCA can achieve nonlinear dimensionality reduction of data and is used to process linear inseparable data sets.\\
+\indent The general idea of KPCA is: for the matrix in the input space, we first use a non-linear mapping to map all samples in a high-dimensional or even infinite-dimensional space, and then perform PCA dimensionality reduction in this high-dimensional space.
 \subsubsection{LDA}
 TODO: Xuanrui Hong\\
 
@@ -144,4 +164,5 @@ TODO: Qilin Chen\\
 TODO: Qilin Chen\\
 \section*{Acknowledgement}
 
+\bibliography{bibfile.bib}
 \end{document}
