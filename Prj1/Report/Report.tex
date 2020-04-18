@@ -26,6 +26,7 @@
 \usepackage{multicol}
 \usepackage{xeCJK}
 \usepackage{subfigure}
+\usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage{indentfirst}
 \setlength{\parindent}{2em}
@@ -152,18 +153,83 @@ TODO: Xuanrui Hong\\
 \subsubsection{PCA}
 Principal component analysis(PCA) is the most typical feature projection method based on dimension reduction, since PCA provides a roadmap for how to reduce a complex data set to a lower dimension to reveal the sometimes hidden, simplified dynamics that often underlie it. Kernel principal component analysis(kernel PCA) provides an extension of traditional PCA using techniques of kernel methods, which project source data into a higher dimensional space, providing with better reduction and classification performance. In this section, two experiment settings can derive from the rule: We use kernel PCA on different number of aim component $[2, 5, 10, 20, 50, 100, 200, 500, 750, 1000, 1200, 1500, 2000]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
 
+\begin{table}
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.1}
+	\caption{Comparison of kernel PCA and baslines in Classification Task}
+	\label{baseline1}%
+	\resizebox{\linewidth}{!}{
+	\begin{tabular}{c|c|c|c|c}
+		\hline
+		Model &\multicolumn{2}{c|}{PCA+SVM}&\multicolumn{2}{c}{SVM}\\
+		\hline
+		{components number} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+		\cline{2-9}
+		\hline
+		2   & 12.46 & 19.68 & 93.28 & 93.52\\
+		\hline
+		5   & 40.31 & 59.68 & 93.28 & 93.52\\
+		\hline
+		10   & 68.99 & 78.25 & 93.28 & 93.52\\
+		\hline
+		20   & 82.27 & 87.07 & 93.28 & 93.52\\
+		\hline
+		50  & 89.31 & 90.53 & 93.28 & 93.52\\
+		\hline
+		100  & 91.37 & 91.66 & 93.28 & 93.52\\
+		\hline
+		200  & 92.20 & 91.94 & 93.28 & 93.52\\
+		\hline
+		500  & 92.14 & 92.42 & 93.28 & 93.52\\
+		\hline
+		750  & 91.90 & 92.50 & 93.28 & 93.52\\
+		\hline
+		1000  & 91.70 & 92.44 & 93.28 & 93.52\\
+		\hline
+		1200  & 91.78 & 92.26 & 93.28 & 93.52\\
+		\hline
+		1500  & 91.57 & 91.85 & 93.28 & 93.52\\
+		\hline
+		2000  & 91.64 & 88.08 & 93.28 & 93.52\\
+		\hline
+	\end{tabular}}
+\end{table}
+
 \begin{figure}
 \centering
-\subfigure[metric Mean Rank comparison on dataset Freebase]{
-\includegraphics[width=3.75cm]{figure/PCA_linear.jpg}
+\subfigure[metric accuracy comparison on linear PCA]{
+\includegraphics[width=6.5cm]{figure/PCA_linear.jpg}
 %\caption{fig1}
 }
 \quad
-\subfigure[metric Mean Rank comparison on dataset AceKG]{
-\includegraphics[width=3.75cm]{figure/PCA_rbf.jpg}
+\subfigure[metric accuracy comparison on RBF PCA]{
+\includegraphics[width=6.5cm]{figure/PCA_rbf.jpg}
 }
-\caption{Mean Rank and Hits}
+\caption{Kernel PCA performance on linear kernel and RBF kernel}
 \label{Fig1}
+\end{figure}
+
+\begin{figure}
+\centering
+\subfigure[Trainset 2D scatter with linear PCA]{
+\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_linear.jpg}
+%\caption{fig1}
+}
+\quad
+\subfigure[Testset 2D scatter with linear PCA]{
+\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_linear.jpg}
+}
+\quad
+\subfigure[Trainset 2D scatter with RBF PCA]{
+\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_rbf.jpg}
+}
+\quad
+\subfigure[Testset 2D scatter with RBF PCA]{
+\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_rbf.jpg}
+}
+\caption{Dataset 2D scatter with linear kernel and RBF kernel}
+\label{Fig2}
 \end{figure}
 
 \subsubsection{LDA}
