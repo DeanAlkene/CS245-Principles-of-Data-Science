@@ -64,9 +64,25 @@
 提交方式：\texttt{git}\\
 \begin{itemize}
   \item 可以使用ppt上的图片、公式，使用公式必须要完整体现这个方法的内涵
-  \item 可以参考维基百科，但需要做一定的改写, i.e. paragraph
+  \item 可以参考维基百科，但需要做一定的改写, i.e. paraphrase
   \item 参考文献获取途径：前往\texttt{sci-kit learn}官方网站，搜索对应的方法，如PCA，在相应文档页面查找是否有参考文献。或者找到左上角User Guide，寻找相应内容，如2.Unsupervised Learning-2.5.Decomposing signals in components (matrix factorization problems)
   \item 可以参考往届报告，行文风格、参考文献等，但不必每个方法处处都引用
+\end{itemize}
+
+\textbf{To Qilin Chen:}\\
+请完成Experiement中Feature Selection之外的部分及Conclusion部分（周日晚Xuanrui Hong会完成Feature Selection部分的分析，并\texttt{push}至仓库中，请使用\texttt{git pull}获取）
+截止日期：周二晚24点 \\
+提交方式：\texttt{git} \\
+\begin{itemize}
+  \item 所有实验结果均在Prj1/Result下，包括不同方法、不同维度的降维结果用线性SVM以及核SVM（RBF核）的分类精度（文本、点线图），以及2维降维结果的可视化（训练集、测试集）
+  \item Baseline已经给出，请以baseline为基准比较各方法结果
+  \item 请恰当使用\texttt{figure}、\texttt{subfigure}等方式美观地排版图片
+  \item 请正确地设计表格，以表现不同降维方法、不同分类器（线性SVM以及核SVM）产生的结果变化，并突出最佳参数设置
+  \item AutoEncoder部分请查看代码（Prj1/Projection/AutoEncoder.py）获取神经网络结构、超参数等数据，并在文中体现
+  \item 关于参考文献：前往\texttt{sci-kit learn}官方网站，搜索对应的方法，如PCA，在相应文档页面查找是否有参考文献。或者找到左上角User Guide，寻找相应内容，如2.Unsupervised Learning-2.5.Decomposing signals in components (matrix factorization problems)。除此之外还可以寻找其他参考文献。
+  \item 可以参考往届报告，行文风格、参考文献等
+  \item 请修改上方\texttt{author}部分你的邮箱
+  \item 由于是多人同时完成不同的部分，每次修改前请使用\texttt{git pull}保持与远程仓库的同步，修改完毕后及时使用\texttt{git push}
 \end{itemize}
 
 \begin{abstract}
@@ -99,6 +115,9 @@ TODO: Xuanrui Hong\\
 \section{Experiment}
 \subsection{Baseline}
 TODO: Hongzhou Liu\\
+Training Set : Test Set = 6:4 \\
+Linear SVM: Best C = 0.002, best accuracy = 0.932815 (baseline) \\
+Kernel SVM with RBF kernel: Best C = 5.0, best accuracy = 0.935160 (baseline) \\
 \subsection{Feature Selection}
 \subsubsection{Select-k-best}
 TODO: Xuanrui Hong\\
