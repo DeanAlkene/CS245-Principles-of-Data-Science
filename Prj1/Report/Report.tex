@@ -361,7 +361,7 @@ We give the 2-components scattering figure of different kernel and dataset in Fi
 \subfigure[metric accuracy comparison on LDA with RBF SVM]{
 \includegraphics[width=6.5cm]{figure/LDA_rbf.jpg}
 }
-\caption{LDA performance on linear kernel SVM and RBF kernel SVM}
+\caption{LDA-based model performance on linear kernel SVM and RBF kernel SVM}
 \label{Fig3}
 \end{figure}
 \end{center}
@@ -370,22 +370,85 @@ We give the 2-components scattering figure of different kernel and dataset in Fi
 \begin{figure}[htbp]
 \centering
 \subfigure[Trainset 2D scatter with LDA]{
-\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_LDA.jpg}
+\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_LDA.jpg}
 %\caption{fig1}
 }
 \quad
 \subfigure[Testset 2D scatter with LDA]{
-\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_LDA.jpg}
+\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_LDA.jpg}
 }
 \caption{Dataset 2-components scatter with LDA}
 \label{Fig4}
 \end{figure}
 \end{center}
 
+\begin{table}
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.1}
+	\caption{Comparison of AutoEncoder-based SVM and baslines in Classification Task}
+	\label{baseline3}%
+	\resizebox{\linewidth}{!}{
+	\begin{tabular}{c|c|c|c|c}
+		\hline
+		Model &\multicolumn{2}{c|}{AutoEncoder+SVM}&\multicolumn{2}{c}{SVM}\\
+		\hline
+		{components number} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+		\cline{2-5}
+		\hline
+		2   & 23.71 & 68.75 & 93.28 & 93.52\\
+		\hline
+		64   & 69.52 & 70.35 & 93.28 & 93.52\\
+		\hline
+		128   & 72.01 & 70.25 & 93.28 & 93.52\\
+		\hline
+		256   & 78.35 & 76.93 & 93.28 & 93.52\\
+		\hline
+		512   & 87.59 & 87.90 & 93.28 & 93.52\\
+		\hline
+		1024   & 91.42 & 91.95 & 93.28 & 93.52\\
+		\hline
+	\end{tabular}}
+\end{table}
 
-TODO: Qilin Chen\\
 \subsubsection{AutoEncoder}
-TODO: Qilin Chen\\
+AutoEncoder is a unsupervised method to determine the essential dimensions of high-dimensional dataset, which can construct the complete dataset features with minimun loss, i.e. with encoder reducing the data dimension to `bottleneck' and decoder to restruct the data, we can get the origin sample data or get the minimun loss. In this section, we use AutoEncoder to get the low-dimensional feature and respectively combine linear SVM and RBF SVM to achieve the classification task. We adopt classifiction accuracy as metric in this section.
+
+We summarize the experimental results of LDA-based model in Tab. \ref{baseline3} and Fig. \ref{Fig5}. As is shown, based on LDA method, Linear kernel SVM and RBF kernel SVM have better performance as the compoents number increase and reach accuracy of $90.56\%$ and $91.47\%$ respectively. As PCA-based method, some components loss may occur while we reduce the data dimension, but with the components number increase, we can find the accuracy nearly closed to the traditional SVM model. Besides, we can find RBF kernel have better performance than linear kernel in LDA tasks and none-LDA tasks, it proves the provided dataset have some features which can't be handled merely by linear kernel. Especially, in LDA tasks, we can find if we have less components, RBF kernel have much better performance than linear kernel.
+
+We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Fig6}. Compared with Fig. \ref{Fig2}, we can conclude LDA have better classes distance than PCA, which supports the correctness of the experiment. And we can find the random splitness of the dataset is covered.
+
+\begin{center}
+\begin{figure}[htbp]
+\centering
+\subfigure[metric accuracy comparison on AutoEncoder with linear SVM]{
+\includegraphics[width=6.5cm]{figure/AE_linear.jpg}
+%\caption{fig1}
+}
+\quad
+\subfigure[metric accuracy comparison on AutoEncoder with RBF SVM]{
+\includegraphics[width=6.5cm]{figure/AE_rbf.jpg}
+}
+\caption{AutoEncoder-based model performance on linear kernel SVM and RBF kernel SVM}
+\label{Fig5}
+\end{figure}
+\end{center}
+
+\begin{center}
+\begin{figure}[htbp]
+\centering
+\subfigure[Trainset 2D scatter with AutoEncoder]{
+\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_AE.jpg}
+%\caption{fig1}
+}
+\quad
+\subfigure[Testset 2D scatter with AutoEncoder]{
+\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_AE.jpg}
+}
+\caption{Dataset 2-components scatter with AutoEncoder}
+\label{Fig6}
+\end{figure}
+\end{center}
 
 \subsection{Feature Learning}
 \subsubsection{t-SNE}
