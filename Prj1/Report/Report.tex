@@ -508,9 +508,57 @@ We also give the 2-components scattering result in Fig. \ref{Fig7}. tSNE enables
 \subsubsection{LLE}
 Locally Linear Embedding (LLE) is a feature learning mathod which tried to keep the linear relation between neighbor samples. In this section, we respectively use 4, 8 and 16 neighbors to rule the experiments and our aim components range is $[2, 3, 50, 100, 500, 1000, 2000]$.
 
-We summarize the experimental results of AutoEncoder-based model in Tab. \ref{baseline3} and Fig. \ref{Fig5}. We can find if we maintain more neighbor relations and more aim components, we can get better performance, i.e. LLE with Linear SVM receives $90.60\%$ and LLE with RBF SVM receives $90.18\%$. Performance of LLE is satisfiying beacause original features may have simple structure and the data is randomly scatering in the high-dimension space.
+We summarize the experimental results of AutoEncoder-based model in Tab. \ref{baseline3} and Fig. \ref{Fig8}. We can find if we maintain more neighbor relations and more aim components, we can get better performance, i.e. LLE with Linear SVM receives $90.60\%$ and LLE with RBF SVM receives $90.18\%$. Performance of LLE is satisfiying beacause original features may have simple structure and the data is randomly scatering in the high-dimension space.
 
-We also give the 2-components scattering result in Fig. \ref{Fig7}. When we use 4 neighbors to reconstruct the sample, we can find its poor performance. For data can be regarded as manifold structure, LLE performs while when we give the proper neighbors' number.
+We also give the 2-components scattering result in Fig. \ref{Fig9}. When we use 4 neighbors to reconstruct the sample, we can find its poor performance. For data can be regarded as manifold structure, LLE performs while when we give the proper neighbors' number.
+
+
+
+\begin{center}
+\begin{figure}[htbp]
+\centering
+\subfigure[metric accuracy comparison on LLE with linear SVM]{
+\includegraphics[width=6.5cm]{figure/LLE_linear.jpg}
+%\caption{fig1}
+}
+\quad
+\subfigure[metric accuracy comparison on LLE with RBF SVM]{
+\includegraphics[width=6.5cm]{figure/LLE_rbf.jpg}
+}
+\caption{LLE-based model performance on linear kernel SVM and RBF kernel SVM}
+\label{Fig8}
+\end{figure}
+\end{center}
+
+\begin{figure}
+\centering
+\subfigure[Trainset 2D scatter with LLE (neighbor\_num=4)]{
+\includegraphics[width=4.1cm]{figure/X_train_scatter_2d_LLE_4.jpg}
+%\caption{fig1}
+}
+\quad
+\subfigure[Trainset 2D scatter with LLE (neighbor\_num=8)]{
+\includegraphics[width=4.1cm]{figure/X_train_scatter_2d_LLE_8.jpg}
+}
+\quad
+\subfigure[Trainset 2D scatter with LLE (neighbor\_num=16)]{
+\includegraphics[width=4.1cm]{figure/X_train_scatter_2d_LLE_16.jpg}
+}
+\quad
+\subfigure[Testset 2D scatter with LLE (neighbor\_num=4)]{
+\includegraphics[width=4.1cm]{figure/X_test_scatter_2d_LLE_4.jpg}
+}
+\quad
+\subfigure[Testset 2D scatter with LLE (neighbor\_num=8)]{
+\includegraphics[width=4.1cm]{figure/X_test_scatter_2d_LLE_8.jpg}
+}
+\quad
+\subfigure[Testset 2D scatter with LLE (neighbor\_num=16)]{
+\includegraphics[width=4.1cm]{figure/X_test_scatter_2d_LLE_16.jpg}
+}
+\caption{Dataset 2D scatter with LLE on neighbors of $\{4, 8, 16\}$}
+\label{Fig9}
+\end{figure}
 
 \section{Conclusion}
 In this project, we evaluate different dimension reduction techniques by measuring their classification performance when combined with SVM model. In this Section, we want to give our perspectives on drawbacks and merits of these dimension reduction method. Importantly, we'll conclude the situations to use these methods.
