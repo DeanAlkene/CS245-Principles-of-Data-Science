@@ -52,7 +52,7 @@ def draw(comp_range, scores, dimension, kernel):
     plt.savefig('VarianceThreshold_' + kernel + '.jpg')
 
 def main():
-    comp_range = [0.1, 0.2, 0.5, 0.7, 1.0, 1.5, 2.0]
+    comp_range = [0.1, 0.2, 0.3, 0.5, 0.7, 0.9]
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True)
     rbf_scores, linear_scores, dimension = runVarianceThreshold(X_train, X_test, y_train, y_test, comp_range)
     draw(comp_range, rbf_scores, dimension, 'rbf')
