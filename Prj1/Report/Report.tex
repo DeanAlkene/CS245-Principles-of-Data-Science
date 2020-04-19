@@ -506,7 +506,11 @@ We also give the 2-components scattering result in Fig. \ref{Fig7}. tSNE enables
 \end{figure}
 
 \subsubsection{LLE}
-TODO: Qilin Chen\\
+Locally Linear Embedding (LLE) is a feature learning mathod which tried to keep the linear relation between neighbor samples. In this section, we respectively use 4, 8 and 16 neighbors to rule the experiments and our aim components range is $[2, 3, 50, 100, 500, 1000, 2000]$.
+
+We summarize the experimental results of AutoEncoder-based model in Tab. \ref{baseline3} and Fig. \ref{Fig5}. We can find if we maintain more neighbor relations and more aim components, we can get better performance, i.e. LLE with Linear SVM receives $90.60\%$ and LLE with RBF SVM receives $90.18\%$. Performance of LLE is satisfiying beacause original features may have simple structure and the data is randomly scatering in the high-dimension space.
+
+We also give the 2-components scattering result in Fig. \ref{Fig7}. When we use 4 neighbors to reconstruct the sample, we can find its poor performance. For data can be regarded as manifold structure, LLE performs while when we give the proper neighbors' number.
 
 \section{Conclusion}
 In this project, we evaluate different dimension reduction techniques by measuring their classification performance when combined with SVM model. In this Section, we want to give our perspectives on drawbacks and merits of these dimension reduction method. Importantly, we'll conclude the situations to use these methods.
