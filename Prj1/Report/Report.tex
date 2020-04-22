@@ -98,11 +98,17 @@
 \section{Method}
 \subsection{Feature Selection}
 \subsubsection{Select-k-best}
-\indent SelectKBest is one of the methods of univariate feature selection, which works by selecting the best features based on univariate statistical tests. It removes all but the $k$ highest scoring features.
+\indent SelectKBest is one of the methods of univariate feature selection, which works by selecting the best features based on univariate statistical tests. It removes all but the $k$ highest scoring features. One of the parameters required for selectKBest is the scoring function, which mainly includes the following two:
+\begin{itemize}
+	\item chi2: Calculate the chi-square value of each feature, and the greater the chi-square value means the higher the correlation with the classification.
+	
+	\item f-classif: Calculate the F value of each feature. When the variance between the groups is much larger than the variance between the groups, that is, the gap between the groups is larger, the larger the F value.	
+\end{itemize}
 \subsubsection{Variance Threshold}
 \indent VarianceThreshold is a simple approach to feature selection. It removes all features whose variance doesn’t meet some threshold. The principle is that features with small variance often contain less data information.
 \subsubsection{Tree-based Selection}
-\indent Tree-based feature selection combines SelectFromModel and ExtraTreesClassifier. SelectFromModel is a meta-transformer that can be used along with any estimator that has a $coef\_$ or $feature\_importances\_$ attribute after fitting. The features whose $coef\_$ or $feature\_importances\_$ values are below the provided threshold parameterare are considered unimportant and removed. ExtraTreesClassifier can be used to compute feature importances, which happens to cooperate with SelectFromModel to discard irrelevant features.
+\indent Tree-based feature selection combines SelectFromModel and ExtraTreesClassifier. SelectFromModel is a meta-transformer that can be used along with any estimator that has a $coef\_$ or $feature\_importances\_$ attribute after fitting. The features whose $coef\_$ or $feature\_importances\_$ values are below the provided threshold parameterare are considered unimportant and removed. ExtraTreesClassifier can be used to compute feature importances, which happens to cooperate with SelectFromModel to discard irrelevant features.\par
+\indent In ExtraTreesClassifier, randomness is further calculated separately. Like random forest, a random subset of candidate features is used, but instead of finding the optimal discriminant attribute, a threshold is randomly selected for each candidate feature, and the best value of the randomly generated threshold is used as the segmentation principle. This usually reduces the variance of the model more, sacrifices the bias, and increases the bias.After constructing the tree, the relative rank (ie depth) of the features of the decision nodes in the tree can be used to evaluate the relative importance of the feature's predictability relative to the target variable. The features at the top of the tree contribute a larger score to the final prediction decision. Therefore, the predicted scores of the samples they contributed can be used as an assessment of the relative importance of features
 
 \subsection{Feature Projection}
 \subsubsection{PCA}
@@ -218,11 +224,179 @@ Linear SVM: Best C = 0.002, best accuracy = 0.932815 (baseline) \\
 Kernel SVM with RBF kernel: Best C = 5.0, best accuracy = 0.935160 (baseline) \\
 \subsection{Feature Selection}
 \subsubsection{Select-k-best}
-TODO: Xuanrui Hong\\
+SelectKBest belongs to univariate feature selection. It removes all but the $k$ highest scoring features. There are many options for the parameter $score\_func$ of this method and we chose the $f\_classif$. In this section, two experiment settings can derive from the rule: We use selectKBest on different number of aim component $[2, 5, 10, 20, 50, 100, 200, 500, 750, 1000, 1200, 1500, 2000]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
+
+We summarize the experimental results of selectKBest in Tab. \ref{base1} and Fig. \ref{Figure1}. As is shown, linear selectKBest model and RBF selectKBest model expectively exhibit the best performances at 1000 components and 750 components, reaching 93.01\% and 92.96\% on the classification task. We can compare the result with the simple linear SVM and simple RBF SVM, find the selectKBest model's performance is worse than the baselines, and we deem the reason is that selectKBest reduces the dimension at the cost of reducing a little accuracy. Besides, more dimensions results in higher accuracy.
+
+We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Figure2}, from which we can see that the data reduced to 2 dimensions using the selectKBest method are clustered together and cannot be well classified. This can also be inferred from the Tab. \ref{base1}.
+
+\begin{table}
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.1}
+	\caption{Comparison of selectKBest and baslines in Classification Task}
+	\label{base1}%
+	\resizebox{\linewidth}{!}{
+		\begin{tabular}{c|c|c|c|c}
+			\hline
+			Model &\multicolumn{2}{c|}{selectKBest+SVM}&\multicolumn{2}{c}{SVM}\\
+			\hline
+			{components number} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+			\cline{2-5}
+			\hline
+			2   & 12.45 & 16.05 & 93.28 & 93.52\\
+			\hline
+			5   & 23.33 & 35.80 & 93.28 & 93.52\\
+			\hline
+			10   & 32.88 & 48.84 & 93.28 & 93.52\\
+			\hline
+			20   & 57.59 & 71.85 & 93.28 & 93.52\\
+			\hline
+			50  & 79.86 & 85.92 & 93.28 & 93.52\\
+			\hline
+			100  & 87.38 & 89.85 & 93.28 & 93.52\\
+			\hline
+			200  & 90.69 & 91.55 & 93.28 & 93.52\\
+			\hline
+			500  & 92.45 & 92.75 & 93.28 & 93.52\\
+			\hline
+			750  & 92.77 & 92.96 & 93.28 & 93.52\\
+			\hline
+			1000  & 93.01 & 92.92 & 93.28 & 93.52\\
+			\hline
+			1200  & 92.88 & 92.84 & 93.28 & 93.52\\
+			\hline
+			1500  & 92.88 & 91.55 & 93.28 & 93.52\\
+			\hline
+			2000  & 92.98 & 91.96 & 93.28 & 93.52\\
+			\hline
+	\end{tabular}}
+\end{table}
+
+\begin{figure}
+	\centering
+	\subfigure[metric accuracy comparison on linear selectKBest]{
+		\includegraphics[width=6.5cm]{figure/selectKBest_linear.jpg}
+		%\caption{fig1}
+	}
+	\quad
+	\subfigure[metric accuracy comparison on RBF selectKBest]{
+		\includegraphics[width=6.5cm]{figure/selectKBest_rbf.jpg}
+	}
+	\caption{selecrKBest performance on linear kernel and RBF kernel}
+	\label{Figure1}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\subfigure[Trainset 2D scatter with selectKBest]{
+		\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_SelectKBest.jpg}
+		%\caption{fig1}
+	}
+	\quad
+	\subfigure[Testset 2D scatter with selectKBest]{
+		\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_SelectKBest.jpg}
+	}
+	\caption{Dataset 2D scatter with selectKBest}
+	\label{Figure2}
+\end{figure}
 \subsubsection{Variance Threshold}
-TODO: Xuanrui Hong\\
+VarianceThreshold is one of the simple feature selection methods, removing all features whose variance is less than the threshold. In this section, two experiment settings can derive from the rule: We use varianceThreshold on different number of aim component $[0.1, 0.2, 0.3, 0.5, 0.7, 0.9]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
+
+We summarize the experimental results of varianceThreshold in Tab. \ref{base2} and Fig. \ref{Figure3}. As is shown, the linear varianceThreshold model and the RBF varianceThreshold model exhibit the best performance on 0.1 components and 0.3 components, with data dimensions of 1883 and 1022, and classification accuracy of 92.96\% and 93.08\% respectively. We can see that varianceThreshold is similar to selectKBest because their classification accuracy is not as good as baselines. It also reduces dimensionality at the cost of accuracy.
+
+
+\begin{table}
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.1}
+	\caption{Comparison of varianceThreshold and baselines in Classification Task}
+	\label{base2}%
+	\resizebox{\linewidth}{!}{
+		\begin{tabular}{c|c|c|c|c|c}
+			\hline
+			Model &\multicolumn{3}{c|}{varianceThreshold+SVM}&\multicolumn{2}{c}{SVM}\\
+			\hline
+			{components number} & {dimension} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+			\cline{2-5}
+			\hline
+			0.1   & 1883 & 92.96 & 92.24 & 93.28 & 93.52\\
+			\hline
+			0.2   & 1345 & 92.94 & 92.75 & 93.28 & 93.52\\
+			\hline
+			0.3   & 1022 & 92.87 & 93.08 & 93.28 & 93.52\\
+			\hline
+			0.5   & 620  & 92.94 & 92.98 & 93.28 & 93.52\\
+			\hline
+			0.7   & 401  & 92.63 & 92.73 & 93.28 & 93.52\\
+			\hline
+			0.9   & 271  & 91.88 & 92.30 & 93.28 & 93.52\\
+			\hline
+	\end{tabular}}
+\end{table}
+
+\begin{figure}
+	\centering
+	\subfigure[metric accuracy comparison on linear varianceThreshold]{
+		\includegraphics[width=6.5cm]{figure/VarianceThreshold_linear.jpg}
+		%\caption{fig1}
+	}
+	\quad
+	\subfigure[metric accuracy comparison on RBF varianceThreshold]{
+		\includegraphics[width=6.5cm]{figure/VarianceThreshold_rbf.jpg}
+	}
+	\caption{VarianceThreshold performance on linear kernel and RBF kernel}
+	\label{Figure3}
+\end{figure}
+
 \subsubsection{Tree-based Selection}
-TODO: Xuanrui Hong\\
+Tree-based predictive models can be used to calculate the importance of features, so they can be used to remove irrelevant features. In this section, two experiment settings can derive from the rule: We use tree-based selection on different number of aim component $[2, 4, 8, 16, 32, 64]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
+
+We summarize the experimental results of tree-based selection in Tab. \ref{base3} and Fig. \ref{Figure4}. As is shown, the linear varianceThreshold model and the RBF varianceThreshold model exhibit the best performance both on 4 components, with data dimensions of 564, and classification accuracy of 92.63\% and 92.84\% respectively. We can see that the best classification accuracy of tree-based selection is not as good as selectKBest and varianceThreshold. According to the decision tree, the reason may be that for data with inconsistent sample sizes in each category, the information gain is biased towards those features with more values.
+
+
+\begin{table}
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.1}
+	\caption{Comparison of Tree-based selection and baslines in Classification Task}
+	\label{base3}%
+	\resizebox{\linewidth}{!}{
+		\begin{tabular}{c|c|c|c|c|c}
+			\hline
+			Model &\multicolumn{3}{c|}{tree-based selection+SVM}&\multicolumn{2}{c}{SVM}\\
+			\hline
+			{components number} & {dimension} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+			\cline{2-5}
+			\hline
+			2   & 523 & 92.61 & 92.69 & 93.28 & 93.52\\
+			\hline
+			4   & 564 & 92.63 & 92.84 & 93.28 & 93.52\\
+			\hline
+			8   & 563 & 92.47 & 92.80 & 93.28 & 93.52\\
+			\hline
+			16   & 609  & 92.59 & 92.67 & 93.28 & 93.52\\
+			\hline
+			32   & 609  & 92.58 & 92.81 & 93.28 & 93.52\\
+			\hline
+			64   & 600  & 92.59 & 92.81 & 93.28 & 93.52\\
+			\hline
+	\end{tabular}}
+\end{table}
+
+\begin{figure}
+	\centering
+	\subfigure[metric accuracy comparison on linear Tree-based selection]{
+		\includegraphics[width=6.5cm]{figure/TreeBasedSelection_linear.jpg}
+		%\caption{fig1}
+	}
+	\quad
+	\subfigure[metric accuracy comparison on RBF Tree-based selection]{
+		\includegraphics[width=6.5cm]{figure/TreeBasedSelection_rbf.jpg}
+	}
+	\caption{Tree-based selection performance on linear kernel and RBF kernel}
+	\label{Figure4}
+\end{figure}
 
 \subsection{Feature Projection}
 \subsubsection{PCA}
