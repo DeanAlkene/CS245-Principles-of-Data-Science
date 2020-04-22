@@ -24,7 +24,8 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 \usepackage{multicol}
-\usepackage{xeCJK}
+\usepackage{multirow}
+\usepackage{diagbox}
 \usepackage{subfigure}
 \usepackage{tabularx}
 \usepackage{graphicx}
@@ -64,31 +65,13 @@
 
 \maketitle
 
-\textbf{To Xuanrui Hong:}\\
-请先完成Method部分\\
-截止日期：周六晚24点\\
-提交方式：\texttt{git}\\
+TODO:
 \begin{itemize}
-  \item 可以使用ppt上的图片、公式，使用公式必须要完整体现这个方法的内涵
-  \item 可以参考维基百科，但需要做一定的改写, i.e. paraphrase
-  \item 参考文献获取途径：前往\texttt{sci-kit learn}官方网站，搜索对应的方法，如PCA，在相应文档页面查找是否有参考文献。或者找到左上角User Guide，寻找相应内容，如2.Unsupervised Learning-2.5.Decomposing signals in components (matrix factorization problems)
-  \item 可以参考往届报告，行文风格、参考文献等，但不必每个方法处处都引用
-\end{itemize}
-
-\textbf{To Qilin Chen:}\\
-请完成Experiement中Feature Selection之外的部分及Conclusion部分（周日晚Xuanrui Hong会完成Feature Selection部分的分析，并\texttt{push}至仓库中，请使用\texttt{git pull}获取）
-截止日期：周二晚24点 \\
-提交方式：\texttt{git} \\
-\begin{itemize}
-  \item 所有实验结果均在Prj1/Result下，包括不同方法、不同维度的降维结果用线性SVM以及核SVM（RBF核）的分类精度（文本、点线图），以及2维降维结果的可视化（训练集、测试集）
-  \item Baseline已经给出，请以baseline为基准比较各方法结果
-  \item 请恰当使用\texttt{figure}、\texttt{subfigure}等方式美观地排版图片
-  \item 请正确地设计表格，以表现不同降维方法、不同分类器（线性SVM以及核SVM）产生的结果变化，并突出最佳参数设置
-  \item AutoEncoder部分请查看代码（Prj1/Projection/AutoEncoder.py）获取神经网络结构、超参数等数据，并在文中体现
-  \item 关于参考文献：前往\texttt{sci-kit learn}官方网站，搜索对应的方法，如PCA，在相应文档页面查找是否有参考文献。或者找到左上角User Guide，寻找相应内容，如2.Unsupervised Learning-2.5.Decomposing signals in components (matrix factorization problems)。除此之外还可以寻找其他参考文献。
-  \item 可以参考往届报告，行文风格、参考文献等
-  \item 请修改上方\texttt{author}部分你的邮箱
-  \item 由于是多人同时完成不同的部分，每次修改前请使用\texttt{git pull}保持与远程仓库的同步，修改完毕后及时使用\texttt{git push}
+	\item Adjust tables and figures DONE
+	\item Write abstract \& baseline part
+	\item Rewrite Feature Selection part
+	\item Add formula to Kernel PCA part
+	\item Read and check
 \end{itemize}
 
 \begin{abstract}
@@ -98,7 +81,7 @@
 \section{Method}
 \subsection{Feature Selection}
 \subsubsection{Select-k-best}
-\indent SelectKBest is one of the methods of univariate feature selection, which works by selecting the best features based on univariate statistical tests. It removes all but the $k$ highest scoring features. One of the parameters required for selectKBest is the scoring function, which mainly includes the following two:
+\indent Select-K-Best is one of the methods of univariate feature selection, which works by selecting the best features based on univariate statistical tests. It removes all but the $k$ highest scoring features. One of the parameters required for Select-K-Best is the scoring function, which mainly includes the following two:
 \begin{itemize}
 	\item chi2: Calculate the chi-square value of each feature, and the greater the chi-square value means the higher the correlation with the classification.
 	
@@ -108,11 +91,11 @@
 \indent VarianceThreshold is a simple approach to feature selection. It removes all features whose variance doesn’t meet some threshold. The principle is that features with small variance often contain less data information.
 \subsubsection{Tree-based Selection}
 \indent Tree-based feature selection combines SelectFromModel and ExtraTreesClassifier. SelectFromModel is a meta-transformer that can be used along with any estimator that has a $coef\_$ or $feature\_importances\_$ attribute after fitting. The features whose $coef\_$ or $feature\_importances\_$ values are below the provided threshold parameterare are considered unimportant and removed. ExtraTreesClassifier can be used to compute feature importances, which happens to cooperate with SelectFromModel to discard irrelevant features.\par
-\indent In ExtraTreesClassifier, randomness is further calculated separately. Like random forest, a random subset of candidate features is used, but instead of finding the optimal discriminant attribute, a threshold is randomly selected for each candidate feature, and the best value of the randomly generated threshold is used as the segmentation principle. This usually reduces the variance of the model more, sacrifices the bias, and increases the bias.After constructing the tree, the relative rank (ie depth) of the features of the decision nodes in the tree can be used to evaluate the relative importance of the feature's predictability relative to the target variable. The features at the top of the tree contribute a larger score to the final prediction decision. Therefore, the predicted scores of the samples they contributed can be used as an assessment of the relative importance of features
+\indent In ExtraTreesClassifier, randomness is further calculated separately. Like random forest, a random subset of candidate features is used, but instead of finding the optimal discriminant attribute, a threshold is randomly selected for each candidate feature, and the best value of the randomly generated threshold is used as the segmentation principle. This usually reduces the variance of the model more, sacrifices the bias, and increases the bias. After constructing the tree, the relative rank (i.e. depth) of the features of the decision nodes in the tree can be used to evaluate the relative importance of the feature's predictability relative to the target variable. The features at the top of the tree contribute a larger score to the final prediction decision. Therefore, the predicted scores of the samples they contributed can be used as an assessment of the relative importance of features
 
 \subsection{Feature Projection}
 \subsubsection{PCA}
-\indent Principal component analysis is one of the most widely used data dimensionality reduction algorithms. It performs a linear mapping of the data to a lower-dimensional space in such a way that the variance of the data in the low-dimensional representation is maximized.\cite{pearson1901liii}
+\indent Principal component analysis is one of the most widely used data dimensionality reduction algorithms. It performs a linear mapping of the data to a lower-dimensional space in such a way that the variance of the data in the low-dimensional representation is maximized\cite{pearson1901liii}.
 Formally, the optimization goal is
 \begin{eqnarray}
 \centering
@@ -148,7 +131,7 @@ We can see that $v$ is the eigenvector of $XX^T$, and $\lambda$ is the correspon
 		
 		\item Calculate the eigenvalues and corresponding eigenvectors of the matrix $S^{-1}_WS_B$.
 		
-		\item Select the eigenvectors corresponding to the first $k$ eigenvalues to construct a $d × k$ dimension transformation matrix $W$, where the eigenvectors are arranged in columns.
+		\item Select the eigenvectors corresponding to the first $k$ eigenvalues to construct a $d \times k$ dimension transformation matrix $W$, where the eigenvectors are arranged in columns.
 		
 		\item Use the transformation matrix $W$ to map the samples to the new feature subspace.
 		
@@ -191,7 +174,7 @@ We can see that $v$ is the eigenvector of $XX^T$, and $\lambda$ is the correspon
 \end{figure}\par
 
 \subsubsection{LLE}
-Locally Linear Embedding (LLE) is a member of the manifold learning algorithm and is a nonlinear dimensionality reduction method. LLE was invented in 2000 and published in the journal Sience.\cite{roweis2000nonlinear}LLE algorithm tries to maintain the linear relationship between samples in the neighborhood. As shown in figure 3，the sample $x_i$ in the high-dimensional space can be reconstructed from its neighbor sample $x_j,x_k,x_l$ through linear combination, ie
+Locally Linear Embedding (LLE) is a member of the manifold learning algorithm and is a nonlinear dimensionality reduction method. LLE was invented in 2000 and published in the journal Sience.\cite{roweis2000nonlinear}LLE algorithm tries to maintain the linear relationship between samples in the neighborhood. As shown in \ref{fig:LLE}, the sample $x_i$ in the high-dimensional space can be reconstructed from its neighbor sample $x_j,x_k,x_l$ through linear combination, i.e.
 \begin{eqnarray}
 x_i = w_{ij}x_j+w_{ik}x_k+x_{il}x_l
 \end{eqnarray}
@@ -223,127 +206,128 @@ Training Set : Test Set = 6:4 \\
 Linear SVM: Best C = 0.002, best accuracy = 0.932815 (baseline) \\
 Kernel SVM with RBF kernel: Best C = 5.0, best accuracy = 0.935160 (baseline) \\
 \subsection{Feature Selection}
-\subsubsection{Select-k-best}
-SelectKBest belongs to univariate feature selection. It removes all but the $k$ highest scoring features. There are many options for the parameter $score\_func$ of this method and we chose the $f\_classif$. In this section, two experiment settings can derive from the rule: We use selectKBest on different number of aim component $[2, 5, 10, 20, 50, 100, 200, 500, 750, 1000, 1200, 1500, 2000]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
+\subsubsection{Select-K-Best}
+Select-K-Best belongs to univariate feature selection. It removes all but the $k$ highest scoring features. There are many options for the parameter $score\_func$ of this method and we chose the $f\_classif$. In this section, two experiment settings can derive from the rule: We use Select-K-Best on different number of aim component $[2, 5, 10, 20, 50, 100, 200, 500, 750, 1000, 1200, 1500, 2000]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
 
-We summarize the experimental results of selectKBest in Tab. \ref{base1} and Fig. \ref{Figure1}. As is shown, linear selectKBest model and RBF selectKBest model expectively exhibit the best performances at 1000 components and 750 components, reaching 93.01\% and 92.96\% on the classification task. We can compare the result with the simple linear SVM and simple RBF SVM, find the selectKBest model's performance is worse than the baselines, and we deem the reason is that selectKBest reduces the dimension at the cost of reducing a little accuracy. Besides, more dimensions results in higher accuracy.
+We summarize the experimental results of Select-K-Best in Tab. \ref{base1} and Fig. \ref{Figure1}. As is shown, linear Select-K-Best model and RBF Select-K-Best model expectively exhibit the best performances at 1000 components and 750 components, reaching 93.01\% and 92.96\% on the classification task. We can compare the result with the simple linear SVM and simple RBF SVM, find the Select-K-Best model's performance is worse than the baselines, and we deem the reason is that Select-K-Best reduces the dimension at the cost of reducing a little accuracy. Besides, more dimensions results in higher accuracy.
 
-We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Figure2}, from which we can see that the data reduced to 2 dimensions using the selectKBest method are clustered together and cannot be well classified. This can also be inferred from the Tab. \ref{base1}.
+We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Figure2}, from which we can see that the data reduced to 2 dimensions using the Select-K-Best method are clustered together and cannot be well classified. This can also be inferred from the Tab. \ref{base1}.
 
-\begin{table}
+\begin{table}[htbp]
 	\centering
 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-	\renewcommand\arraystretch{1.1}
-	\caption{Comparison of selectKBest and baslines in Classification Task}
+	\renewcommand\arraystretch{1.0}
+	\caption{Comparison of Select-K-Best and baslines in Classification Task}
 	\label{base1}%
-	\resizebox{\linewidth}{!}{
-		\begin{tabular}{c|c|c|c|c}
-			\hline
-			Model &\multicolumn{2}{c|}{selectKBest+SVM}&\multicolumn{2}{c}{SVM}\\
-			\hline
-			{components number} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
-			\cline{2-5}
-			\hline
-			2   & 12.45 & 16.05 & 93.28 & 93.52\\
-			\hline
-			5   & 23.33 & 35.80 & 93.28 & 93.52\\
-			\hline
-			10   & 32.88 & 48.84 & 93.28 & 93.52\\
-			\hline
-			20   & 57.59 & 71.85 & 93.28 & 93.52\\
-			\hline
-			50  & 79.86 & 85.92 & 93.28 & 93.52\\
-			\hline
-			100  & 87.38 & 89.85 & 93.28 & 93.52\\
-			\hline
-			200  & 90.69 & 91.55 & 93.28 & 93.52\\
-			\hline
-			500  & 92.45 & 92.75 & 93.28 & 93.52\\
-			\hline
-			750  & 92.77 & 92.96 & 93.28 & 93.52\\
-			\hline
-			1000  & 93.01 & 92.92 & 93.28 & 93.52\\
-			\hline
-			1200  & 92.88 & 92.84 & 93.28 & 93.52\\
-			\hline
-			1500  & 92.88 & 91.55 & 93.28 & 93.52\\
-			\hline
-			2000  & 92.98 & 91.96 & 93.28 & 93.52\\
-			\hline
-	\end{tabular}}
+	\begin{tabular}{@{}p{2.5cm}<{\centering}|c|c}
+		\hline
+		\multirow{2}{*}{\diagbox[height=2\line,width=2.7cm,font=\tiny,trim=lr]{$d$}{Acc.}{$\mathit{M}$}} &\multicolumn{2}{c}{Select-K-Best+SVM}\\
+		\cline{2-3}
+			& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+		\cline{2-3}
+		\hline
+		Baseline & 93.28 & 93.52\\
+		\hline
+		2   & 12.45 & 16.05\\
+		\hline
+		5   & 23.33 & 35.80\\
+		\hline
+		10  & 32.88 & 48.84\\
+		\hline
+		20  & 57.59 & 71.85\\
+		\hline
+		50  & 79.86 & 85.92\\
+		\hline
+		100 & 87.38 & 89.85\\
+		\hline
+		200 & 90.69 & 91.55\\
+		\hline
+		500 & 92.45 & 92.75\\
+		\hline
+		750 & 92.77 & \textbf{92.96}\\
+		\hline
+		1000 & \textbf{93.01} & 92.92\\
+		\hline
+		1200 & 92.88 & 92.84\\
+		\hline
+		1500 & 92.88 & 91.55\\
+		\hline
+		2000 & 92.98 & 91.96\\
+		\hline
+\end{tabular}
 \end{table}
 
-\begin{figure}
+\begin{figure}[htbp]
 	\centering
-	\subfigure[metric accuracy comparison on linear selectKBest]{
-		\includegraphics[width=6.5cm]{figure/selectKBest_linear.jpg}
+	\subfigure[metric accuracy comparison on linear Select-K-Best]{
+		\includegraphics[width=5.5cm]{figure/SelectKBest_linear.jpg}
 		%\caption{fig1}
 	}
 	\quad
-	\subfigure[metric accuracy comparison on RBF selectKBest]{
-		\includegraphics[width=6.5cm]{figure/selectKBest_rbf.jpg}
+	\subfigure[metric accuracy comparison on RBF Select-K-Best]{
+		\includegraphics[width=5.5cm]{figure/SelectKBest_rbf.jpg}
 	}
-	\caption{selecrKBest performance on linear kernel and RBF kernel}
+	\caption{Select-K-Best performance on linear kernel and RBF kernel}
 	\label{Figure1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htbp]
 	\centering
-	\subfigure[Trainset 2D scatter with selectKBest]{
-		\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_SelectKBest.jpg}
+	\subfigure[Trainset 2D scatter with Select-K-Best]{
+		\includegraphics[width=5.5cm]{figure/X_train_scatter_2d_SelectKBest.jpg}
 		%\caption{fig1}
 	}
 	\quad
-	\subfigure[Testset 2D scatter with selectKBest]{
-		\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_SelectKBest.jpg}
+	\subfigure[Testset 2D scatter with Select-K-Best]{
+		\includegraphics[width=5.5cm]{figure/X_test_scatter_2d_SelectKBest.jpg}
 	}
-	\caption{Dataset 2D scatter with selectKBest}
+	\caption{Dataset 2D scatter with Select-K-Best}
 	\label{Figure2}
 \end{figure}
 \subsubsection{Variance Threshold}
-VarianceThreshold is one of the simple feature selection methods, removing all features whose variance is less than the threshold. In this section, two experiment settings can derive from the rule: We use varianceThreshold on different number of aim component $[0.1, 0.2, 0.3, 0.5, 0.7, 0.9]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
+VarianceThreshold is one of the simple feature selection methods, removing all features whose variance is less than the threshold. In this section, two experiment settings can derive from the rule: We use Variance Threshold on different number of aim component $[0.1, 0.2, 0.3, 0.5, 0.7, 0.9]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
 
-We summarize the experimental results of varianceThreshold in Tab. \ref{base2} and Fig. \ref{Figure3}. As is shown, the linear varianceThreshold model and the RBF varianceThreshold model exhibit the best performance on 0.1 components and 0.3 components, with data dimensions of 1883 and 1022, and classification accuracy of 92.96\% and 93.08\% respectively. We can see that varianceThreshold is similar to selectKBest because their classification accuracy is not as good as baselines. It also reduces dimensionality at the cost of accuracy.
+We summarize the experimental results of Variance Threshold in Tab. \ref{base2} and Fig. \ref{Figure3}. As is shown, the linear Variance Threshold model and the RBF Variance Threshold model exhibit the best performance on 0.1 components and 0.3 components, with data dimensions of 1883 and 1022, and classification accuracy of 92.96\% and 93.08\% respectively. We can see that Variance Threshold is similar to Select-K-Best because their classification accuracy is not as good as baselines. It also reduces dimensionality at the cost of accuracy.
 
 
-\begin{table}
+\begin{table}[htbp]
 	\centering
 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-	\renewcommand\arraystretch{1.1}
-	\caption{Comparison of varianceThreshold and baselines in Classification Task}
+	\renewcommand\arraystretch{1.0}
+	\caption{Comparison of Variance Threshold and baselines in Classification Task}
 	\label{base2}%
-	\resizebox{\linewidth}{!}{
-		\begin{tabular}{c|c|c|c|c|c}
-			\hline
-			Model &\multicolumn{3}{c|}{varianceThreshold+SVM}&\multicolumn{2}{c}{SVM}\\
-			\hline
-			{components number} & {dimension} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
-			\cline{2-5}
-			\hline
-			0.1   & 1883 & 92.96 & 92.24 & 93.28 & 93.52\\
-			\hline
-			0.2   & 1345 & 92.94 & 92.75 & 93.28 & 93.52\\
-			\hline
-			0.3   & 1022 & 92.87 & 93.08 & 93.28 & 93.52\\
-			\hline
-			0.5   & 620  & 92.94 & 92.98 & 93.28 & 93.52\\
-			\hline
-			0.7   & 401  & 92.63 & 92.73 & 93.28 & 93.52\\
-			\hline
-			0.9   & 271  & 91.88 & 92.30 & 93.28 & 93.52\\
-			\hline
-	\end{tabular}}
+	\begin{tabular}{@{}p{2.5cm}<{\centering}|c|c|c}
+		\hline
+		\multirow{2}{*}{\diagbox[height=2\line,width=2.9cm,font=\tiny]{$\theta$}{Acc.}{$\mathit{M}$}} &\multicolumn{3}{c}{Variance Threshold+SVM}\\
+		\cline{2-4}
+		& {Dimension} & {Linear kernel(\%)} & {RBF kernel(\%)}\\
+		\hline
+		Baseline & 2048 & 93.28 & 93.52\\
+		\hline
+		0.1   & 1883 & \textbf{92.96} & 92.24\\
+		\hline
+		0.2   & 1345 & 92.94 & 92.75\\
+		\hline
+		0.3   & 1022 & 92.87 & \textbf{93.08}\\
+		\hline
+		0.5   & 620  & 92.94 & 92.98\\
+		\hline
+		0.7   & 401  & 92.63 & 92.73\\
+		\hline
+		0.9   & 271  & 91.88 & 92.30\\
+		\hline
+	\end{tabular}
 \end{table}
 
-\begin{figure}
+\begin{figure}[htbp]
 	\centering
-	\subfigure[metric accuracy comparison on linear varianceThreshold]{
-		\includegraphics[width=6.5cm]{figure/VarianceThreshold_linear.jpg}
+	\subfigure[metric accuracy comparison on linear Variance Threshold]{
+		\includegraphics[width=5.5cm]{figure/VarianceThreshold_linear.jpg}
 		%\caption{fig1}
 	}
 	\quad
-	\subfigure[metric accuracy comparison on RBF varianceThreshold]{
-		\includegraphics[width=6.5cm]{figure/VarianceThreshold_rbf.jpg}
+	\subfigure[metric accuracy comparison on RBF Variance Threshold]{
+		\includegraphics[width=5.5cm]{figure/VarianceThreshold_rbf.jpg}
 	}
 	\caption{VarianceThreshold performance on linear kernel and RBF kernel}
 	\label{Figure3}
@@ -352,47 +336,47 @@ We summarize the experimental results of varianceThreshold in Tab. \ref{base2} a
 \subsubsection{Tree-based Selection}
 Tree-based predictive models can be used to calculate the importance of features, so they can be used to remove irrelevant features. In this section, two experiment settings can derive from the rule: We use tree-based selection on different number of aim component $[2, 4, 8, 16, 32, 64]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
 
-We summarize the experimental results of tree-based selection in Tab. \ref{base3} and Fig. \ref{Figure4}. As is shown, the linear varianceThreshold model and the RBF varianceThreshold model exhibit the best performance both on 4 components, with data dimensions of 564, and classification accuracy of 92.63\% and 92.84\% respectively. We can see that the best classification accuracy of tree-based selection is not as good as selectKBest and varianceThreshold. According to the decision tree, the reason may be that for data with inconsistent sample sizes in each category, the information gain is biased towards those features with more values.
+We summarize the experimental results of tree-based selection in Tab. \ref{base3} and Fig. \ref{Figure4}. As is shown, the linear Variance Threshold model and the RBF Variance Threshold model exhibit the best performance both on 4 components, with data dimensions of 564, and classification accuracy of 92.63\% and 92.84\% respectively. We can see that the best classification accuracy of tree-based selection is not as good as Select-K-Best and Variance Threshold. According to the decision tree, the reason may be that for data with inconsistent sample sizes in each category, the information gain is biased towards those features with more values.
 
 
-\begin{table}
+\begin{table}[htbp]
 	\centering
 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-	\renewcommand\arraystretch{1.1}
+	\renewcommand\arraystretch{1.0}
 	\caption{Comparison of Tree-based selection and baslines in Classification Task}
 	\label{base3}%
-	\resizebox{\linewidth}{!}{
-		\begin{tabular}{c|c|c|c|c|c}
-			\hline
-			Model &\multicolumn{3}{c|}{tree-based selection+SVM}&\multicolumn{2}{c}{SVM}\\
-			\hline
-			{components number} & {dimension} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
-			\cline{2-5}
-			\hline
-			2   & 523 & 92.61 & 92.69 & 93.28 & 93.52\\
-			\hline
-			4   & 564 & 92.63 & 92.84 & 93.28 & 93.52\\
-			\hline
-			8   & 563 & 92.47 & 92.80 & 93.28 & 93.52\\
-			\hline
-			16   & 609  & 92.59 & 92.67 & 93.28 & 93.52\\
-			\hline
-			32   & 609  & 92.58 & 92.81 & 93.28 & 93.52\\
-			\hline
-			64   & 600  & 92.59 & 92.81 & 93.28 & 93.52\\
-			\hline
-	\end{tabular}}
+	\begin{tabular}{@{}p{2.5cm}<{\centering}|c|c|c}
+		\hline
+		\multirow{2}{*}{\diagbox[height=2\line,width=2.9cm,font=\tiny]{$\#est.$}{Acc.}{$\mathit{M}$}} &\multicolumn{3}{c}{Tree-based selection+SVM}\\
+		\cline{2-4}
+			& {Dimension} & {Linear kernel(\%)} & {RBF kernel(\%)}\\
+		\hline
+		Baseline & 93.28 & 93.52\\
+		\hline
+		2   & 523 & 92.61 & 92.69\\
+		\hline
+		4   & 564 & 92.63 & 92.84\\
+		\hline
+		8   & 563 & 92.47 & 92.80\\
+		\hline
+		16   & 609  & 92.59 & 92.67\\
+		\hline
+		32   & 609  & 92.58 & 92.81\\
+		\hline
+		64   & 600  & 92.59 & 92.81\\
+		\hline
+\end{tabular}
 \end{table}
 
-\begin{figure}
+\begin{figure}[htbp]
 	\centering
 	\subfigure[metric accuracy comparison on linear Tree-based selection]{
-		\includegraphics[width=6.5cm]{figure/TreeBasedSelection_linear.jpg}
+		\includegraphics[width=5.5cm]{figure/TreeBasedSelection_linear.jpg}
 		%\caption{fig1}
 	}
 	\quad
 	\subfigure[metric accuracy comparison on RBF Tree-based selection]{
-		\includegraphics[width=6.5cm]{figure/TreeBasedSelection_rbf.jpg}
+		\includegraphics[width=5.5cm]{figure/TreeBasedSelection_rbf.jpg}
 	}
 	\caption{Tree-based selection performance on linear kernel and RBF kernel}
 	\label{Figure4}
@@ -406,80 +390,81 @@ We summarize the experimental results of kernel PCA in Tab. \ref{baseline1} and 
 
 We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Fig2}, which can support the result that RBF kernel have better performance than linear kernel since the RBF figure can be better splited. What's more, if we compare the trainset and testset, we can find the dataset is randomly splited.
 
-\begin{table}
+\begin{table}[htbp]
 	\centering
 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-	\renewcommand\arraystretch{1.1}
+	\renewcommand\arraystretch{1.0}
 	\caption{Comparison of kernel PCA and baslines in Classification Task}
 	\label{baseline1}%
-	\resizebox{\linewidth}{!}{
-	\begin{tabular}{c|c|c|c|c}
+	\begin{tabular}{@{}p{2.5cm}<{\centering}|c|c}
 		\hline
-		Model &\multicolumn{2}{c|}{PCA+SVM}&\multicolumn{2}{c}{SVM}\\
+		\multirow{2}{*}{\diagbox[height=2\line,width=2.9cm,font=\tiny]{$d$}{Acc.}{$\mathit{M}$}} &\multicolumn{2}{c}{PCA+SVM}\\
+		\cline{2-3}
+			& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+		\cline{2-3}
 		\hline
-		{components number} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
-		\cline{2-5}
+		Baseline & 93.28 & 93.52\\
 		\hline
-		2   & 12.46 & 19.68 & 93.28 & 93.52\\
+		2   & 12.46 & 19.68\\
 		\hline
-		5   & 40.31 & 59.68 & 93.28 & 93.52\\
+		5   & 40.31 & 59.68\\
 		\hline
-		10   & 68.99 & 78.25 & 93.28 & 93.52\\
+		10   & 68.99 & 78.25\\
 		\hline
-		20   & 82.27 & 87.07 & 93.28 & 93.52\\
+		20   & 82.27 & 87.07\\
 		\hline
-		50  & 89.31 & 90.53 & 93.28 & 93.52\\
+		50  & 89.31 & 90.53\\
 		\hline
-		100  & 91.37 & 91.66 & 93.28 & 93.52\\
+		100  & 91.37 & 91.66\\
 		\hline
-		200  & 92.20 & 91.94 & 93.28 & 93.52\\
+		200  & \textbf{92.20} & 91.94\\
 		\hline
-		500  & 92.14 & 92.42 & 93.28 & 93.52\\
+		500  & 92.14 & 92.42\\
 		\hline
-		750  & 91.90 & 92.50 & 93.28 & 93.52\\
+		750  & 91.90 & \textbf{92.50}\\
 		\hline
-		1000  & 91.70 & 92.44 & 93.28 & 93.52\\
+		1000  & 91.70 & 92.44\\
 		\hline
-		1200  & 91.78 & 92.26 & 93.28 & 93.52\\
+		1200  & 91.78 & 92.26\\
 		\hline
-		1500  & 91.57 & 91.85 & 93.28 & 93.52\\
+		1500  & 91.57 & 91.85\\
 		\hline
-		2000  & 91.64 & 88.08 & 93.28 & 93.52\\
+		2000  & 91.64 & 88.08\\
 		\hline
-	\end{tabular}}
+	\end{tabular}
 \end{table}
 
-\begin{figure}
+\begin{figure}[htbp]
 \centering
 \subfigure[metric accuracy comparison on linear PCA]{
-\includegraphics[width=6.5cm]{figure/PCA_linear.jpg}
+\includegraphics[width=5.5cm]{figure/PCA_linear.jpg}
 %\caption{fig1}
 }
 \quad
 \subfigure[metric accuracy comparison on RBF PCA]{
-\includegraphics[width=6.5cm]{figure/PCA_rbf.jpg}
+\includegraphics[width=5.5cm]{figure/PCA_rbf.jpg}
 }
 \caption{Kernel PCA performance on linear kernel and RBF kernel}
 \label{Fig1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htbp]
 \centering
 \subfigure[Trainset 2D scatter with linear PCA]{
-\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_linear.jpg}
+\includegraphics[width=5.5cm]{figure/X_train_scatter_2d_linear.jpg}
 %\caption{fig1}
 }
 \quad
 \subfigure[Testset 2D scatter with linear PCA]{
-\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_linear.jpg}
+\includegraphics[width=5.5cm]{figure/X_test_scatter_2d_linear.jpg}
 }
 \quad
 \subfigure[Trainset 2D scatter with RBF PCA]{
-\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_rbf.jpg}
+\includegraphics[width=5.5cm]{figure/X_train_scatter_2d_rbf.jpg}
 }
 \quad
 \subfigure[Testset 2D scatter with RBF PCA]{
-\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_rbf.jpg}
+\includegraphics[width=5.5cm]{figure/X_test_scatter_2d_rbf.jpg}
 }
 \caption{Dataset 2D scatter with linear kernel and RBF kernel}
 \label{Fig2}
@@ -493,47 +478,48 @@ We summarize the experimental results of LDA-based model in Tab. \ref{baseline2}
 
 We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Fig4}. Compared with Fig. \ref{Fig2}, we can conclude LDA have better classes distance than PCA, which supports the correctness of the experiment. And we can find the random splitness of the dataset is covered.
 
-\begin{table}
+\begin{table}[htbp]
 	\centering
 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-	\renewcommand\arraystretch{1.1}
+	\renewcommand\arraystretch{1.0}
 	\caption{Comparison of LDA-based SVM and baslines in Classification Task}
 	\label{baseline2}%
-	\resizebox{\linewidth}{!}{
-	\begin{tabular}{c|c|c|c|c}
+	\begin{tabular}{@{}p{2.5cm}<{\centering}|c|c}
 		\hline
-		Model &\multicolumn{2}{c|}{LDA+SVM}&\multicolumn{2}{c}{SVM}\\
+		\multirow{2}{*}{\diagbox[height=2\line,width=2.9cm,font=\tiny]{$d$}{Acc.}{$\mathit{M}$}} &\multicolumn{2}{c}{LDA+SVM}\\
+		\cline{2-3}
+			& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+		\cline{2-3}
 		\hline
-		{components number} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
-		\cline{2-5}
+		Baseline & 93.28 & 93.52\\
 		\hline
-		2   & 16.02 & 30.39 & 93.28 & 93.52\\
+		2   & 16.02 & 30.39\\
 		\hline
-		3   & 19.63 & 39.80 & 93.28 & 93.52\\
+		3   & 19.63 & 39.80\\
 		\hline
-		5   & 38.93 & 57.69 & 93.28 & 93.52\\
+		5   & 38.93 & 57.69\\
 		\hline
-		10   & 58.08 & 71.36 & 93.28 & 93.52\\
+		10   & 58.08 & 71.36\\
 		\hline
-		20   & 77.61 & 82.75 & 93.28 & 93.52\\
+		20   & 77.61 & 82.75\\
 		\hline
-		30   & 87.80 & 89.75 & 93.28 & 93.52\\
+		30   & 87.80 & 89.75\\
 		\hline
-		40   & 90.56 & 91.47 & 93.28 & 93.52\\
+		40   & \textbf{90.56} & \textbf{91.47}\\
 		\hline
-	\end{tabular}}
+	\end{tabular}
 \end{table}
 
 \begin{center}
 \begin{figure}[htbp]
 \centering
 \subfigure[metric accuracy comparison on LDA with linear SVM]{
-\includegraphics[width=6.5cm]{figure/LDA_linear.jpg}
+\includegraphics[width=5.5cm]{figure/LDA_linear.jpg}
 %\caption{fig1}
 }
 \quad
 \subfigure[metric accuracy comparison on LDA with RBF SVM]{
-\includegraphics[width=6.5cm]{figure/LDA_rbf.jpg}
+\includegraphics[width=5.5cm]{figure/LDA_rbf.jpg}
 }
 \caption{LDA-based model performance on linear kernel SVM and RBF kernel SVM}
 \label{Fig3}
@@ -544,46 +530,17 @@ We give the 2-components scattering figure of different kernel and dataset in Fi
 \begin{figure}[htbp]
 \centering
 \subfigure[Trainset 2D scatter with LDA]{
-\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_LDA.jpg}
+\includegraphics[width=5.5cm]{figure/X_train_scatter_2d_LDA.jpg}
 %\caption{fig1}
 }
 \quad
 \subfigure[Testset 2D scatter with LDA]{
-\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_LDA.jpg}
+\includegraphics[width=5.5cm]{figure/X_test_scatter_2d_LDA.jpg}
 }
 \caption{Dataset 2-components scatter with LDA}
 \label{Fig4}
 \end{figure}
 \end{center}
-
-\begin{table}
-	\centering
-	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-	\renewcommand\arraystretch{1.1}
-	\caption{Comparison of AutoEncoder-based SVM and baslines in Classification Task}
-	\label{baseline3}%
-	\resizebox{\linewidth}{!}{
-	\begin{tabular}{c|c|c|c|c}
-		\hline
-		Model &\multicolumn{2}{c|}{AutoEncoder+SVM}&\multicolumn{2}{c}{SVM}\\
-		\hline
-		{components number} & {Linear kernel(\%)} & {RBF kernel(\%)}& {Linear kernel(\%)} & {RBF kernel(\%)}\\
-		\cline{2-5}
-		\hline
-		2   & 23.71 & 68.75 & 93.28 & 93.52\\
-		\hline
-		64   & 69.52 & 70.35 & 93.28 & 93.52\\
-		\hline
-		128   & 72.01 & 70.25 & 93.28 & 93.52\\
-		\hline
-		256   & 78.35 & 76.93 & 93.28 & 93.52\\
-		\hline
-		512   & 87.59 & 87.90 & 93.28 & 93.52\\
-		\hline
-		1024   & 91.42 & 91.95 & 93.28 & 93.52\\
-		\hline
-	\end{tabular}}
-\end{table}
 
 \subsubsection{AutoEncoder}
 AutoEncoder is a unsupervised method to determine the essential dimensions of high-dimensional dataset, which can construct the complete dataset features with minimun loss, i.e. with encoder reducing the data dimension to `bottleneck' and decoder to restruct the data, we can get the origin sample data or get the minimun loss. In this section, we use AutoEncoder with MSE loss to get the low-dimensional feature and respectively combine linear SVM and RBF SVM to achieve the classification task. We adopt classifiction accuracy as metric in this section.
@@ -591,38 +548,66 @@ AutoEncoder is a unsupervised method to determine the essential dimensions of hi
 We summarize the experimental results of AutoEncoder-based model in Tab. \ref{baseline3} and Fig. \ref{Fig5}. As is shown, with the components number increases, models receive better performance especially for RBF kernel model. We can recognize that when we have less compoents, model with RBF SVM may receive a higher accuracy. AE with linear SVM and with RBF SVM respectively reach $91.42\%$ and $91.95\%$ in classification accuracy when components number comes to 1024.
 
 We give the 2-components scattering figure of different kernel and dataset in Fig. \ref{Fig6}. We can find that some classes can't be linearly differed in 2-components, and we deem it's the reason why RBF SVM have better performance than linear one when we have less components.
-
 \begin{center}
-\begin{figure}[htbp]
-\centering
-\subfigure[metric accuracy comparison on AutoEncoder with linear SVM]{
-\includegraphics[width=6.5cm]{figure/AE_linear.jpg}
-%\caption{fig1}
-}
-\quad
-\subfigure[metric accuracy comparison on AutoEncoder with RBF SVM]{
-\includegraphics[width=6.5cm]{figure/AE_rbf.jpg}
-}
-\caption{AutoEncoder-based model performance on linear kernel SVM and RBF kernel SVM}
-\label{Fig5}
-\end{figure}
+	\begin{figure}[htbp]
+	\centering
+	\subfigure[metric accuracy comparison on AutoEncoder with linear SVM]{
+	\includegraphics[width=5.5cm]{figure/AE_linear.jpg}
+	%\caption{fig1}
+	}
+	\quad
+	\subfigure[metric accuracy comparison on AutoEncoder with RBF SVM]{
+	\includegraphics[width=5.5cm]{figure/AE_rbf.jpg}
+	}
+	\caption{AutoEncoder-based model performance on linear kernel SVM and RBF kernel SVM}
+	\label{Fig5}
+	\end{figure}
+	\end{center}
+	
+	\begin{center}
+	\begin{figure}[htbp]
+	\centering
+	\subfigure[Trainset 2D scatter with AutoEncoder]{
+	\includegraphics[width=5.5cm]{figure/X_train_scatter_2d_AE.jpg}
+	%\caption{fig1}
+	}
+	\quad
+	\subfigure[Testset 2D scatter with AutoEncoder]{
+	\includegraphics[width=5.5cm]{figure/X_test_scatter_2d_AE.jpg}
+	}
+	\caption{Dataset 2-components scatter with AutoEncoder}
+	\label{Fig6}
+	\end{figure}
 \end{center}
 
-\begin{center}
-\begin{figure}[htbp]
-\centering
-\subfigure[Trainset 2D scatter with AutoEncoder]{
-\includegraphics[width=6.5cm]{figure/X_train_scatter_2d_AE.jpg}
-%\caption{fig1}
-}
-\quad
-\subfigure[Testset 2D scatter with AutoEncoder]{
-\includegraphics[width=6.5cm]{figure/X_test_scatter_2d_AE.jpg}
-}
-\caption{Dataset 2-components scatter with AutoEncoder}
-\label{Fig6}
-\end{figure}
-\end{center}
+\begin{table}[htbp]
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.0}
+	\caption{Comparison of AutoEncoder-based SVM and baslines in Classification Task}
+	\label{baseline3}%
+	\begin{tabular}{@{}p{2.5cm}<{\centering}|c|c}
+		\hline
+		\multirow{2}{*}{\diagbox[height=2\line,width=2.9cm,font=\tiny]{$d$}{Acc.}{$\mathit{M}$}} &\multicolumn{2}{c}{AutoEncoder+SVM}\\
+		\cline{2-3}
+			& {Linear kernel(\%)} & {RBF kernel(\%)}\\
+		\hline
+		Baseline & 93.28 & 93.52\\
+		\hline
+		2   & 23.71 & 68.75\\
+		\hline
+		64   & 69.52 & 70.35\\
+		\hline
+		128   & 72.01 & 70.25\\
+		\hline
+		256   & 78.35 & 76.93\\
+		\hline
+		512   & 87.59 & 87.90\\
+		\hline
+		1024   & \textbf{91.42} & \textbf{91.95}\\
+		\hline
+	\end{tabular}
+\end{table}
 
 \subsection{Feature Learning}
 \subsubsection{t-SNE}
@@ -633,47 +618,47 @@ tSNE with linear SVM receives its best performance $5.39\%$ when $perplexity=10.
 
 We also give the 2-components scattering result in Fig. \ref{Fig7}. tSNE enables different data clusters in low-dimension to be distant enough and the data points belonging to the same cluster to be close, which benefits classification. As is shown, we can differ various classes in 2D scattering. Besides, we can find with the parameter $perplexity$ increase, tSNE model can process more data.
 
-\begin{figure}
+\begin{figure}[htbp]
 \centering
 \subfigure[Trainset 2D scatter with tSNE (perplexity=10.0)]{
-\includegraphics[width=2.9cm]{figure/X_train_scatter_2d_TSNE_10.jpg}
+\includegraphics[width=2.5cm]{figure/X_train_scatter_2d_TSNE_10.jpg}
 %\caption{fig1}
 }
 \quad
 \subfigure[Trainset 2D scatter with tSNE (perplexity=20.0)]{
-\includegraphics[width=2.9cm]{figure/X_train_scatter_2d_TSNE_20.jpg}
+\includegraphics[width=2.5cm]{figure/X_train_scatter_2d_TSNE_20.jpg}
 }
 \quad
 \subfigure[Trainset 2D scatter with tSNE (perplexity=30.0)]{
-\includegraphics[width=2.9cm]{figure/X_train_scatter_2d_TSNE_30.jpg}
+\includegraphics[width=2.5cm]{figure/X_train_scatter_2d_TSNE_30.jpg}
 }
 \quad
 \subfigure[Trainset 2D scatter with tSNE (perplexity=40.0)]{
-\includegraphics[width=2.9cm]{figure/X_train_scatter_2d_TSNE_40.jpg}
+\includegraphics[width=2.5cm]{figure/X_train_scatter_2d_TSNE_40.jpg}
 }
 \quad
 \subfigure[Trainset 2D scatter with tSNE (perplexity=50.0)]{
-\includegraphics[width=2.9cm]{figure/X_train_scatter_2d_TSNE_50.jpg}
+\includegraphics[width=2.5cm]{figure/X_train_scatter_2d_TSNE_50.jpg}
 }
 \quad
 \subfigure[Testset 2D scatter with tSNE (perplexity=10.0)]{
-\includegraphics[width=2.9cm]{figure/X_test_scatter_2d_TSNE_10.jpg}
+\includegraphics[width=2.5cm]{figure/X_test_scatter_2d_TSNE_10.jpg}
 }
 \quad
 \subfigure[Trainset 2D scatter with tSNE (perplexity=20.0)]{
-\includegraphics[width=2.9cm]{figure/X_test_scatter_2d_TSNE_20.jpg}
+\includegraphics[width=2.5cm]{figure/X_test_scatter_2d_TSNE_20.jpg}
 }
 \quad
 \subfigure[Testset 2D scatter with tSNE (perplexity=30.0)]{
-\includegraphics[width=2.9cm]{figure/X_test_scatter_2d_TSNE_30.jpg}
+\includegraphics[width=2.5cm]{figure/X_test_scatter_2d_TSNE_30.jpg}
 }
 \quad
 \subfigure[Trainset 2D scatter with tSNE (perplexity=40.0)]{
-\includegraphics[width=2.9cm]{figure/X_test_scatter_2d_TSNE_40.jpg}
+\includegraphics[width=2.5cm]{figure/X_test_scatter_2d_TSNE_40.jpg}
 }
 \quad
 \subfigure[Testset 2D scatter with tSNE (perplexity=50.0)]{
-\includegraphics[width=2.9cm]{figure/X_test_scatter_2d_TSNE_50.jpg}
+\includegraphics[width=2.5cm]{figure/X_test_scatter_2d_TSNE_50.jpg}
 }
 \caption{Dataset 2D scatter with tSNE on perplexity of $\{10.0,20.0,30.0,40.0,50.0\}$}
 \label{Fig7}
@@ -686,49 +671,49 @@ We summarize the experimental results of AutoEncoder-based model in Tab. \ref{ba
 
 We also give the 2-components scattering result in Fig. \ref{Fig9}. When we use 4 neighbors to reconstruct the sample, we can find its poor performance. For data can be regarded as manifold structure, LLE performs while when we give the proper neighbors' number.
 
-\begin{table}
+\begin{table}[htbp]
 	\centering
 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-	\renewcommand\arraystretch{1.1}
-	\caption{Comparison of AutoEncoder-based SVM and baslines in Classification Task}
+	\renewcommand\arraystretch{1.0}
+	\caption{Comparison of LLE-based SVM and baslines in Classification Task}
 	\label{baselin4}%
-	\resizebox{\linewidth}{!}{
-	\begin{tabular}{c|c|c|c|c|c|c|c|c}
+	\begin{tabular}{@{}p{2.5cm}<{\centering}|c|c|c|c|c|c}
 		\hline
-		Model &\multicolumn{6}{c|}{AutoEncoder+SVM}&\multicolumn{2}{c}{SVM}\\
+		\multirow{3}{*}{\diagbox[height=3\line,width=2.9cm,font=\tiny]{$\#neigh.$}{Acc.}{$\mathit{M}$}} &\multicolumn{6}{c}{LLE+SVM}\\
+		\cline{2-7}
+		 & \multicolumn{3}{c|}{Linear kernel(\%)} & \multicolumn{3}{c}{RBF kernel(\%)}\\
+		\cline{2-7}
+		 & 4 & 8 & 16 & 4 & 8 & 16\\
 		\hline
-		{components} & \multicolumn{3}{c|}{Linear kernel(\%)} & \multicolumn{3}{c|}{RBF kernel(\%)} & \multicolumn{1}{c|}{Linear kernel(\%)} & \multicolumn{1}{c}{RBF kernel(\%)}\\
-		\cline{2-5}
+		Baseline & 93.28 & 93.28 & 93.28 & 93.52 & 93.52 & 93.52\\
 		\hline
-		neighbors   & 4 & 8 & 16 & 4 & 8 & 16 & -- & -- \\
+		2   & 10.12 & 15.93 & 15.13 & 23.19 & 48.47 & 44.62\\
 		\hline
-		2   & 10.12 & 15.93 & 15.13 & 23.19 & 48.47 & 44.62 & 93.28 & 93.52\\
+		3   & 11.57 & 18.55 & 17.81 & 26.21 & 49.43 & 47.65\\
 		\hline
-		3   & 11.57 & 18.55 & 17.81 & 26.21 & 49.43 & 47.65 & 93.28 & 93.52\\
+		50   & 77.72 & 78.67 & 80.82 & 80.91 & 84.18 & 84.79\\
 		\hline
-		50   & 77.72 & 78.67 & 80.82 & 80.91 & 84.18 & 84.79 & 93.28 & 93.52\\
+		100   & 85.20 & 86.72 & 86.69 & 87.18 & 88.87 & 89.08\\
 		\hline
-		100   & 85.20 & 86.72 & 86.69 & 87.18 & 88.87 & 89.08 & 93.28 & 93.52\\
+		500   & 88.47 & 89.70 & 90.15 & \textbf{88.62} & \textbf{89.69} & 90.07\\
 		\hline
-		500   & 88.47 & 89.70 & 90.15 & 88.62 & 89.69 & 90.07 & 93.28 & 93.52\\
+		1000   & 88.74 & \textbf{89.93} & 90.48 & 88.49 & 89.58 & 90.12\\
 		\hline
-		1000   & 88.74 & 89.93 & 90.48 & 88.49 & 89.58 & 90.12 & 93.28 & 93.52\\
+		2000   & \textbf{88.82} & 89.70 & \textbf{90.60} & 88.49 & 89.48 & \textbf{90.18}\\
 		\hline
-		2000   & 88.82 & 89.70 & 90.60 & 88.49 & 89.48 & 90.18 & 93.28 & 93.52\\
-		\hline
-	\end{tabular}}
+	\end{tabular}
 \end{table}
 
 \begin{center}
 \begin{figure}[htbp]
 \centering
 \subfigure[metric accuracy comparison on LLE with linear SVM]{
-\includegraphics[width=6.5cm]{figure/LLE_linear.jpg}
+\includegraphics[width=5.5cm]{figure/LLE_linear.jpg}
 %\caption{fig1}
 }
 \quad
 \subfigure[metric accuracy comparison on LLE with RBF SVM]{
-\includegraphics[width=6.5cm]{figure/LLE_rbf.jpg}
+\includegraphics[width=5.5cm]{figure/LLE_rbf.jpg}
 }
 \caption{LLE-based model performance on linear kernel SVM and RBF kernel SVM}
 \label{Fig8}
