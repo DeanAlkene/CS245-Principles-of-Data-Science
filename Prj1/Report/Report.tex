@@ -66,12 +66,6 @@
 
 \maketitle
 
-TODO:
-\begin{itemize}
-	\item Rewrite Feature Selection part
-	\item Read and check
-\end{itemize}
-
 \begin{abstract}
 \indent Datasets in real world often consist of noisies. Those noisies bring some difficulties and complexities to machine learning tasks. It is significant for us to eliminate those noisies, which leads to the topic of this project.
 In this project, we conduct experiment on different dimension reduction methods, including select-k-best, variance threshold, tree-based selcetion, PCA, LDA, AutoEncoder, t-SNE and LLE.
@@ -81,17 +75,19 @@ We will observe performances of SVM on those dimension-reducted data and compare
 \section{Method}
 \subsection{Feature Selection}
 \subsubsection{Select-k-best}
-\indent Select-K-Best is one of the methods of univariate feature selection, which works by selecting the best features based on univariate statistical tests. It removes all but the $k$ highest scoring features. One of the parameters required for Select-K-Best is the scoring function, which mainly includes the following two:
+\indent Select-K-Best is one of the methods of univariate feature selection, which works by selecting the best features based on univariate statistical tests. It removes all but the $k$ highest scoring features. There're different functions to score features:
 \begin{itemize}
-	\item chi2: Calculate the chi-square value of each feature, and the greater the chi-square value means the higher the correlation with the classification.
+	\item $\chi^2$ value: We can get $\chi^2$ value by testing chi-squared statistic from X.
+	The greater the chi-square value means the higher the correlation with the classification.
 	
-	\item f-classif: Calculate the F value of each feature. When the variance between the groups is much larger than the variance between the groups, that is, the gap between the groups is larger, the larger the F value.	
+	\item ANOVA $F$ value: $F$ value = variance of the group means (Mean Square Between) / mean of the within group variances (Mean Squared Error).
+	When the variance between the groups is much larger than the variance between the groups, that is, the larger the gap between the groups, the larger the F value.
 \end{itemize}
 \subsubsection{Variance Threshold}
 \indent VarianceThreshold is a simple approach to feature selection. It removes all features whose variance doesn’t meet some threshold. The principle is that features with small variance often contain less data information.
 \subsubsection{Tree-based Selection}
-\indent Tree-based feature selection combines SelectFromModel and ExtraTreesClassifier. SelectFromModel is a meta-transformer that can be used along with any estimator that has a $coef\_$ or $feature\_importances\_$ attribute after fitting. The features whose $coef\_$ or $feature\_importances\_$ values are below the provided threshold parameterare are considered unimportant and removed. ExtraTreesClassifier can be used to compute feature importances, which happens to cooperate with SelectFromModel to discard irrelevant features.\par
-\indent In ExtraTreesClassifier, randomness is further calculated separately. Like random forest, a random subset of candidate features is used, but instead of finding the optimal discriminant attribute, a threshold is randomly selected for each candidate feature, and the best value of the randomly generated threshold is used as the segmentation principle. This usually reduces the variance of the model more, sacrifices the bias, and increases the bias. After constructing the tree, the relative rank (i.e. depth) of the features of the decision nodes in the tree can be used to evaluate the relative importance of the feature's predictability relative to the target variable. The features at the top of the tree contribute a larger score to the final prediction decision. Therefore, the predicted scores of the samples they contributed can be used as an assessment of the relative importance of features
+\indent  Tree-based selcetion is a kind of embedded method. Embedded methods can learn which features contribute most to the accuracy of the model. Then, we can pick up important features and remove irrelevant features.
+Here, tree-based estimator is a number of randomized decision trees. The estimator will fit those trees on various sub-samples of the dataset and use averaging to improve accuracy and control over-fitting problem.
 
 \subsection{Feature Projection}
 \subsubsection{PCA}
@@ -239,7 +235,7 @@ We feed the training set without dimension reduction into SVM and test the model
 \end{table}
 \subsection{Feature Selection}
 \subsubsection{Select-K-Best}
-Select-K-Best belongs to univariate feature selection. It removes all but the $k$ highest scoring features. There are many options for the parameter $score\_func$ of this method and we chose the $f\_classif$. In this section, two experiment settings can derive from the rule: We use Select-K-Best on different number of aim component $[2, 5, 10, 20, 50, 100, 200, 500, 750, 1000, 1200, 1500, 2000]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
+Select-K-Best belongs to univariate feature selection. It removes all but the $k$ highest scoring features. There are many options for the score function of this method and we chose the ANOVA $F$ value. In this section, two experiment settings can derive from the rule: We use Select-K-Best on different number of aim component $[2, 5, 10, 20, 50, 100, 200, 500, 750, 1000, 1200, 1500, 2000]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
 
 We summarize the experimental results of Select-K-Best in Tab. \ref{base1} and Fig. \ref{Figure1}. As is shown, linear Select-K-Best model and RBF Select-K-Best model expectively exhibit the best performances at 1000 components and 750 components, reaching 93.01\% and 92.96\% on the classification task. We can compare the result with the simple linear SVM and simple RBF SVM, find the Select-K-Best model's performance is worse than the baselines, and we deem the reason is that Select-K-Best reduces the dimension at the cost of reducing a little accuracy. Besides, more dimensions results in higher accuracy.
 
@@ -383,11 +379,11 @@ We summarize the experimental results of tree-based selection in Tab. \ref{base3
 		\cline{2-4}
 			& {Dimension} & {Linear kernel(\%)} & {RBF kernel(\%)}\\
 		\hline
-		Baseline & 93.28 & 93.52\\
+		Baseline & 2048 & 93.28 & 93.52\\
 		\hline
 		2   & 523 & 92.61 & 92.69\\
 		\hline
-		4   & 564 & 92.63 & 92.84\\
+		4   & 564 & \textbf{92.63} & \textbf{92.84}\\
 		\hline
 		8   & 563 & 92.47 & 92.80\\
 		\hline
@@ -783,7 +779,7 @@ We also give the 2-components scattering result in Fig. \ref{Fig9}. When we use 
 \end{figure}
 
 \section{Conclusion}
-In this project, we evaluate different dimension reduction techniques by measuring their classification performance when combined with SVM model. In this Section, we want to give our perspectives on drawbacks and merits of these dimension reduction method. Importantly, we'll conclude the situations to use these methods. In general, we think feature projection and feature learning have better average performance than feature selection since minimizing effective information loss. We think kernelPCA is a universal method for dimension reduction while LDA receives a lot in the classification tasks. AutoEncoder is a good choice for generative model. In learning model, t-SNE has advantages in data visualization while LLE have great performance for data’s manifold structure.
+In this project, we evaluate different dimension reduction techniques by measuring their classification performance when combined with SVM model. In this section, we want to give our perspectives on drawbacks and merits of these dimension reduction method. Importantly, we'll conclude the situations to use these methods. In general, we think feature projection and feature learning have better average performance than feature selection since minimizing effective information loss. We think kernel PCA is a universal method for dimension reduction while LDA receives a lot in the classification tasks. AutoEncoder is a good choice for generative model. In learning model, t-SNE has advantages in data visualization while LLE have great performance for data’s manifold structure.
 
 \bibliography{bibfile.bib}
 \end{document}
