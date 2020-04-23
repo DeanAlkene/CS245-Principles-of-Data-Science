@@ -30,6 +30,7 @@
 \usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage{indentfirst}
+\usepackage{amsmath}
 \setlength{\parindent}{2em}
 
 \title{Principles of Data Science Project 1\\
@@ -67,15 +68,14 @@
 
 TODO:
 \begin{itemize}
-	\item Adjust tables and figure DONE
-	\item Write abstract \& baseline part
 	\item Rewrite Feature Selection part
-	\item Add formula to Kernel PCA part
 	\item Read and check
 \end{itemize}
 
 \begin{abstract}
-  TODO: Hongzhou Liu\\
+\indent Datasets in real world often consist of noisies. Those noisies bring some difficulties and complexities to machine learning tasks. It is significant for us to eliminate those noisies, which leads to the topic of this project.
+In this project, we conduct experiment on different dimension reduction methods, including select-k-best, variance threshold, tree-based selcetion, PCA, LDA, AutoEncoder, t-SNE and LLE.
+We will observe performances of SVM on those dimension-reducted data and compare the difference among those methods. Also, we will find the optimal dimensions of each method and the optimal dimension reduction method.
 \end{abstract}
 
 \section{Method}
@@ -105,14 +105,31 @@ where $v$ is the new axis.
 \begin{eqnarray}
 s.t.\quad v^Tv=1
 \end{eqnarray}
-Using lagrange Multiplier we can get
+Using Lagrange Multiplier we can get
 \begin{eqnarray}
 XX^Tv=\lambda v
 \end{eqnarray}
 We can see that $v$ is the eigenvector of $XX^T$, and $\lambda$ is the corresponding eigenvalue. Therefore, $v$ can be calculated by performing eigenvalue decomposition to the co-variance matrix $XX^T$. Then we can get the data after dimensionality reduction.
 \subsubsection{Kernel PCA}
 \indent In general, principal components analysis is suitable for linear dimensionality reduction of data. Kernel PCA can achieve nonlinear dimensionality reduction of data and is used to process linear inseparable data sets.\\
-\indent The general idea of KPCA is: for the matrix in the input space, we first use a non-linear mapping to map all samples in a high-dimensional or even infinite-dimensional space, and then perform PCA dimensionality reduction in this high-dimensional space.
+\indent The general idea of Kernel PCA is: for the matrix in the input space, we first use a non-linear mapping to map all samples in a high-dimensional or even infinite-dimensional space, and then perform PCA dimensionality reduction in this high-dimensional space.
+So Kernel PCA will replace $X$ in PCA by $\phi(X)$ to do this mapping, and $\phi(X)$ is called kernel. However, $\phi(X)$ may not have an explicit form, sometimes it will map $X$ into a infinite dimension space. The kernel trick solves this problem by directly compute the inner product between $\phi(X)$ and $\phi(Y)$ by
+\begin{eqnarray}
+\centering
+K(X, Y) = \phi(X)^{T}\phi(Y)
+\end{eqnarray}
+So, using Lagrange Multiplier we will instead get
+\begin{eqnarray}
+\centering
+K(X, X)v=\lambda v
+\end{eqnarray}
+There're different kinds of kernels
+\begin{itemize}
+	\item Linear Kernel: $K(\boldsymbol{x}, \boldsymbol{y})=\boldsymbol{x}^{T}\boldsymbol{y}$
+	\item Polynomial Kernel: $K(\boldsymbol{x}, \boldsymbol{y})=(\boldsymbol{x}^{T}\boldsymbol{y}+c)^d$
+	\item Gaussian Kernel (RBF Kernel): $K(\boldsymbol{x},\boldsymbol{y})=\exp(-\dfrac{\left\| \boldsymbol{x}-\boldsymbol{y}\right\|^2}{2\sigma^2})$
+	\item Sigmoid Kernel: $K(\boldsymbol{x},\boldsymbol{y})=\tanh(\alpha \boldsymbol{x}^{T}\boldsymbol{y}+c)$
+\end{itemize}
 \subsubsection{LDA}
 \indent Linear discriminate analysis is commonly used as dimensionality reduction technique. Its main idea is to project the samples on a straight line so that the projections of similar samples are as close as possible, and the projection points of heterogeneous samples are as far as possible. 
 	\begin{figure}[htbp]
@@ -201,10 +218,25 @@ x_i = w_{ij}x_j+w_{ik}x_k+x_{il}x_l
 
 \section{Experiment}
 \subsection{Baseline}
-TODO: Hongzhou Liu\\
-Training Set : Test Set = 6:4 \\
-Linear SVM: Best C = 0.002, best accuracy = 0.932815 (baseline) \\
-Kernel SVM with RBF kernel: Best C = 5.0, best accuracy = 0.935160 (baseline) \\
+\par The dataset we use is \href{https://cvml.ist.ac.at/AwA2/}{Animals with Attributes (AwA2)}, which consists of 37322 images of 50 animal classes. We will do our experiment on pre-extracted deep learning features with 2048 dimensions of AwA2.
+\par We will split 60\% of the features and labels into training set and 40\% for testing set.
+We feed the training set without dimension reduction into SVM and test the model on testing set. Then we observe the optimal hyper-parameter by k-fold validation. The optimal hyper-parameters of linear SVM and RBF kernel SVM on AwA2 is \ref{baseline}
+\begin{table}[htbp]
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.0}
+	\caption{SVM}
+	\label{baseline}%
+	\begin{tabular}{c|c|c}
+		\hline
+			& C & Acc.(\%)\\
+		\hline
+		Linear & 0.002 & 93.2815\\
+		\hline
+		RBF Kernel & 5.0 & 93.5160\\
+		\hline
+\end{tabular}
+\end{table}
 \subsection{Feature Selection}
 \subsubsection{Select-K-Best}
 Select-K-Best belongs to univariate feature selection. It removes all but the $k$ highest scoring features. There are many options for the parameter $score\_func$ of this method and we chose the $f\_classif$. In this section, two experiment settings can derive from the rule: We use Select-K-Best on different number of aim component $[2, 5, 10, 20, 50, 100, 200, 500, 750, 1000, 1200, 1500, 2000]$, and we give our results on two types of kernel: linear kernel and radial basis function kernel. We adopt classifiction accuracy as metric in this section.
