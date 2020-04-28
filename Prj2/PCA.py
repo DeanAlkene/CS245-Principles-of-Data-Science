@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 import sys
 from processData import loadDataDivided
 
-def runPCA(X_train, X_test, y_train, y_test, comp_range, Kernel):
+def runPCA(X_train, X_test, comp_range, Kernel):
     for n_comp in comp_range:
         print("\nn_comp=%d\n" % (n_comp))
         transformer = KernelPCA(n_components=n_comp, kernel=Kernel, copy_X=True, n_jobs=8)
@@ -23,7 +23,7 @@ def main():
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=False)
     for kernel in ['linear', 'ploy', 'rbf', 'sigmoid', 'cosine']:
         print("kernel: %s" % (kernel))
-        runPCA(X_train, X_test, y_train, y_test, comp_range, kernel)
+        runPCA(X_train, X_test, comp_range, kernel)
 
 if __name__ == '__main__':
     main()
