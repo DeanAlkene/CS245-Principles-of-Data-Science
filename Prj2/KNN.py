@@ -5,7 +5,7 @@ import sklearn
 from sklearn.neighbors import KNeighborsClassifier, DistanceMetric
 from sklearn.preprocessing import StandardScaler
 
-def runSVM(X_train, X_test, y_train, y_test, k_range, metric, metric_params=None, label=""):
+def runKNN(X_train, X_test, y_train, y_test, k_range, metric, metric_params=None, label=""):
     scores = []
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)

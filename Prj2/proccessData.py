@@ -20,7 +20,7 @@ def divideData(size='full'):
     np.save('y_train', y_train)
     np.save('y_test', y_test)
 
-def loadDataDivided(ifSubDir=False, ifScale=False, suffix=""):
+def loadDataDivided(ifSubDir=False, ifScale=True, suffix=""):
     if ifSubDir:
         X_train = np.load('../X_train' + suffix + '.npy')
         X_test = np.load('../X_test' + suffix + '.npy')
