@@ -23,6 +23,7 @@ def main():
             else:
                 X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='')
             for metric in metric_range:
+                print("dim: %d, kernel: %s, metric: %s" % (dim, kernel, metric))
                 KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=metric, metric_params=None, label=str(dim) + '_' + kernel + '_' + metric)
     
     for dim in dim_range:
@@ -31,4 +32,8 @@ def main():
                 X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='_' + str(dim) + '_' + kernel)
             else:
                 X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='')
+            print("dim: %d, kernel: %s, metric: %s" % (dim, kernel, "cosine"))
             KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=cosine_distances, metric_params=None, label=str(dim) + '_' + kernel + '_cosine')
+
+if __name__ == '__main__':
+    main()
