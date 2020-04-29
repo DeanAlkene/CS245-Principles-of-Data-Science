@@ -14,7 +14,7 @@ import KNN
 def main():
     kernel_range = ['linear', 'rbf', 'poly', 'sigmoid', 'cosine']
     dim_range = [50, 500, 2048]
-    k_range = [2, 3, 4, 5, 6, 7, 8, 10, 15]
+    k_range = [2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 50, 100, 200, 500, 1000]
     metric_range = ['euclidean', 'manhattan', 'chebyshev']
     for dim in dim_range:
         for kernel in kernel_range:
