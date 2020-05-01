@@ -19,21 +19,24 @@ def main():
     for dim in dim_range:
         for kernel in kernel_range:
             if dim != 2048:
-                X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='_' + str(dim) + '_' + kernel)
+                X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=False, suffix='_' + str(dim) + '_' + kernel)
+                for metric in metric_range:
+                    print("dim: %d, kernel: %s, metric: %s" % (dim, kernel, metric))
+                    KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=metric, metric_params=None, label=str(dim) + '_' + kernel + '_' + metric)
             else:
-                X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='')
-            for metric in metric_range:
-                print("dim: %d, kernel: %s, metric: %s" % (dim, kernel, metric))
-                KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=metric, metric_params=None, label=str(dim) + '_' + kernel + '_' + metric)
+                X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=False, suffix='')
+                print("dim: %d, metric: %s" % (dim, metric))
+                KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=metric, metric_params=None, label=str(dim) + '_' + metric)
+            
     
-    for dim in dim_range:
-        for kernel in kernel_range:
-            if dim != 2048:
-                X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='_' + str(dim) + '_' + kernel)
-            else:
-                X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='')
-            print("dim: %d, kernel: %s, metric: %s" % (dim, kernel, "cosine"))
-            KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=cosine_distances, metric_params=None, label=str(dim) + '_' + kernel + '_cosine')
+#    for dim in dim_range:
+#        for kernel in kernel_range:
+#            if dim != 2048:
+#                X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='_' + str(dim) + '_' + kernel)
+#            else:
+#                X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='')
+#            print("dim: %d, kernel: %s, metric: %s" % (dim, kernel, "cosine"))
+#            KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=cosine_distances, metric_params=None, label=str(dim) + '_' + kernel + '_cosine')
 
 if __name__ == '__main__':
     main()
