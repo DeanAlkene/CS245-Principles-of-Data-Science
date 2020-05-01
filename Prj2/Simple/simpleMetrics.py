@@ -17,11 +17,11 @@ def main():
     k_range = [2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 50, 100, 200, 500, 1000]
     metric_range = ['euclidean', 'manhattan', 'chebyshev']
     for dim in dim_range:
-        for kernel in kernel_range:
+        for metric in metric_range:
             if dim != 2048:
-                X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=False, suffix='_' + str(dim) + '_' + kernel)
-                for metric in metric_range:
+                for kernel in kernel_range:
                     print("dim: %d, kernel: %s, metric: %s" % (dim, kernel, metric))
+                    X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=False, suffix='_' + str(dim) + '_' + kernel)
                     KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=metric, metric_params=None, label=str(dim) + '_' + kernel + '_' + metric)
             else:
                 X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=False, suffix='')
