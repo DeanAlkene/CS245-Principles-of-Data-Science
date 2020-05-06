@@ -11,10 +11,10 @@ from processData import loadDataDivided
 import KNN
 
 def cosine(x, y):
-    	s = np.linalg.norm(x, ord=2) * np.linalg.norm(y, ord=2)
-	if s == 0:
-		return 0
-	return 1 - np.dot(x, y) / s
+    s = np.linalg.norm(x, ord=2) * np.linalg.norm(y, ord=2)
+    if s == 0:
+        return 0
+    return 1 - np.dot(x, y) / s
 
 def main():
     kernel_range = ['linear', 'rbf', 'poly', 'sigmoid', 'cosine']
