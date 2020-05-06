@@ -39,11 +39,11 @@ def main():
             for kernel in kernel_range:
                 print("dim: %d, kernel: %s, metric: %s" % (dim, kernel, "cosine"))
                 X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=False, suffix='_' + str(dim) + '_' + kernel)
-                KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=metric, metric_params=None, label=str(dim) + '_' + kernel + '_cosine')
+                KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=cosine, metric_params=None, label=str(dim) + '_' + kernel + '_cosine')
         else:
             X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=False, suffix='')
             print("dim: %d, metric: %s" % (dim, "cosine"))
-            KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=metric, metric_params=None, label=str(dim) + '_cosine')
+            KNN.runKNN(X_train, X_test, y_train, y_test, k_range, metric=cosine, metric_params=None, label=str(dim) + '_cosine')
 
 if __name__ == '__main__':
     main()
