@@ -1,0 +1,21 @@
+3_LDA_chebyshev: k = 2, acc = 0.948750
+3_LDA_chebyshev: k = 3, acc = 0.953750
+3_LDA_chebyshev: k = 4, acc = 0.953750
+3_LDA_chebyshev: k = 5, acc = 0.952500
+3_LDA_chebyshev: k = 6, acc = 0.953750
+3_LDA_chebyshev: k = 7, acc = 0.956250
+3_LDA_chebyshev: k = 8, acc = 0.953750
+3_LDA_chebyshev: k = 10, acc = 0.953750
+3_LDA_chebyshev: k = 11, acc = 0.956250
+3_LDA_chebyshev: k = 12, acc = 0.955000
+3_LDA_chebyshev: k = 13, acc = 0.953750
+3_LDA_chebyshev: k = 14, acc = 0.953750
+3_LDA_chebyshev: k = 15, acc = 0.955000
+3_LDA_chebyshev: k = 16, acc = 0.952500
+3_LDA_chebyshev: k = 50, acc = 0.953750
+3_LDA_chebyshev: k = 100, acc = 0.953750
+3_LDA_chebyshev: k = 200, acc = 0.947500
+3_LDA_chebyshev: k = 500, acc = 0.625000
+3_LDA_chebyshev: k = 1000, acc = 0.518750
+3_LDA_chebyshev: Best k = 7
+3_LDA_chebyshev: Best acc = 0.956250

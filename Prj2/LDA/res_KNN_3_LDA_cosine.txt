@@ -1,0 +1,21 @@
+3_LDA_cosine: k = 2, acc = 0.957500
+3_LDA_cosine: k = 3, acc = 0.957500
+3_LDA_cosine: k = 4, acc = 0.957500
+3_LDA_cosine: k = 5, acc = 0.956250
+3_LDA_cosine: k = 6, acc = 0.957500
+3_LDA_cosine: k = 7, acc = 0.957500
+3_LDA_cosine: k = 8, acc = 0.957500
+3_LDA_cosine: k = 10, acc = 0.956250
+3_LDA_cosine: k = 11, acc = 0.955000
+3_LDA_cosine: k = 12, acc = 0.955000
+3_LDA_cosine: k = 13, acc = 0.955000
+3_LDA_cosine: k = 14, acc = 0.955000
+3_LDA_cosine: k = 15, acc = 0.955000
+3_LDA_cosine: k = 16, acc = 0.955000
+3_LDA_cosine: k = 50, acc = 0.950000
+3_LDA_cosine: k = 100, acc = 0.951250
+3_LDA_cosine: k = 200, acc = 0.951250
+3_LDA_cosine: k = 500, acc = 0.700000
+3_LDA_cosine: k = 1000, acc = 0.518750
+3_LDA_cosine: Best k = 2
+3_LDA_cosine: Best acc = 0.957500

@@ -1,0 +1,21 @@
+3_LDA_manhattan: k = 2, acc = 0.956250
+3_LDA_manhattan: k = 3, acc = 0.960000
+3_LDA_manhattan: k = 4, acc = 0.957500
+3_LDA_manhattan: k = 5, acc = 0.961250
+3_LDA_manhattan: k = 6, acc = 0.958750
+3_LDA_manhattan: k = 7, acc = 0.961250
+3_LDA_manhattan: k = 8, acc = 0.958750
+3_LDA_manhattan: k = 10, acc = 0.953750
+3_LDA_manhattan: k = 11, acc = 0.953750
+3_LDA_manhattan: k = 12, acc = 0.953750
+3_LDA_manhattan: k = 13, acc = 0.955000
+3_LDA_manhattan: k = 14, acc = 0.955000
+3_LDA_manhattan: k = 15, acc = 0.955000
+3_LDA_manhattan: k = 16, acc = 0.955000
+3_LDA_manhattan: k = 50, acc = 0.953750
+3_LDA_manhattan: k = 100, acc = 0.956250
+3_LDA_manhattan: k = 200, acc = 0.955000
+3_LDA_manhattan: k = 500, acc = 0.665000
+3_LDA_manhattan: k = 1000, acc = 0.518750
+3_LDA_manhattan: Best k = 5
+3_LDA_manhattan: Best acc = 0.961250
