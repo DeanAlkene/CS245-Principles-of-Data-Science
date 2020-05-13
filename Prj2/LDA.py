@@ -11,8 +11,6 @@ sys.path.append("..")
 from processData import loadDataDivided
 
 def runLDA(X_train, X_test, y_train, y_test, comp_range):
-    rbf_scores = []
-    linear_scores = []
     for n_comp in comp_range:
         print("\nn_comp=%d\n"%(n_comp))
         transformer = LinearDiscriminantAnalysis(solver='svd', n_components=n_comp)
