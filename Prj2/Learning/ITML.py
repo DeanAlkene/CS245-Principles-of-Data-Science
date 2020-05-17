@@ -13,7 +13,7 @@ from processData import loadDataDivided
 import KNN
 
 def runITML(X_train, X_test, y_train, y_test):
-    transformer = ITML_Supervised()
+    transformer = ITML_Supervised(num_constraints=200, verbose=True)
     transformer.fit(X_train, y_train)
     X_train_proj = transformer.transform(X_train)
     X_test_proj = transformer.transform(X_test)
