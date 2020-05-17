@@ -1,0 +1,21 @@
+5_ITML_euclidean: k = 2, acc = 0.844263
+5_ITML_euclidean: k = 3, acc = 0.866568
+5_ITML_euclidean: k = 4, acc = 0.867439
+5_ITML_euclidean: k = 5, acc = 0.872195
+5_ITML_euclidean: k = 6, acc = 0.871592
+5_ITML_euclidean: k = 7, acc = 0.873870
+5_ITML_euclidean: k = 8, acc = 0.871056
+5_ITML_euclidean: k = 10, acc = 0.870721
+5_ITML_euclidean: k = 11, acc = 0.872128
+5_ITML_euclidean: k = 12, acc = 0.870119
+5_ITML_euclidean: k = 13, acc = 0.869784
+5_ITML_euclidean: k = 14, acc = 0.867774
+5_ITML_euclidean: k = 15, acc = 0.866702
+5_ITML_euclidean: k = 16, acc = 0.865899
+5_ITML_euclidean: k = 50, acc = 0.842990
+5_ITML_euclidean: k = 100, acc = 0.815929
+5_ITML_euclidean: k = 200, acc = 0.775738
+5_ITML_euclidean: k = 500, acc = 0.701454
+5_ITML_euclidean: k = 1000, acc = 0.618327
+5_ITML_euclidean: Best k = 7
+5_ITML_euclidean: Best acc = 0.873870

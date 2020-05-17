@@ -13,6 +13,7 @@ def runKNN(X_train, X_test, y_train, y_test, k_range, metric, metric_params=None
     for k in k_range:
         model = KNeighborsClassifier(n_neighbors=k, metric=metric, metric_params=metric_params, n_jobs=8)
         model.fit(X_train, y_train)
+        print("train finished")
         score = model.score(X_test, y_test)
         print("k=%d, score=%f" % (k, score))
         scores.append(score)

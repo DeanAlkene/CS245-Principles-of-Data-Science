@@ -30,8 +30,8 @@ def cosine(x, y):
     return 1 - np.dot(x, y) / s
 
 def main():
-    dim_range = [2, 5, 10, 20, 50, 75, 100, 200, 300]
-    k_range = [2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 50, 100, 200, 500, 1000]
+    dim_range = [2, 5, 10, 20, 50, 100, 200, 300]
+    k_range = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='')
     for dim in dim_range:

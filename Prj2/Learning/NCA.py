@@ -31,7 +31,7 @@ def cosine(x, y):
 
 def main():
     dim_range = [2, 3, 5, 10, 20, 30, 40]
-    k_range = [2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 50, 100, 200, 500, 1000]
+    k_range = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 50, 100, 200, 500, 1000]
 
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='')
     for dim in dim_range:
