@@ -18,9 +18,6 @@ def runLDA(X_train, X_test, y_train, y_test, n_comp):
     transformer.fit(X_train, y_train)
     X_train_proj = transformer.transform(X_train)
     X_test_proj = transformer.transform(X_test)
-    if n_comp == 2:
-        np.save('X_train_'+str(n_comp)+'_LDA', X_train_proj)
-        np.save('X_test_'+str(n_comp)+'_LDA', X_test_proj)
     return X_train_proj, X_test_proj
 
 def cosine(x, y):
