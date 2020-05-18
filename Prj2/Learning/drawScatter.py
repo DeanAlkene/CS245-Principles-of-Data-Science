@@ -17,8 +17,8 @@ def draw(suffix):
     plt.figure()
     for i, label in enumerate(test_categories):
         plt.scatter(test_2d.loc[test_2d.label==label].x, test_2d.loc[test_2d.label==label].y, s=2, cmap=test_colors[i], alpha=0.5)
-    plt.title('X_test')
-    plt.savefig('X_test_scatter_2d_' + suffix + '.jpg')
+    plt.title('X')
+    plt.savefig('X_test_scatter_' + suffix)
 
 def main():
     draw('LDA')
