@@ -12,7 +12,7 @@ from processData import loadDataDivided
 import KNN
 
 def runLMNN(X_train, X_test, y_train, t_test, k):
-    transformer = LMNN(k=k, learn_rate=1e-6, verbose=True)
+    transformer = LMNN(k=k, learn_rate=1e-6, convergence_tol=0.1, verbose=True)
     transformer.fit(X_train, y_train)
     X_train_proj = transformer.transform(X_train)
     X_test_proj = transformer.transform(X_test)
@@ -22,7 +22,7 @@ def runLMNN(X_train, X_test, y_train, t_test, k):
 
 def main():
     k_range = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-    LMNN_k_range = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    LMNN_k_range = [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=False, ifScale=True, suffix='_LDA')
     for i in LMNN_k_range:
         X_train_proj, X_test_proj = runLMNN(X_train, X_test, y_train, y_test, i)
