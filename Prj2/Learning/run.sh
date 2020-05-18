@@ -1,4 +1,11 @@
+echo "LFDA"
+python LFDA.py
+echo "ITML"
 python ITML.py
-python LSML.py
-python NCA.py
-python LDA.py
+echo "MMC"
+python MMC.py
+echo "RCA"
+python RCA.py
+echo "LMNN"
+python LMNN.py
+

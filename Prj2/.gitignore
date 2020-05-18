@@ -24,6 +24,11 @@ X_test_50_cosine.npy
 X_train_50_cosine.npy
 X_test_500_cosine.npy
 X_train_500_cosine.npy
+Learning/Data
+Learning/X_train_LDA.npy
+Learning/X_test_LDA.npy
+Learning/y_train.npy
+Learning/y_test.npy
 Report/Report.aux
 Report/Report.log
 Report/Report.out

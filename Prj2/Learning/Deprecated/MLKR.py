@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from metric_learn import NCA
+from metric_learn import MLKR
 import sklearn
 from sklearn.neighbors import KNeighborsClassifier, DistanceMetric
 from sklearn.preprocessing import StandardScaler
@@ -12,13 +12,13 @@ sys.path.append("..")
 from processData import loadDataDivided
 import KNN
 
-def runNCA(X_train, X_test, y_train, y_test):
-    transformer = NCA()
+def runMLKR(X_train, X_test, y_train, y_test):
+    transformer = MLKR(verbose=True)
     transformer.fit(X_train, y_train)
     X_train_proj = transformer.transform(X_train)
     X_test_proj = transformer.transform(X_test)
-    np.save('X_train_NCA', X_train_proj)
-    np.save('X_test_NCA', X_test_proj)
+    np.save('X_train_MLKR', X_train_proj)
+    np.save('X_test_MLKR', X_test_proj)
     return X_train_proj, X_test_proj
 
 def cosine(x, y):
@@ -28,12 +28,12 @@ def cosine(x, y):
     return 1 - np.dot(x, y) / s
 
 def main():
-    k_range = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 50, 100, 200, 500, 1000]
+    k_range = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
-    X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=True, ifScale=True, suffix='')
-    X_train_proj, X_test_proj = runNCA(X_train, X_test, y_train, y_test)
+    X_train, X_test, y_train, y_test = loadDataDivided(ifSubDir=False, ifScale=True, suffix='_LDA')
+    X_train_proj, X_test_proj = runMLKR(X_train, X_test, y_train, y_test)
     KNN.runKNN(X_train_proj, X_test_proj, y_train, y_test, k_range, metric='euclidean', metric_params=None,
-                label='_NCA_euclidean')
+                label='_MLKR_euclidean')
 
 
 if __name__ == '__main__':
