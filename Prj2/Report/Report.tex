@@ -48,10 +48,25 @@ Hello
 \end{abstract}
 
 \begin{IEEEkeywords}
-a, b, c
+kNN, Distance Metric, Metric Learning
 \end{IEEEkeywords}
 
 \section{Introduction}
+\subsection{k-Nearest Neighbor}
+K-Nearest Neighbor is a kind of supervised learning method. It can be used for both classification and regression.
+In the case of classification, the input consists of the $k$ closest training examples in the feature space and the output is a class membership.
+A certain object is classified by a plurality vote of its neighbors, with it being assigned to the class which is the most common in its $k$ nearsest neighbors.
+The algorithm is non-parametric\cite{knn}, which means the model is distribution free or with a specified distribution whose parameters are unspecified.
+It is also a type of instance-based learning or lazy learning, where the generalization of the training data is delayed until a query is made. In this case, $k$-NN has no explicit 
+training step and does all computations during testing period. Because we are finding the $k$ nearest neighbors, the distance metric to evaluate "nearest" is significant in $k$-NN.
+\subsection{Distance Metrics}
+\subsubsection{Minkowski Distance}
+\subsubsection{Chebyshev Distance}
+\subsubsection{Euclidean Distance}
+\subsubsection{Manhattan Distance}
+\subsubsection{Cosine Distance}
+\subsubsection{Mahalanobis Distance}
+\subsection{Metric Learning}
 \section{Simple Distance Metrics}
 \section{Metric Learning}
 \bibliography{Prj2}
