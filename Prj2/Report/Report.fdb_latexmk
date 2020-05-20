@@ -1,14 +1,14 @@
 # Fdb version 3
-["bibtex Report"] 1589975047 "Report.aux" "Report.bbl" "Report" 1589975048
+["bibtex Report"] 1589978586 "Report.aux" "Report.bbl" "Report" 1589979215
   "./IEEEtran.bst" 1589346173 61632 1eded68932b68cdfaf04f54eba82634b ""
-  "Prj2.bib" 1589969552 601 dfe849b79ce44aa48ecdfb12398d6b7f ""
-  "Report.aux" 1589975048 2932 bf3b5e760f95cb21efb388614c57f595 ""
+  "Prj2.bib" 1589976066 861 32280b30eb173ee968f3de05a26e7c67 ""
+  "Report.aux" 1589979215 3173 d303f44115abcacf21ad4c2a94f5a2fe ""
   (generated)
   "Report.blg"
   "Report.bbl"
-["pdflatex"] 1589975047 "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.tex" "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.pdf" "Report" 1589975048
-  "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.aux" 1589975048 2932 bf3b5e760f95cb21efb388614c57f595 ""
-  "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.tex" 1589975045 5834 83500077119bac219883d05155c37cc6 ""
+["pdflatex"] 1589979215 "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.tex" "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.pdf" "Report" 1589979215
+  "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.aux" 1589979215 3173 d303f44115abcacf21ad4c2a94f5a2fe ""
+  "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.tex" 1589979214 8187 e2acf8d61f13b489477998cd521f3950 ""
   "/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc" 1480098666 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2018/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2018/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1480098688 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -146,14 +146,14 @@
   "/usr/local/texlive/2018/texmf-var/web2c/pdftex/pdflatex.fmt" 1555076125 4220280 422b7f84c94c9aa1d43282e72a70482c ""
   "/usr/local/texlive/2018/texmf.cnf" 1523934483 577 0b39adfd7c93507ff20c9c14c2f1a33f ""
   "IEEEtran.cls" 1589346173 288304 b67b6fc6c2abb39f9b461923f5199343 ""
-  "Report.aux" 1589975048 2932 bf3b5e760f95cb21efb388614c57f595 ""
-  "Report.bbl" 1589975047 1300 6acc96416c863dab1f9a1b47d01a7654 "bibtex Report"
-  "Report.out" 1589975048 1055 de08e26e158246d3e747339df32cb6ba ""
-  "Report.tex" 1589975045 5834 83500077119bac219883d05155c37cc6 ""
+  "Report.aux" 1589979215 3173 d303f44115abcacf21ad4c2a94f5a2fe ""
+  "Report.bbl" 1589978586 1058 c9c845e23980c55b664ca8927617064b "bibtex Report"
+  "Report.out" 1589979215 1097 03819090533d2181b0fdf214eec1cb98 ""
+  "Report.tex" 1589979214 8187 e2acf8d61f13b489477998cd521f3950 ""
   (generated)
-  "Report.pdf"
-  "Report.aux"
   "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.pdf"
-  "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.log"
   "Report.out"
   "Report.log"
+  "Report.pdf"
+  "/Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.log"
+  "Report.aux"
