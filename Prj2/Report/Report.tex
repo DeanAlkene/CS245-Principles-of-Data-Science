@@ -183,5 +183,13 @@ Our experiment results are shown in Tab. \ref{base3}. We find simple LFDA model 
 
 In this project, we introduced traditional distance metric and several metric learning method, which is to learn a distance metric for the input space of data from a given collection of pair of similar/dissimilar points that preserves the distance relation among the training data. We have several supervised experiments such as ITML, LFDA, MMC, RCA and LMNN, and give a experiment with unsupervised method PCA. In this section, we will conclude the properties of every method and show 2-D scattering figure of them.
 
+PCA is a supervised dimensionality reduction method, which can preserve the global structure and maintain the variance of the data. In our project, we use PCA to processed data, i.e. we project the data into processed data, then we can use different distance metrics in $k-$NN, such as Euclidean, Manhattan, Chebyshev and Cosine. Most importantly, we can use it to preprocess data before we use anothor metircs learning method, we use this combination method in other experiments, for example, PCA-preprocessed ITML, it means we use PCA to proprecess the data, and then use ITML to finish metrics learning before $k-$NN steps.
+
+ITML is an information-besed learning approach that formulate the problem as that of minimizing the differential relative entropy between two multivariate Gaussians under constraints on the distance function\cite{Davis2007Information}. It does not rely on an eigenvalue computation but probability distributions, it results its performance can increase when we combine it with PCA-processed or LDA-processed.
+
+LFDA is a linear supervised dimensionality reduction method while ITML tends to be information-based method. It extend LDA by assigning greater weights to closer connecting examples and can only maintain the local data structure. In our experiment, we combine LFDA with PCA-processed or LDA-processed method to get a satisfied result.
+
+RCA 
+
 \bibliography{Prj2}
 \end{document}
