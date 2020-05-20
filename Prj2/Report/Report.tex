@@ -61,10 +61,51 @@ It is also a type of instance-based learning or lazy learning, where the general
 training step and does all computations during testing period. Because we are finding the $k$ nearest neighbors, the distance metric to evaluate "nearest" is significant in $k$-NN.
 \subsection{Distance Metrics}
 \subsubsection{Minkowski Distance}
+Minkowski Distance is a metric in normed vector space. It is a generalization of the well-known Euclidean distance, the Manhattan distance and the Chebyshev distance.
+The Minkowski distance of order $p$ between two points $\mathbf{x}=(x_1,x_2,\cdots,x_n), \mathbf{y}=(y_1,y_2,\cdots,y_n) \in \mathbb{R}^n$ is defined as
+\begin{equation}
+    d(\mathbf{x}, \mathbf{y})=\left(\sum_{i=1}^{n}\left|x_{i}-y_{i}\right|^{p}\right)^{\frac{1}{p}}
+\end{equation}
+The following figure \ref{fig:mkd} shows unit circles (the set of all points which are at the unit distance from the center) with different values of $p$.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.3]{pic/minkowski.png}
+	\caption{Unit Circles}
+	\label{fig:mkd}
+\end{figure}
 \subsubsection{Chebyshev Distance}
+The Chebyshev distance or $L_{\infty}$ metric is a metric defined on a vector space where the distance between two points is the maximum of their differences along any coordinate dimension.\cite{hmds}
+It is actually the Minkowski distance when $p\rightarrow\infty$ and thus is defined as:
+\begin{equation}
+    d_{Chebyshev}(\mathbf{x},\mathbf{y})=\lim_{p\rightarrow\infty}\left(\sum_{i=1}^{n}\left|x_{i}-y_{i}\right|^{p}\right)^{\frac{1}{p}}=\max_{i}(|x_i-y_i|)
+\end{equation}
 \subsubsection{Euclidean Distance}
+The Euclidean distance is the "ordinary" straight-line distance in Euclidean space. It is also a specialization of Minkowski distance where $p=2$. Thus, it is defined as
+\begin{equation}
+    d_{Euclidean}(\mathbf{x},\mathbf{y})=\sqrt{\sum_{i=1}^n(x_i-y_i)^2}
+\end{equation}
 \subsubsection{Manhattan Distance}
+The Manhattan distance is a metric in which the distance between two points is the sum of the abosolute differences of their Cartesian coordinates. The name alludes to the island of Manhattan, which causes the shortest paths a
+car could take between two intersections to have the same length \ref{fig:mah}. As it's the Minkowski distance with $p=1$, it is defined as:
+\begin{equation}
+    d_{Manhattan}(\mathbf{x},\mathbf{y})=\left|\sum_{i=1}^n(x_i-y_i)\right|
+\end{equation}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.3]{pic/manhattan.png}
+	\caption{Manhattan vs Euclidean}
+	\label{fig:mah}
+\end{figure}
 \subsubsection{Cosine Distance}
+The Cosine distance is closely related to Cosine similarity where the more similar two points are, the closer their distance is. The Cosine similarity between two non-zero points of an inner product space is defined to equal to the cosine of
+the angle between them. Then, we can define it as:
+\begin{equation}
+    similarity(\mathbf{x},\mathbf{y})=\dfrac{\langle\mathbf{x},\mathbf{y}\rangle}{\|\mathbf{x}\| \|\mathbf{y}\|}=\dfrac{\sum_{i=1}^n x_i y_i}{\sqrt{\sum_{i=1}^n x_i^2}\sqrt{\sum_{i=1}^n y_i^2}}
+\end{equation}
+Thus, the Cosine distance is defined as:
+\begin{equation}
+    d_{cosine}(\mathbf{x},\mathbf{y})=1-similarity(\mathbf{x},\mathbf{y})
+\end{equation}
 \subsubsection{Mahalanobis Distance}
 \subsection{Metric Learning}
 \section{Simple Distance Metrics}
