@@ -69,7 +69,10 @@ training step and does all computations during testing period. Because we are fi
 \subsection{Metric Learning}
 \section{Simple Distance Metrics}
 \section{Metric Learning}
-\subsection{1}
+\subsection{Information Theoretic Metric Learning (ITML)}
+ITML is an information-besed learning approach taht formulate the problem as that of minimizing the differential relative entropy between two multivariate Gaussians under constraints on the distance function\cite{Davis2007Information}. In this section, we will introduce the experiment on pure ITML, PCA-based ITML and LDA-based ITML.
+
+In this experiment, we trained supervised ITML model in training dataset, then transform source data to ITML-learned data for KNN classification. We set $constraints=200$ in supervised ITML model and give the $k-$neighbors range in $k-$NN model as $[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]$. For PCA-based ITML, we first perprocess the data by 50-conponents linear PCA, then train supervised ITML model on the processed data, it will give a better performance. For LDA-based one, we perprocess the data by 40-conponents LDA, instead.
 \subsection{2}
 \bibliography{Prj2}
 \end{document}
