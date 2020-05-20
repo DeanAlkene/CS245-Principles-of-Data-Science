@@ -130,8 +130,6 @@ Our experiment results are shown in Tab. \ref{base2}. Compared with baseline $87
 
 In this experiment, we trained LFDA model in training dataset, then project source data to LFDA-learned data for KNN classification. We set $k-$neighbors range in $k-$NN model as $[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]$. For PCA-preprocessed LFDA, we first perprocess the data by 50-conponents linear PCA, then train supervised ITML model on the processed data, it will give a better performance. For LDA-preprocessed one, we perprocess the data by 40-conponents LDA, instead.
 
-Our experiment results are shown in Tab. \ref{base3}. We find in simple LFDA model, 
-
 \begin{table}[htbp]
 	\centering
  	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
@@ -178,6 +176,8 @@ Our experiment results are shown in Tab. \ref{base3}. We find in simple LFDA mod
  		\hline
  	\end{tabular}
 \end{table}
+
+Our experiment results are shown in Tab. \ref{base3}. We find simple LFDA model have poor performance as $16.20\%$, we think this may be caused by that we set the n\_components parameter as default, and it means we can't control its dimensionality reduction process to get a satisfied result. Compared with baseline $87.61\%$ in Euclidean KNN, we find LDA-preprocessed model reached $90.76\%$ while PCA-preprocessed one reached $87.51\%$, we deem the reason is that LDA can make the variance high enough between different clusters.
 
 \section{Conclusion}
 

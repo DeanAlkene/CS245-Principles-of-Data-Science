@@ -288,8 +288,6 @@ INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/public/cm/cmti8.tfm
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/public/cm/cmti7.tfm
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/public/cm/cmti7.tfm
-INPUT /Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.bbl
-INPUT /Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.bbl
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/vf/adobe/times/ptmr8t.vf
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT /usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map
@@ -314,6 +312,8 @@ INPUT /usr/local/texlive/2018/texmf-dist/fonts/vf/adobe/times/ptmr8t.vf
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/vf/adobe/times/ptmb8t.vf
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm
+INPUT /Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.bbl
+INPUT /Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.bbl
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/vf/adobe/times/ptmri8t.vf
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm
 INPUT /Users/kylinchan/learningmt/features-project/CS245-Projects/Prj2/Report/Report.aux
