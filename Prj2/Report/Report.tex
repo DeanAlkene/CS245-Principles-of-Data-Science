@@ -44,7 +44,9 @@ Distance Metrics}
 \maketitle
 
 \begin{abstract}
-Hello
+The distance metric is an important topic in machine learning. A lot of algorithms rely on a suitable distance metric to perform well, especially $k$-NN. The choice of $k$ nearest neighbors is
+closely related to the distance metric. In this project, we tried some classical distance metrics and different metric learning methods to learn some new distance metrics then applied them on $k$-NN classifier and compared the differences
+on the classification results.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -59,6 +61,12 @@ A certain object is classified by a plurality vote of its neighbors, with it bei
 The algorithm is non-parametric\cite{knn}, which means the model is distribution free or with a specified distribution whose parameters are unspecified.
 It is also a type of instance-based learning or lazy learning, where the generalization of the training data is delayed until a query is made. In this case, $k$-NN has no explicit 
 training step and does all computations during testing period. Because we are finding the $k$ nearest neighbors, the distance metric to evaluate "nearest" is significant in $k$-NN.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.1]{pic/KNN.png}
+	\caption{KNN}
+	\label{fig:knn}
+\end{figure}
 \subsection{Distance Metrics}
 \subsubsection{Minkowski Distance}
 \par
@@ -146,10 +154,47 @@ Then, given pairs of similar points $S$ and dissimilar points $D$, the learning 
 \end{equation}
 As we can see in \ref{eq:itml}, $u$ and $l$ is the upper and lower bound of distance for similar and dissimilar pairs respectively. It means that if the Mahalanobis distance between two points is greater than $l$ then they are considered dissimilar while if the distance is lower than $u$, then they are considered similar.
 In addition, the matrix $\mathbf{A}_0$ is the prior distance metric and in practice we always set $\mathbf{A}_0=\mathbf{I}$ to make the prior metric the Euclidean one. So, ITML can optionally incorporate a prior on the distance function and can handle a variety of constraints. It also does not rely on eigenvalue computation or semi-definite programming.
-\subsubsection{LFDA}
+\subsubsection{Local Fisher Discriminant Analysis}
 \par
-\subsubsection{MMC}
+Local Fisher Discriminant Analysis (LFDA) \cite{sugiyama2007dimensionality} is a kind of supervised learning algorithm. It is also a linear dimensionality reduction method. It is particularly useful when dealing with multi-modality, where one ore more classes consist of separate clusters in input space. The core optimization problem of LFDA is solved as a generalized eigenvalue problem.
+We need to define the Fisher local within-/between-class scatter matrix $\mathbf{S}^{(w)}$ and $\mathbf{S}^{(b)}$ as
+\begin{equation}
+	\mathbf{S}^{(w)}=\frac{1}{2} \sum_{i, j=1}^{n} W_{i j}^{(w)}\left(\mathbf{x}_{i}-\mathbf{x}_{j}\right)\left(\mathbf{x}_{i}-\mathbf{x}_{j}\right)^{T}
+\end{equation}
+\begin{equation}
+	\mathbf{S}^{(b)}=\frac{1}{2} \sum_{i, j=1}^{n} W_{i j}^{(b)}\left(\mathbf{x}_{i}-\mathbf{x}_{j}\right)\left(\mathbf{x}_{i}-\mathbf{x}_{j}\right)^{T}
+\end{equation}
+where
+\begin{equation}
+	W_{i j}^{(w)}=\left\{\begin{array}{rl}
+		0 & y_{i} \neq y_{j} \\
+		\mathbf{A}_{i, j} / n_{l} & y_{i}=y_{j}
+		\end{array}\right.
+\end{equation}
+\begin{equation}
+	W_{i j}^{(b)}=\left\{\begin{array}{rl}
+		1 / n & y_{i} \neq y_{j} \\
+		\mathbf{A}_{i, j}\left(1 / n-1 / n_{l}\right) & y_{i}=y_{j}
+		\end{array}\right.
+\end{equation}
+Here, $\mathbf{A}_{i,j}$ is the $(i,j)$-th entry of the affinity matrix $\mathbf{A}$, which can be calculated with local scaling methods. The learning problem then becomes to derive the LFDA transformation matrix $\mathbf{T}_{LFDA}$:
+\begin{equation}
+	\left.\mathbf{T}_{L F D A}=\arg \max _{\mathbf{T}}\left[\operatorname{tr}\left(\mathbf{T}^{T} \mathbf{S}^{(w)} \mathbf{T}\right)^{-1} \mathbf{T}^{T} \mathbf{S}^{(b)} \mathbf{T}\right)\right]
+\end{equation}
+That is, it is looking for a transformation matrix $\mathbf{T}$ such that nearby data pairs in the same class are made close and the data pairs in different classes are separated from each other; far apart data pairs in the same class are not imposed to be close.
+\subsubsection{Metric Learning with Application for Clustering with Side Information}
 \par
+Metric Learning with Application for Clustering with Side Information (MMC) \cite{xing2003distance} is also a kind of weakly supervised learning method. It minimizes the sum of squared distances between similar points, while enforcing the sum of distances between dissimilar ones to be greater than one.
+It is thus a convex problem and can find local-minima-free optimization solution efficiently. However, the algorithm involves the computation of eigenvalues, which is the main speed-bottleneck.
+According to the idea of MMC, the optimization problem is defined as
+\begin{equation}
+	\begin{array}{c}
+		\min_{\mathbf{M}\in\mathbb{S}^d_+}\sum_{(\mathbf{x_i},\mathbf{x_j})\in S}d_{\mathbf{M}}(\mathbf{x_i},\mathbf{x_j})\\
+		\\
+		\text{s.t.} \quad \sum_{(\mathbf{x_i},\mathbf{x_j})\in D}d_{\mathbf{M}}^2(\mathbf{x_i},\mathbf{x_j})\ge 1
+	\end{array}
+\end{equation}
+where $\mathbf{M}$ is the Mahalanobis matrix and thus a positive semi-definite matrix ($\mathbf{M}\in\mathbb{S}^d_+$) and $d_{\mathbf{M}}(\cdot)$ is the Mahalanobis distance. As we can see, The algorithm aims at minimizing the sum of distances between all the similar points, while constrains the sum of distances between dissimilar points.
 \subsubsection{RCA}
 \par
 Relative Components Analysis \cite{shental2002adjustment} is a kind of weakly supervised learning method. It learns a full rank Mahalanobis distance metric based on a weighted sum of in-chunklets covariance matrices. It applies a global linear transformation to assign large weights to relevant dimensions and low weights to irrelevant dimensions. 
@@ -159,9 +204,23 @@ For a training set with $n$ training points in $k$ chunklets (classes), the algo
 	\mathbf{C}=\dfrac{1}{n}\sum_{j=1}^k\sum_{i=1}^{n_j}(\mathbf{x}_{ji}-\mu_j)(\mathbf{x}_{ji}-\mu_j)^T
 \end{equation}
 where chunklet $j$ consists of $\{\mathbf{x}_{ji}\}^{n_j}_{i=1}$ with mean $\mu_j$. THe inverse of $C^{-1}$ is used as the Mahalanobis matrix.
-\subsubsection{LMNN}
+\subsubsection{Large Margin Nearest Neighbor Metric Learning}
 \par
+Large Margin Nearest Neighbor Metric Learning (LMNN) \cite{weinberger2009distance} is a kind of supervised learning method. It learns a Mahalanobis distance metric in the $k$-NN classification setting. 
+The learned metric attempts to keep close k-nearest neighbors from the same class, while keeping examples from different classes separated by a large margin. This algorithm makes no assumptions about the distribution of the data.
+The distance is learned by solving the following optimization problem:
+\begin{equation}
+	\begin{array}{l}
+		\min _{\mathbf{L}} \sum_{i, j} \eta_{i j}\left\|\mathbf{L}\left(\mathbf{x}_{\mathbf{i}}-\mathbf{x}_{\mathbf{j}}\right)\right\|^{2}+\\
+		c \sum_{i, j, l} \eta_{i j}\left(1-y_{i j}\right)\left[1+\left\|\mathbf{L}\left(\mathbf{x}_{\mathbf{i}}-\mathbf{x}_{\mathbf{j}}\right)\right\|^{2}-\left\|\mathbf{L}\left(\mathbf{x}_{\mathbf{i}}-\mathbf{x}_{\mathbf{l}}\right)\right\|^{2}\right]_{+}	
+	\end{array}
+\end{equation}
+where $\mathbf{x}_j$ is one of the $k$ nearest neighbors sharing the same label with $\mathbf{x}_i$, $\mathbf{x}_l$ are all the other instances within that region with different labels. Both $\eta_{ij}$ and $y_{ij}$ are indicators in $\{0,1\}$. $\eta_{ij}$ represents $\mathbf{x}_j$ is the $k$ nearest neighbors with same labels of $mathbf{x}_i$.
+$y_{ij}=0$ indicates $\mathbf{x}_i,\mathbf{x}_j$ belong to different class. $[\cdot]_+=\max(0,\cdot)$ is the Hinge loss.
 \section{Simple Distance Metrics}
+\subsection{Minkowski Distance}
+In this part, we use the Euclidean distance, the Chebyshev distance and the Manhattan distance on the $k$-NN with our dataset. We tried different $k$'s and the results differs with regard to different $k$ values. Here is the result:
+
 \section{Metric Learning}
 \subsection{Information Theoretic Metric Learning (ITML)}
 % ITML is an information-besed learning approach taht formulate the problem as that of minimizing the differential relative entropy between two multivariate Gaussians under constraints on the distance function\cite{Davis2007Information}. In this section, we will introduce the experiment on pure ITML, PCA-preprocessed ITML and LDA-preprocessed ITML.
