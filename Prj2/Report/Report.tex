@@ -152,6 +152,13 @@ In addition, the matrix $\mathbf{A}_0$ is the prior distance metric and in pract
 \par
 \subsubsection{RCA}
 \par
+Relative Components Analysis \cite{shental2002adjustment} is a kind of weakly supervised learning method. It learns a full rank Mahalanobis distance metric based on a weighted sum of in-chunklets covariance matrices. It applies a global linear transformation to assign large weights to relevant dimensions and low weights to irrelevant dimensions. 
+Those relevant dimensions are estimated using “chunklets” which are subsets of points that are known to belong to the same class.
+For a training set with $n$ training points in $k$ chunklets (classes), the algorithm is efficient since it simply amounts to computing
+\begin{equation}
+	\mathbf{C}=\dfrac{1}{n}\sum_{j=1}^k\sum_{i=1}^{n_j}(\mathbf{x}_{ji}-\mu_j)(\mathbf{x}_{ji}-\mu_j)^T
+\end{equation}
+where chunklet $j$ consists of $\{\mathbf{x}_{ji}\}^{n_j}_{i=1}$ with mean $\mu_j$. THe inverse of $C^{-1}$ is used as the Mahalanobis matrix.
 \subsubsection{LMNN}
 \par
 \section{Simple Distance Metrics}
@@ -175,35 +182,22 @@ In this experiment, we trained supervised ITML model in training dataset, then t
  		& {ITML(\%)} & {PCA-preprocessed(\%)} & {LDA-preprocessed(\%)}\\
  		\hline
  		2   & 82.04 & 83.18 & 88.06\\
- 		\hline
  		3   & \textbf{83.60} & 85.41 & 89.57\\
- 		\hline
  		4   & 83.31 & 85.55 & 89.42\\
- 		\hline
  		5   & 83.52  & 86.19 & 90.01\\
- 		\hline
  		6   & 83.33  & 86.21 & 90.04\\
- 		\hline
  		7   & 83.37  & \textbf{86.67} & 90.35\\
- 		\hline
  		8   & 83.02  & 86.51 & 90.35\\
- 		\hline
  		9   & 82.97  & 86.37 & 90.40\\
- 		\hline
  		10   & 82.72  & 86.41 & 90.55\\
- 		\hline
  		11   & 82.73  & 86.25 & 90.64\\
- 		\hline
  		12   & 82.52  & 86.27 & 90.67\\
- 		\hline
  		13   & 82.47  & 86.17 & 90.58\\
- 		\hline
  		14   & 82.33  & 86.06 & 90.64\\
- 		\hline
  		15   & 82.10  & 86.15 & \textbf{90.74}\\
- 		\hline
- 		16   & 81.96  & 86.01 & 90.69\\
- 		% \hline Baseline& \multicolumn{3}{c}{87.61} \\
+		16   & 81.96  & 86.01 & 90.69\\
+		\hline
+ 		Baseline & \multicolumn{3}{c}{\textbf{87.61}} \\
  		\hline
  	\end{tabular}
 \end{table}
@@ -231,41 +225,235 @@ In this experiment, we trained LFDA model in training dataset, then project sour
  		& {PCA-preprocessed(\%)} & {LDA-preprocessed(\%)}\\
  		\hline
  		2   & 84.00 & 88.18\\
- 		\hline
  		3   & 86.30 & 89.95\\
- 		\hline
  		4   & 86.74 & 89.94\\
- 		\hline
  		5   & 87.17 & 90.38\\
- 		\hline
  		6   & 87.16 & 90.29\\
- 		\hline
  		7   & 87.40 & 90.43\\
- 		\hline
  		8   & 87.42 & 90.54\\
- 		\hline
  		9   & 87.51 & 90.62\\
- 		\hline
  		10   & 87.46 & 90.55\\
- 		\hline
  		11   & \textbf{87.51} & 90.63\\
- 		\hline
  		12   & 87.38 & 90.68\\
- 		\hline
  		13   & 87.49 & 90.71\\
- 		\hline
  		14   & 87.24 & 90.68\\
- 		\hline
  		15   & 87.23 & \textbf{90.76}\\
- 		\hline
- 		16   & 86.97 & 90.76\\
- 		% \hline Baseline& \multicolumn{3}{c}{87.61} \\
+		16   & 86.97 & 90.76\\
+		\hline
+ 		Baseline & \multicolumn{2}{c}{\textbf{87.61}} \\
  		\hline
  	\end{tabular}
 \end{table}
 
 Our experiment results are shown in Tab. \ref{base3}. We find simple LFDA model have poor performance as $16.20\%$, we think this may be caused by that we set the n\_components parameter as default, and it means we can't control its dimensionality reduction process to get a satisfied result. Compared with baseline $87.61\%$ in Euclidean KNN, we find LDA-preprocessed model reached $90.76\%$ while PCA-preprocessed one reached $87.51\%$, we deem the reason is that LDA can make the variance high enough between different clusters.
 
+\subsection{MMC}
+\par
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of Variance MMC and baselines in $k-$NN Classification Task}
+ 	\label{base4}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{3}{c}{Variance MMC model + $k-$NN}\\
+ 		\cline{2-4}
+			& MMC(\%) & {PCA-preprocessed(\%)} & {LDA-preprocessed(\%)}\\
+ 		\hline
+ 		2   &   &  & \\
+ 		3   &   &  & \\
+ 		4   &   &  & \\
+ 		5   &   &  & \\
+ 		6   &   &  & \\
+ 		7   & \textbf{best}  &  & \\
+ 		8   &   &  & \\
+ 		9   &   & \textbf{best} & \\
+ 		10   &   &  & \\
+ 		11   &   &  & \\
+ 		12   &   &  & \\
+ 		13   &   &  & \\
+ 		14   &   &  & \\
+ 		15   &   &  & \textbf{best}\\
+		16   &   &  & \\  
+		\hline
+		Baseline & \multicolumn{3}{c}{\textbf{87.61}} \\
+ 		\hline
+		\end{tabular}
+\end{table}
+\subsection{RCA}
+\par
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of Variance RCA and baselines in $k-$NN Classification Task}
+ 	\label{base5}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{2}{c}{Variance RCA model + $k-$NN}\\
+ 		\cline{2-3}
+		    & {PCA-preprocessed(\%)} & {LDA-preprocessed(\%)}\\
+ 		\hline
+ 		2   &  & \\
+ 		3   &  & \\
+ 		4   &  & \\
+ 		5   &  & \\
+ 		6   &  & \\
+ 		7   & \textbf{best} & \\
+ 		8   &  & \\
+ 		9   &  & \\
+ 		10   &  & \\
+ 		11   &  & \\
+ 		12   &  & \\
+ 		13   &  & \textbf{best} \\
+ 		14   &  & \\
+ 		15   &  & \\
+		16   &  & \\
+		\hline
+		Baseline & \multicolumn{2}{c}{\textbf{87.61}} \\
+ 		\hline
+ 	\end{tabular}
+\end{table}
+\subsection{LMNN}
+\par
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of Variance PCA+LMNN and baselines in $k-$NN Classification Task}
+ 	\label{base6}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{5}{c}{Variance PCA+LMNN model + $k-$NN}\\
+ 		\cline{2-6}
+		    & {k=2(\%)} & {k=3(\%)} & {k=4(\%)} & {k=5(\%)} & {k=6(\%)}\\
+ 		\hline
+ 		2   &  &  &  &  &  \\
+ 		3   &  &  &  &  &  \\
+ 		4   &  &  &  &  &  \\
+ 		5   &  &  &  &  &  \\
+ 		6   &  &  &  &  &  \\
+ 		7   &  &  &  & \textbf{best} &  \\
+ 		8   &  &  &  &  &  \\
+ 		9   &  & \textbf{best} &  &  &  \\
+ 		10   &  &  &  &  &  \\
+ 		11   & \textbf{best} &  &  &  &  \\
+ 		12   &  &  &  &  &  \\
+ 		13   &  &  & \textbf{best} &  &  \\
+ 		14   &  &  &  &  &  \\
+ 		15   &  &  &  &  & \textbf{best} \\
+		16   &  &  &  &  &  \\  
+		\hline
+		Baseline & \multicolumn{5}{c}{\textbf{87.61}} \\
+ 		\hline
+ 	\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of Variance LDA+LMNN and baselines in $k-$NN Classification Task}
+ 	\label{base7}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c|c|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{6}{c}{Variance LDA+LMNN model + $k-$NN}\\
+ 		\cline{2-7}
+		    & {k=2(\%)} & {k=3(\%)} & {k=4(\%)} & {k=5(\%)} & {k=6(\%)} & {k=7(\%)}\\
+ 		\hline
+ 		2   &  &  &  &  &  &  \\
+ 		3   &  &  &  &  &  &  \\
+ 		4   &  &  &  &  &  &  \\
+ 		5   &  &  &  &  &  &  \\
+ 		6   &  &  &  &  &  &  \\
+ 		7   &  &  &  &  &  &  \\
+ 		8   &  &  &  &  &  &  \\
+ 		9   &  &  &  &  &  &  \\
+ 		10   &  &  &  &  &  &  \\
+ 		11   & \textbf{best} &  & \textbf{best} &  &  &  \\
+ 		12   &  &  &  &  &  &  \\
+ 		13   &  & \textbf{best} &  &  &  & \textbf{best} \\
+ 		14   &  &  &  &  &  &  \\
+ 		15   &  &  &  &  & \textbf{best} &  \\
+		16   &  &  &  & \textbf{best} &  &  \\  
+		\hline
+		Baseline & \multicolumn{6}{c}{\textbf{87.61}} \\
+ 		\hline
+ 	\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of Variance LDA+LMNN and baselines in $k-$NN Classification Task (Continue)}
+ 	\label{base8}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c|c|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{6}{c}{Variance LDA+LMNN model + $k-$NN}\\
+ 		\cline{2-7}
+		    & {k=8(\%)} & {k=9(\%)} & {k=10(\%)} & {k=11(\%)} & {k=12(\%)} & {k=13(\%)}\\
+ 		\hline
+ 		2   &  &  &  &  &  &  \\
+ 		3   &  &  &  &  &  &  \\
+ 		4   &  &  &  &  &  &  \\
+ 		5   &  &  &  &  &  &  \\
+ 		6   &  &  &  &  &  &  \\
+ 		7   &  &  &  &  &  &  \\
+ 		8   &  &  &  &  &  &  \\
+ 		9   &  &  &  &  &  &  \\
+ 		10   &  &  &  &  &  &  \\
+ 		11   &  &  &  &  &  &  \\
+ 		12   &  &  &  &  &  &  \\
+ 		13   & \textbf{best} &  &  & \textbf{best} &  &  \\
+ 		14   &  & \textbf{best} & \textbf{best} &  &  &  \\
+ 		15   &  &  &  &  & \textbf{best} &  \\
+		16   &  &  &  &  &  & \textbf{best} \\  
+		\hline
+		Baseline & \multicolumn{6}{c}{\textbf{87.61}} \\
+ 		\hline
+ 	\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of Variance LDA+LMNN and baselines in $k-$NN Classification Task (Continue)}
+ 	\label{base9}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{3}{c}{Variance LDA+LMNN model + $k-$NN}\\
+ 		\cline{2-4}
+			& {k=14(\%)} & {k=15(\%)} & {k=16(\%)}\\
+ 		\hline
+ 		2   &   &  & \\
+ 		3   &   &  & \\
+ 		4   &   &  & \\
+ 		5   &   &  & \\
+ 		6   &   &  & \\
+ 		7   &   &  & \\
+ 		8   &   &  & \\
+ 		9   &   &  & \\
+ 		10   &   &  & \\
+ 		11   &   &  & \\
+ 		12   &   &  & \\
+ 		13   &   &  & \\
+ 		14   &   &  & \\
+ 		15   &   & \textbf{best} & \\
+		16   & \textbf{best}  &  & \textbf{best}\\  
+		\hline
+		Baseline & \multicolumn{3}{c}{\textbf{87.61}} \\
+ 		\hline
+		\end{tabular}
+\end{table}
 \section{Conclusion}
 
 In this project, we introduced traditional distance metric and several metric learning method, which is to learn a distance metric for the input space of data from a given collection of pair of similar/dissimilar points that preserves the distance relation among the training data. We have several supervised experiments such as ITML, LFDA, MMC, RCA and LMNN, and give a experiment with unsupervised method PCA. In this section, we will conclude the properties of every method and conclude the performance of simple distance metrics and metrics learning models.
