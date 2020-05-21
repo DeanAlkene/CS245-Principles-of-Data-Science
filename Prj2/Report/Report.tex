@@ -220,7 +220,195 @@ $y_{ij}=0$ indicates $\mathbf{x}_i,\mathbf{x}_j$ belong to different class. $[\c
 \section{Simple Distance Metrics}
 \subsection{Minkowski Distance}
 In this part, we use the Euclidean distance, the Chebyshev distance and the Manhattan distance on the $k$-NN with our dataset. We tried different $k$'s and the results differs with regard to different $k$ values. Here is the result:
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of $k-$NN Classification Task with Different Minkowski Distances}
+ 	\label{base0}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{3}{c}{$k-$NN with different Minkowski distances}\\
+ 		\cline{2-4}
+			& Euclidean(\%) & Chebyshev(\%) & Manhattan(\%)\\
+ 		\hline
+ 		2   & 84.56 & 63.45 & 84.75 \\
+ 		3   & 86.89 & 66.64 & \textbf{86.62} \\
+ 		4   & 86.94 & 67.77 & 86.51 \\
+ 		5   & 87.44 & 68.44 & 86.52 \\
+ 		6   & 87.25 & 68.95 & 86.40 \\
+ 		7   & \textbf{87.61} & 69.07 & 86.60 \\
+ 		8   & 87.37 & 69.37 & 86.38 \\ 
+ 		9   & 87.54 & 69.35 & 86.38 \\
+ 		10   & 87.32 & 69.32 & 86.36 \\
+ 		11   & 87.35 & 69.37 & 86.28 \\
+ 		12   & 87.19 & 69.38 & 86.15 \\
+ 		13   & 87.16 & \textbf{69.44} & 85.97 \\
+ 		14   & 87.09 & 69.28 & 85.87 \\
+ 		15   & 86.10 & 69.31 & 85.79 \\
+		16   & 86.84 & 69.16 & 85.54 \\
+		50   & 84.46 & 65.99 & 82.44 \\
+		100   & 82.06 & 62.61 & 79.36 \\
+		200   & 78.14 & 58.50 & 74.30 \\
+		500   & 70.53 & 51.28 & 64.93 \\
+		1000   & 62.51 & 44.21 & 54.95 \\
+		\hline
+		\end{tabular}
+\end{table}
+\subsection{Dimension Reduction and Minkowski Distance}
+In this part, we explored the effect of dimension reduction on $k$-NN with different Minkowski distances. We did experiments on different methods including PCA and LDA, different kernels of PCA and different dimensions.
+Firstly, we tried different kernels (linear, rbf) of PCA and reduced the original 2048 dimensions into 50 dimensions.
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of Linear PCA+$k-$NN Classification Task with Different Minkowski Distances}
+ 	\label{base1}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{3}{c}{Linear PCA+$k-$NN with different Minkowski distances}\\
+ 		\cline{2-4}
+			& Euclidean(\%) & Chebyshev(\%) & Manhattan(\%)\\
+ 		\hline
+ 		2   & 83.96 & 77.00 & 83.58 \\
+ 		3   & 86.34 & 79.54 & 85.91 \\
+ 		4   & 86.70 & 80.40 & 86.42 \\
+ 		5   & 87.17 & 80.88 & 87.03 \\
+ 		6   & 87.18 & 80.90 & 86.80 \\
+ 		7   & 87.41 & 81.24 & 87.02 \\
+ 		8   & 87.50 & 81.07 & 86.88 \\ 
+ 		9   & 87.45 & 81.25 & 87.07 \\
+ 		10   & 87.33 & 81.24 & \textbf{87.16} \\
+ 		11   & \textbf{87.51} & \textbf{81.29} & 87.13 \\
+ 		12   & 87.39 & 81.06 & 87.03 \\
+ 		13   & 87.50 & 81.13 & 87.03 \\
+ 		14   & 87.26 & 80.95 & 86.92 \\
+ 		15   & 87.23 & 80.97 & 86.94 \\
+		16   & 86.92 & 80.99 & 86.83 \\
+		50   & 85.20 & 78.92 & 84.87 \\
+		100   & 83.21 & 76.25 & 83.06 \\
+		200   & 80.35 & 72.71 & 80.48 \\
+		500   & 75.60 & 67.08 & 75.51 \\
+		1000   & 70.13 & 60.73 & 70.18 \\
+		\hline
+ 		Baseline & \multicolumn{3}{c}{\textbf{87.61}} \\
+		\hline
+		\end{tabular}
+\end{table}
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of RBF PCA+$k-$NN Classification Task with Different Minkowski Distances}
+ 	\label{base1_1}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{3}{c}{RBF PCA+$k-$NN with different Minkowski distances}\\
+ 		\cline{2-4}
+			& Euclidean(\%) & Chebyshev(\%) & Manhattan(\%)\\
+ 		\hline
+ 		2   & 82.72 & 76.65 & 82.89 \\
+ 		3   & 85.45 & 79.34 & 85.71 \\
+ 		4   & 85.84 & 80.05 & 85.95 \\
+ 		5   & 86.29 & 80.76 & 86.49 \\
+ 		6   & 86.32 & 80.92 & 86.53 \\
+ 		7   & \textbf{86.74} & 81.28 & 86.75 \\
+ 		8   & 86.60 & 81.31 & 86.70 \\ 
+ 		9   & 86.57 & 81.37 & \textbf{86.84} \\
+ 		10   & 86.56 & 81.47 & 86.73 \\
+ 		11   & 86.47 & 81.39 & 86.78 \\
+ 		12   & 86.38 & 81.41 & 86.64 \\
+ 		13   & 86.40 & 81.55 & 86.68 \\
+ 		14   & 86.48 & 81.64 & 86.64 \\
+ 		15   & 86.36 & 81.59 & 86.55 \\
+		16   & 86.49 & \textbf{81.67} & 86.63 \\
+		50   & 84.53 & 79.49 & 84.57 \\
+		100   & 82.61 & 77.42 & 83.18 \\
+		200   & 80.16 & 74.69 & 80.49 \\
+		500   & 75.54 & 69.49 & 75.66 \\
+		1000   & 69.84 & 64.02 & 70.23 \\
+		\hline
+ 		Baseline & \multicolumn{3}{c}{\textbf{87.61}} \\
+		\hline
+		\end{tabular}
+\end{table}
 
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of $k-$NN Classification Task with Euclidean Distance in Different Dimensions}
+ 	\label{base1_2}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{3}{c}{$k-$NN with Euclidean distance in different dimensions}\\
+ 		\cline{2-4}
+			& Linear,50(\%) & Linear,500(\%) & Original,2048(\%)\\
+ 		\hline
+ 		2   & 83.96 & \textbf{66.01} & 84.56 \\
+ 		3   & 86.34 & 64.72 & 86.89 \\
+ 		4   & 86.70 & 63.65 & 86.94 \\
+ 		5   & 87.17 & 61.72 & 87.44 \\
+ 		6   & 87.18 & 60.39 & 87.25 \\
+ 		7   & 87.41 & 59.01 & \textbf{87.61} \\
+ 		8   & 87.50 & 57.72 & 87.37 \\ 
+ 		9   & 87.45 & 56.57 & 87.54 \\
+ 		10   & 87.33 & 55.44 & 87.32 \\
+ 		11   & \textbf{87.51} & 54.30 & 87.35 \\
+ 		12   & 87.39 & 53.45 & 87.19 \\
+ 		13   & 87.50 & 52.20 & 87.16 \\
+ 		14   & 87.26 & 51.55 & 87.09 \\
+ 		15   & 87.23 & 50.55 & 86.10 \\
+		16   & 86.92 & 49.45 & 86.84 \\
+		50   & 85.20 & 32.90 & 84.46 \\
+		100   & 83.21 & 22.63 & 82.06 \\
+		200   & 80.35 & 13.87 & 78.14 \\
+		500   & 75.60 & 06.67 & 70.53 \\
+		1000   & 70.13 & 05.17 & 62.51 \\
+		\hline
+ 		Baseline & \multicolumn{3}{c}{\textbf{87.61}} \\
+		\hline
+		\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of $k-$NN Classification Task with Linear PCA and LDA}
+ 	\label{base1_3}%
+ 		\begin{tabular}{@{}p{1cm}<{\centering}|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+ 		\multicolumn{2}{c}{$k-$NN with Linear PCA and LDA}\\
+ 		\cline{2-3}
+			& PCA,50(\%) & LDA,40(\%) \\
+ 		\hline
+ 		2   & 83.96 & 88.21 \\
+ 		3   & 86.34 & 89.95 \\
+ 		4   & 86.70 & 89.91 \\
+ 		5   & 87.17 & 90.41 \\
+ 		6   & 87.18 & 90.26 \\
+ 		7   & 87.41 & 90.46 \\
+ 		8   & 87.50 & 90.55 \\ 
+ 		9   & 87.45 & 90.62 \\
+ 		10   & 87.33 & 90.58 \\
+ 		11   & \textbf{87.51} & 90.65 \\
+ 		12   & 87.39 & 90.70 \\
+ 		13   & 87.50 & 90.76 \\
+ 		14   & 87.26 & 90.68 \\
+ 		15   & 87.23 & \textbf{90.77} \\
+		16   & 86.92 & 90.74 \\
+		\hline
+ 		Baseline & \multicolumn{2}{c}{\textbf{87.61}} \\
+		\hline
+		\end{tabular}
+\end{table}
+\subsection{Cosine Distance}
 \section{Metric Learning}
 \subsection{Information Theoretic Metric Learning (ITML)}
 % ITML is an information-besed learning approach taht formulate the problem as that of minimizing the differential relative entropy between two multivariate Gaussians under constraints on the distance function\cite{Davis2007Information}. In this section, we will introduce the experiment on pure ITML, PCA-preprocessed ITML and LDA-preprocessed ITML.
