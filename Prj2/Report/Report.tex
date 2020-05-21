@@ -222,7 +222,7 @@ Our experiment results are shown in Tab. \ref{base3}. We find simple LFDA model 
 
 \section{Conclusion}
 
-In this project, we introduced traditional distance metric and several metric learning method, which is to learn a distance metric for the input space of data from a given collection of pair of similar/dissimilar points that preserves the distance relation among the training data. We have several supervised experiments such as ITML, LFDA, MMC, RCA and LMNN, and give a experiment with unsupervised method PCA. In this section, we will conclude the properties of every method and show 2D-scattering figure of them.
+In this project, we introduced traditional distance metric and several metric learning method, which is to learn a distance metric for the input space of data from a given collection of pair of similar/dissimilar points that preserves the distance relation among the training data. We have several supervised experiments such as ITML, LFDA, MMC, RCA and LMNN, and give a experiment with unsupervised method PCA. In this section, we will conclude the properties of every method and conclude the performance of simple distance metrics and metrics learning models.
 
 PCA is a supervised dimensionality reduction method, which can preserve the global structure and maintain the variance of the data. In our project, we use PCA to processed data, i.e. we project the data into processed data, then we can use different distance metrics in $k-$NN, such as Euclidean, Manhattan, Chebyshev and Cosine. Most importantly, we can use it to preprocess data before we use anothor metircs learning method, we use this combination method in other experiments, for example, PCA-preprocessed ITML, it means we use PCA to proprecess the data, and then use ITML to finish metrics learning before $k-$NN steps.
 
@@ -230,9 +230,35 @@ ITML is an information-besed learning approach that formulate the problem as tha
 
 LFDA is a linear supervised dimensionality reduction method while ITML tends to be information-based method. It extend LDA by assigning greater weights to closer connecting examples and can only maintain the local data structure. In our experiment, we combine LFDA with PCA-processed or LDA-processed method to get a satisfied result.
 
+MMC minimizes the sum of squared distances between similar points, while enforcing the sum of distances between dissimilar ones to be greater than one. This leads to a convex and, thus, local-minima-free optimization problem that can be solved efficiently. In our experiment, we set 200 constrains for MMC evaluation, and find its satisfied performance.
+
 RCA learns a global linear transformation from the equivalence constraints, and the learned linear transformation can be used directly to compute distance between any two examples. It can preserve global structure and all the positive/negative constrains, it means it will cost very large memory and take too long, therefore in our experiment we use PCA and LDA to preprocess the source data instead of evaluating pure RCA model.
 
 LMNN is a linear model that extends NCA through a maximum margin framework. It learns a Mahalanobis distance that tries to collapse examples in the same class to a single point, and in the meantime keep examples from different classes far away. LMNN preserve the local information as NCA but have better performance than NCA. In our experiments, to prevent memory explosion, we only evaluate performance of LMNN model at $k-$neighbors range of $[2,3,4,5,6]$ and use PCA or LDA to preprocess the data.
+
+\begin{center}
+\begin{figure}
+\centering
+\subfigure[PCA 2D-scattering]{
+\includegraphics[width=3.75cm]{pic/X_test_scatter_PCA.png}
+%\caption{fig1}
+}
+\quad
+\subfigure[LDA 2D-scattering]{
+\includegraphics[width=3.75cm]{pic/X_test_scatter_LDA.png}
+}
+\quad
+\subfigure[PCA + MMC 2D-scattering]{
+\includegraphics[width=3.75cm]{pic/X_test_scatter_PCA_MMC.png}
+}
+\quad
+\subfigure[LDA + MMC 2D-scattering]{
+\includegraphics[width=3.75cm]{pic/X_test_scatter_LDA_MMC.png}
+}
+\caption{tSNE Visualization with Variance Model}
+\label{Fig2}
+\end{figure}
+\end{center}
 
 \bibliography{Prj2}
 \end{document}
