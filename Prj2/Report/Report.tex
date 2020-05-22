@@ -567,7 +567,7 @@ In this experiment, we trained MMC model in preprocessed training dataset for la
  	\end{tabular}
 \end{table}
 
-Our experiment results are shown in Tab. \ref{base5}. We find LDA-preprocessed RCA which reached $90.34\%$ performed better than PCA-preprocessed RCA which reached $86.30\%$. RCA uses the information in such chunklets to reduce irrelevant variability in the data while amplifying relevant variability，Therefore, we deem the reason is that PCA lacks attention to categories when reducing dimensionality.
+Our experiment results are shown in Tab. \ref{base5}. We find LDA-preprocessed RCA which reached $90.34\%$ performed better than PCA-preprocessed RCA which reached $86.30\%$. RCA uses the information in such chunklets to reduce irrelevant variability in the data while amplifying relevant variability. Therefore, we deem the reason is that PCA lacks attention to categories when reducing dimensionality.
 \subsection{Large Margin Nearest Neighbor (LMNN)}
 
 In this experiment, we trained LMNN model in PCA-preprocessed training dataset and LDA-preprocessed training dataset, then project the data to LMNN-learned data for KNN classification. Due to lack of computing resources, we did not use the original dataset. LMNN needs to set the target neighbor k, so we also set different target neighbors for experiment. We set $K-$neighbors in KNN range as $[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]$. For PCA-preprocessed LFDA, we set $k-$target neighbors in LMNN range as $[2,3,4,5,6]$. We first perprocess the data by 50-conponents linear PCA, then train LMNN model on the processed data. For LDA-preprocessed one, we perprocess the data by 40-conponents LDA instead and set $k-$target neighbors in LMNN range as $[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]$. 
@@ -707,23 +707,6 @@ In this experiment, we trained LMNN model in PCA-preprocessed training dataset a
 		\end{tabular}
 \end{table}
 Our experiment results are shown in Tab. \ref{base6}, Tab. \ref{base7}, Tab. \ref{base8}, Tab. \ref{base9}. We find both PCA-precessed LMNN and LDA-precessed LMNN have improved the performance of KNN. We think the main reason is that LMNN reduces the distance between similar samples and expands the distance between different samples. Compared with PCA-preprocessed LMNN which reached $88.24\%$, LDA-preprocessed LMNN performed better which reached $90.99\%$. We deem the reasion is that the idea of LDA is to minimize the intra-class variance and maximum inter-class variance after projection, which is helpful for classification. But we only set the $k-$target neighbors in LMNN change between 2-6 for PCA-preprocessed LMNN, this factor may also affect the experimental results. Another interesting finding is that the best experimental result is not achieved when $k = K$. We speculate that $k-$target neighbors represent our degree of supervision of the model. But we must also consider the amount of data for each class. Bcause when the number of certain types of data is less than k, there is not enough correct target neighbors to calculate the loss function, which will have a bad impact on the results. Therefore, the relationship between k and K for best results involves the trade-off between the data set itself and the intensity of supervision. We believe that if the parameter of $k-$target neighbors in LMNN can change according to each type in the dataset instead of the initial setting, it will play an optimizing role for LMNN.
-
-\section{Conclusion}
-
-In this project, we introduced traditional distance metric and several metric learning method, which is to learn a distance metric for the input space of data from a given collection of pair of similar/dissimilar points that preserves the distance relation among the training data. We have several supervised experiments such as ITML, LFDA, MMC, RCA and LMNN, and give a experiment with unsupervised method PCA. In this section, we will conclude the properties of every method and conclude the performance of simple distance metrics and metrics learning models.
-
-PCA is a supervised dimensionality reduction method, which can preserve the global structure and maintain the variance of the data. In our project, we use PCA to processed data, i.e. we project the data into processed data, then we can use different distance metrics in $k-$NN, such as Euclidean, Manhattan, Chebyshev and Cosine. Most importantly, we can use it to preprocess data before we use anothor metircs learning method, we use this combination method in other experiments, for example, PCA-preprocessed ITML, it means we use PCA to proprecess the data, and then use ITML to finish metrics learning before $k-$NN steps.
-
-ITML is an information-besed learning approach that formulate the problem as that of minimizing the differential relative entropy between two multivariate Gaussians under constraints on the distance function\cite{Davis2007Information}. It does not rely on an eigenvalue computation but probability distributions, it results its performance can increase when we combine it with PCA-processed or LDA-processed.
-
-LFDA is a linear supervised dimensionality reduction method while ITML tends to be information-based method. It extend LDA by assigning greater weights to closer connecting examples and can only maintain the local data structure. In our experiment, we combine LFDA with PCA-processed or LDA-processed method to get a satisfied result.
-
-MMC minimizes the sum of squared distances between similar points, while enforcing the sum of distances between dissimilar ones to be greater than one. This leads to a convex and, thus, local-minima-free optimization problem that can be solved efficiently. In our experiment, we set 200 constrains for MMC evaluation, and find its satisfied performance.
-
-RCA learns a global linear transformation from the equivalence constraints, and the learned linear transformation can be used directly to compute distance between any two examples. It can preserve global structure and all the positive/negative constrains, it means it will cost very large memory and take too long, therefore in our experiment we use PCA and LDA to preprocess the source data instead of evaluating pure RCA model.
-
-LMNN is a linear model that extends NCA through a maximum margin framework. It learns a Mahalanobis distance that tries to collapse examples in the same class to a single point, and in the meantime keep examples from different classes far away. LMNN preserve the local information as NCA but have better performance than NCA. In our experiments, to prevent memory explosion, we only evaluate performance of LMNN model at $k-$neighbors range of $[2,3,4,5,6]$ and use PCA or LDA to preprocess the data.
-
 \begin{center}
 \begin{figure}
 \centering
@@ -747,6 +730,51 @@ LMNN is a linear model that extends NCA through a maximum margin framework. It l
 \label{Fig2}
 \end{figure}
 \end{center}
+
+\section{Conclusion}
+
+In this project, we introduced traditional distance metric and several metric learning method, which is to learn a distance metric for the input space of data from a given collection of pair of similar/dissimilar points that preserves the distance relation among the training data. We have several simple distance matrics experiments like Minkowski, Chebyshev, Euclidean, Manhattan, Cosine and Mahalanobis, besides, we have several supervised experiments such as ITML, LFDA, MMC, RCA and LMNN, and give a experiment with unsupervised method PCA. In this section, we will conclude the properties of every method and conclude the performance of simple distance metrics and metrics learning models.
+
+PCA is a supervised dimensionality reduction method, which can preserve the global structure and maintain the variance of the data. In our project, we use PCA to processed data, i.e. we project the data into processed data, then we can use different distance metrics in $k-$NN, such as Euclidean, Manhattan, Chebyshev and Cosine. Most importantly, we can use it to preprocess data before we use anothor metircs learning method, we use this combination method in other experiments, for example, PCA-preprocessed ITML, it means we use PCA to proprecess the data, and then use ITML to finish metrics learning before $k-$NN steps.
+
+ITML is an information-besed learning approach that formulate the problem as that of minimizing the differential relative entropy between two multivariate Gaussians under constraints on the distance function\cite{Davis2007Information}. It does not rely on an eigenvalue computation but probability distributions, it results its performance can increase when we combine it with PCA-processed or LDA-processed.
+
+LFDA is a linear supervised dimensionality reduction method while ITML tends to be information-based method. It extend LDA by assigning greater weights to closer connecting examples and can only maintain the local data structure. In our experiment, we combine LFDA with PCA-processed or LDA-processed method to get a satisfied result.
+
+MMC minimizes the sum of squared distances between similar points, while enforcing the sum of distances between dissimilar ones to be greater than one. This leads to a convex and, thus, local-minima-free optimization problem that can be solved efficiently. In our experiment, we set 200 constrains for MMC evaluation, and find its satisfied performance.
+
+RCA learns a global linear transformation from the equivalence constraints, and the learned linear transformation can be used directly to compute distance between any two examples. It can preserve global structure and all the positive/negative constrains, it means it will cost very large memory and take too long, therefore in our experiment we use PCA and LDA to preprocess the source data instead of evaluating pure RCA model.
+
+LMNN is a linear model that extends NCA through a maximum margin framework. It learns a Mahalanobis distance that tries to collapse examples in the same class to a single point, and in the meantime keep examples from different classes far away. LMNN preserve the local information as NCA but have better performance than NCA. In our experiments, to prevent memory explosion, we only evaluate performance of LMNN model at $k-$neighbors range of $[2,3,4,5,6]$ and use PCA or LDA to preprocess the data.
+
+As is shown in Fig. \ref*{Fig2}, we can find LDA can maintain the distance between different cluster than PCA, it can explain why LDA-preprocessed method usually have better performance than PCA-preprocessed one, for instance, (c)(d) can subscribe the reason why $k-$NN with LDA-preprocessed method achieve higher accuracy.
+
+Finally, we will show performance comprision of all the metrics learning methods in Tab. \ref*{final1}.
+
+\begin{table}[htbp]
+	\centering
+ 	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+ 	\renewcommand\arraystretch{1.0}
+ 	\caption{Comparison of Metrics Learning and baselines in $k-$NN Classification Task}
+ 	\label{final1}%
+ 		\begin{tabular}{@{}p{3cm}<{\centering}|c|c}
+ 		\hline
+ 		\multirow{2}{*}{\diagbox[height=2\line,width=3.42cm,font=\tiny]{$M$}{preM+Acc.}{$\mathit{}$}} &
+ 		\multicolumn{2}{c}{Variance metrics learning model + $k-$NN}\\
+ 		\cline{2-3}
+ 		& {preprocess model(\%)} & {best performance(\%)}\\
+ 		\hline
+ 		ITML   & LDA & 90.74\\
+ 		LFDA   & LDA & 90.76\\
+ 		MMC   & PCA & 97.23\\
+ 		RCA   & LDA & 90.34\\
+ 		LMNN   & LDA & 90.99\\
+		\hline
+ 		Baseline & \multicolumn{2}{c}{\textbf{87.61}} \\
+ 		\hline
+ 	\end{tabular}
+\end{table}
+
 
 \bibliography{Prj2}
 \end{document}
