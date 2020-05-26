@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 import time
 from skimage import io, transform
 import selective_search
@@ -16,12 +17,14 @@ def SelectiveSearchImg(className, imgName):
     boxes_filter = selective_search.box_filter(boxes, min_size=30, topN=20)
     image = np.asarray(image)
     proposals = []
-    for i, box in enumerate(boxes_filter):
+    for box in boxes_filter:
         w, h = box[2] - box[0], box[3] - box[1]
         if w < 150 and h < 150:
             proposals.append(image[box[0] : box[2], box[1] : box[3], :])
-    proposals = np.asarray(proposals)
-    np.save(PRP_PATH + imgName, proposals)
+    np.savez_compressed(PRP_PATH + imgName, **{str(i) : box for i, box in enumerate(proposals)})
+    # proposals = np.asarray(proposals)
+    # np.save(PRP_PATH + imgName, proposals)
+    # pickle.dump(proposals, open(PRP_PATH + imgName + '.pkl', "wb"), True)
 
 def main():
     f_class_dict = {}
@@ -40,6 +43,8 @@ def main():
             line = f_name_list.readline()
     f_class_dict['zebra'] = 11170
     
+    np.save('f_class_dict.npy', f_class_dict)
+    # f_class_dict = np.load('f_class_dict.npy').item() #for load dict
     for className, totalNum in f_class_dict.items():
         print("SS at %s" % (className))
         for idx in range(10001, totalNum + 1):
