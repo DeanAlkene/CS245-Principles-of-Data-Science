@@ -1,7 +1,5 @@
-# images are resized to (224,224) in this program
 import numpy as np
 import pandas as pd
-import os
 import cv2
 
 IMG_PATH = '../AwA2-data/JPEGImages/'
@@ -21,3 +19,6 @@ def main():
         for idx in range(10001, totalNum + 1):
             _, des = SIFT(className, className + '_' + str(idx))
             np.save(LD_PATH + className + '/' + className + '_' + str(idx), des)
+
+if __name__ == '__main__':
+    main()
