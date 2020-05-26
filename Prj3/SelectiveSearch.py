@@ -47,7 +47,7 @@ def main():
     # f_class_dict['zebra'] = 11170
     
     # np.save('f_class_dict.npy', f_class_dict)
-    f_class_dict = np.load('f_class_dict.npy').item() #for load dict
+    f_class_dict = np.load('f_class_dict.npy', allow_pickle=True).item() #for load dict
     for className, totalNum in f_class_dict.items():
         print("SS at %s" % (className))
         for idx in range(10001, totalNum + 1):

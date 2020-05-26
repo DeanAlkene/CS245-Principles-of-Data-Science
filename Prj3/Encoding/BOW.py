@@ -10,8 +10,8 @@ import SVMmodel
 
 y_file_name = "../AwA2-data/AwA2-labels.txt"
 
-f_class_dict = np.load('../f_class_dict.npy').item()
-ld_sample = np.load('../LD_for_clustering.npy')
+f_class_dict = np.load('../f_class_dict.npy', allow_pickle=True).item()
+ld_sample = np.load('../LD_for_clustering.npy', allow_pickle=True)
 
 def BOW(k):
     feature = []
@@ -21,8 +21,8 @@ def BOW(k):
     for className, totalNum in f_class_dict.items():
         print("SS at %s" % (className))
         for idx in range(10001, totalNum + 1):
+            ld = np.load(className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
             bow = np.zeros((1, k))
-            ld = np.load(className + '_' + str(idx) + '.npy')  # 2d np array
             for des in ld:
                 bow[model.predict(des.reshape(1, -1))[0]] += 1
             feature.append(bow)

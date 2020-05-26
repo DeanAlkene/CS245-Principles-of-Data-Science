@@ -1,11 +1,11 @@
 import numpy as np
 
-f_class_dict = np.load('f_class_dict.npy').item()
+f_class_dict = np.load('f_class_dict.npy', allow_pickle=True).item()
 
 def shuffleSelectorClass(className, tot, prop):
-    pool = np.load(className + '_10001.npy')
+    pool = np.load(className + '_10001.npy', allow_pickle=True)
     for i in (10002, tot + 1):
-        tmp = np.load(className + '_' + str(i) + '.npy') # 2d np array
+        tmp = np.load(className + '_' + str(i) + '.npy', allow_pickle=True) # 2d np array
         np.concatenate((pool, tmp))
     rand_array = np.arange(pool.shape[0])
     np.random.shuffle(rand_array)

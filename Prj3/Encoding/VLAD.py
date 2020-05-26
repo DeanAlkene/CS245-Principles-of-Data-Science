@@ -13,8 +13,8 @@ import SVMmodel
 
 y_file_name = "../AwA2-data/AwA2-labels.txt"
 
-f_class_dict = np.load('../f_class_dict.npy').item()
-ld_sample = np.load('../LD_for_clustering.npy')
+f_class_dict = np.load('../f_class_dict.npy', allow_pickle=True).item()
+ld_sample = np.load('../LD_for_clustering.npy', allow_pickle=True)
 
 def VLAD(k):
     feature = []
@@ -24,7 +24,7 @@ def VLAD(k):
     for className, totalNum in f_class_dict.items():
         print("SS at %s" % (className))
         for idx in range(10001, totalNum + 1):
-            ld = np.load(className + '_' + str(idx) + '.npy')  # 2d np array
+            ld = np.load(className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
             vlad = [np.zeros((1, ld.shape[1])) for i in range(k)]
             for des in ld:
                 label = model.predict(des)[0]

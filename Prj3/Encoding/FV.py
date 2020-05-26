@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import math
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, Normalizer
@@ -14,28 +15,31 @@ import SVMmodel
 
 y_file_name = "../AwA2-data/AwA2-labels.txt"
 
-f_class_dict = np.load('../f_class_dict.npy').item()
-ld_sample = np.load('../LD_for_clustering.npy')
+f_class_dict = np.load('../f_class_dict.npy', allow_pickle=True).item()
+ld_sample = np.load('../LD_for_clustering.npy', allow_pickle=True)
 
 def FV(k):
     feature = []
     model = GaussianMixture(n_components=k)
     model.fit(ld_sample)
-    # model = KMeans(n_clusters=k, copy_x=False, n_jobs=8)
-    # model.fit(ld_sample)
 
     for className, totalNum in f_class_dict.items():
         print("SS at %s" % (className))
         for idx in range(10001, totalNum + 1):
-            ld = np.load(className + '_' + str(idx) + '.npy')  # 2d np array
-
-            vlad = [np.zeros((1, ld.shape[1])) for i in range(k)]
-            for des in ld:
-                label = model.predict(des)[0]
-                vlad[label] += des - model.cluster_centers_[label]
-            vlad = np.hstack(vlad)
-            feature.append(vlad)
-
+            ld = np.load(className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
+            fv = [np.zeros((1, ld.shape[1])) for i in range(2 * k)]
+            for i in range(k):
+                for des in ld:
+                    gamma = model.predict_proba(des)[i]  # gamma_des(i)
+                    mu = model.means_[i]
+                    sigma = np.diagonal(model.covariances_[i])
+                    pi = model.weights_[i]
+                    fv[i * 2] += gamma * (des - mu) / sigma  # of shape (d, )
+                    fv[i * 2 + 1] += gamma * (np.square(des - mu) / np.square(sigma) - 1)
+                fv[i * 2] /= ld.shape[0] * math.sqrt(pi)
+                fv[i * 2 + 1] /= ld.shape[0] * math.sqrt(2 * pi)
+            fv = np.hstack(fv)
+            feature.append(fv)
     return np.vstack(feature)
 
 def main():
