@@ -2,11 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
-imageName = "../AwA2-data/JPEGImages/antelope/antelope_10001.jpg"
+#imageName = "../AwA2-data/JPEGImages/antelope/antelope_10001.jpg"
+imageName = "../AwA2-data/JPEGImages/dolphin/dolphin_10180.jpg"
 
 def drawDemo(imageName):
     image = cv2.imread(imageName)
-    image = cv2.resize(image, (224, 224))
+    #image = cv2.resize(image, (224, 224))
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     sift = cv2.xfeatures2d.SIFT_create()
     kp, des = sift.detectAndCompute(image, None)
