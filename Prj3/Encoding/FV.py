@@ -41,7 +41,7 @@ class FVProcess(Process):
                 fv = [np.zeros((1, ld.shape[1])) for i in range(2 * self.k)]
                 for i in range(self.k):
                     for des in ld:
-                        gamma = self.model.predict_proba(des)[i]  # gamma_des(i)
+                        gamma = self.model.predict_proba(des.reshape(1,-1))[0][i]  # gamma_des(i)
                         mu = self.model.means_[i]
                         sigma = np.diagonal(self.model.covariances_[i])
                         pi = self.model.weights_[i]
@@ -55,7 +55,7 @@ class FVProcess(Process):
 
 def FV(k):
     print("Start clustering")
-    model = GaussianMixture(n_components=k)
+    model = GaussianMixture(n_components=k, verbose=2)
     model.fit(ld_sample)
     print("Clustering Ended")
 

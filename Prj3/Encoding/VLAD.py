@@ -38,7 +38,7 @@ class VLADProcess(Process):
                 ld = np.load(SIFT_PATH + className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
                 vlad = [np.zeros((1, ld.shape[1])) for i in range(self.k)]
                 for des in ld:
-                    label = self.model.predict(des)[0]
+                    label = self.model.predict(des.reshape(1, -1))[0]
                     vlad[label] += des - self.model.cluster_centers_[label]
                 vlad = np.hstack(vlad)
                 feature.append(vlad)
