@@ -1,13 +1,16 @@
 import numpy as np
 import threading
+from multiprocessing import Process, Queue
 
 f_class_dict = np.load('f_class_dict.npy', allow_pickle=True).item()
 dict_list = np.load('f_class_dict_mul.npy', allow_pickle=True)
 
-class BOWThread(threading.Thread):
-    def __init__(self, class_dict):  # model
-        threading.Thread.__init__(self)
+class BOWProcess(Process):
+    def __init__(self, class_dict, q, i):  # model
+        super(BOWProcess, self).__init__()
         self.class_dict = class_dict
+        self.q = q
+        self.i = i
     
     def run(self):
         feature = []
@@ -15,10 +18,7 @@ class BOWThread(threading.Thread):
             print("SS at %s" % (className))
             for idx in range(10001, totalNum + 1):
                 feature.append(className + '_' + str(idx))
-        self.val = np.vstack(feature)
-    
-    def get(self):
-        return self.val
+        self.q.put((self.i, np.vstack(feature)))
 
 def divideDict():
     dict_list = [{} for i in range(8)]
@@ -29,14 +29,19 @@ def divideDict():
     np.save('f_class_dict_mul', dict_list)
 
 def main():
+    q = Queue()
     feature = [None for i in range(8)]
-    threadPool = [BOWThread(dict_list[i]) for i in range(8)]
+    threadPool = [BOWProcess(dict_list[i], q, i) for i in range(8)]
     for i in range(8):
         threadPool[i].start()
     for i in range(8):
-        threadPool[i].join()
+        tmp = q.get()
+        feature[tmp[0]] = tmp[1]
     for i in range(8):
-        feature[i] = threadPool[i].get()
+        threadPool[i].join()
+    print(q.empty())
     n = np.vstack(feature)
 
+main()
+main()
 main()

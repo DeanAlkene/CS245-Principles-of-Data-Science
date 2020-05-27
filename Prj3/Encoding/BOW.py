@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import time
 import threading
+from multiprocessing import Process, Queue
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, Normalizer
@@ -16,14 +17,16 @@ y_file_name = "../AwA2-data/AwA2-labels.txt"
 
 f_class_dict = np.load('../f_class_dict.npy', allow_pickle=True).item()
 ld_sample = np.load('../LD_for_clustering.npy', allow_pickle=True)
-dict_list = np.load('f_class_dict_mul.npy', allow_pickle=True)
+dict_list = np.load('../f_class_dict_mul.npy', allow_pickle=True)
 
-class BOWThread(threading.Thread):
-    def __init__(self, class_dict, k, model):
-        threading.Thread.__init__(self)
+class BOWProcess(Process):
+    def __init__(self, class_dict, k, model, q, idx):
+        super(BOWProcess, self).__init__()
         self.class_dict = class_dict
         self.k = k
         self.model = model
+        self.q = q
+        self.idx = idx
     
     def run(self):
         feature = []
@@ -35,10 +38,7 @@ class BOWThread(threading.Thread):
                 for des in ld:
                     bow[0][self.model.predict(des.reshape(1, -1))[0]] += 1
                 feature.append(bow)
-        self.val = np.vstack(feature)
-    
-    def get(self):
-        return self.val
+        self.q.put((self.idx, np.vstack(feature)))
 
 def BOW(k):
     feature = []
@@ -47,14 +47,16 @@ def BOW(k):
     model.fit(ld_sample)
     print("Clustering Ended")
 
+    q = Queue()
     feature = [None for i in range(8)]
-    threadPool = [BOWThread(dict_list[i], k, model) for i in range(8)]
+    processPool = [BOWProcess(dict_list[i], k, model, q, i) for i in range(8)]
     for i in range(8):
-        threadPool[i].start()
+        processPool[i].start()
     for i in range(8):
-        threadPool[i].join()
+        tmp = q.get()
+        feature[tmp[0]] = tmp[1]
     for i in range(8):
-        feature[i] = threadPool[i].get()
+        processPool[i].join()
 
     return np.vstack(feature)
 
@@ -82,6 +84,7 @@ def main():
     for k in k_range:
         print("BOW, k:%d" % (k))
         X = BOW(k)
+        print(X.shape)
         col_name = ['feature' + str(i) for i in range(k)]
         y = pd.read_csv(y_file_name, names=['label'])
         for method in scale_range:
