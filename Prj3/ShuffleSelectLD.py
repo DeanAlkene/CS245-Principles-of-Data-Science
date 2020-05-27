@@ -9,9 +9,9 @@ def shuffleSelectorClass(className, tot, prop):
     #print(className + '_10001 ', end='')
     for i in range(10002, tot + 1):
         tmp = np.load(SIFT_PATH + className + '/' + className + '_' + str(i) + '.npy', allow_pickle=True) # 2d np array
-        #print(className + '_' + str(i) + ' ', end='')
-        #print(tmp.shape)
-        np.concatenate((pool, tmp))
+        print(className + '_' + str(i) + ' ', end='')
+        print(tmp.shape)
+        pool = np.concatenate((pool, tmp))
     rand_array = np.arange(pool.shape[0])
     np.random.shuffle(rand_array)
     num = pool.shape[0] // prop

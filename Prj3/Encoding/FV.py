@@ -13,6 +13,8 @@ import sys
 sys.path.append("..")
 import SVMmodel
 
+SIFT_PATH = '../AwA2-data/SIFT_LD/'
+DL_PATH = '../AwA2-data/DL_LD/'
 y_file_name = "../AwA2-data/AwA2-labels.txt"
 
 f_class_dict = np.load('../f_class_dict.npy', allow_pickle=True).item()
@@ -20,13 +22,15 @@ ld_sample = np.load('../LD_for_clustering.npy', allow_pickle=True)
 
 def FV(k):
     feature = []
+    print("Start clustering")
     model = GaussianMixture(n_components=k)
     model.fit(ld_sample)
+    print("Clustering Ended")
 
     for className, totalNum in f_class_dict.items():
         print("SS at %s" % (className))
         for idx in range(10001, totalNum + 1):
-            ld = np.load(className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
+            ld = np.load(SIFT_PATH + className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
             fv = [np.zeros((1, ld.shape[1])) for i in range(2 * k)]
             for i in range(k):
                 for des in ld:
@@ -77,3 +81,6 @@ def main():
             with open('res_FV_LDA.txt', "a") as f:
                 f.write("FV with k=%d, Z-score, SVM with %d kernel, C=%f, score=%f\n"%(k, 'linear', C, linear_score))
                 f.write("FV with k=%d, Z-score, SVM with %d kernel, C=%f, score=%f\n"%(k, 'rbf', C, rbf_score))
+
+if __name__ == '__main__':
+    main()
