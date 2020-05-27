@@ -2,11 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import time
-import threading
 from multiprocessing import Process, Queue
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, Normalizer
+from sklearn.preprocessing import StandardScaler
 import sys
 sys.path.append("..")
 import SVMmodel
@@ -26,7 +25,7 @@ class BOWProcess(Process):
         self.k = k
         self.model = model
         self.q = q
-        self.idx = idx
+        self.i = idx
     
     def run(self):
         feature = []
@@ -38,10 +37,9 @@ class BOWProcess(Process):
                 for des in ld:
                     bow[0][self.model.predict(des.reshape(1, -1))[0]] += 1
                 feature.append(bow)
-        self.q.put((self.idx, np.vstack(feature)))
+        self.q.put((self.i, np.vstack(feature)))
 
 def BOW(k):
-    feature = []
     print("Start clustering")
     model = KMeans(n_clusters=k, copy_x=False, n_jobs=8)
     model.fit(ld_sample)
@@ -60,43 +58,26 @@ def BOW(k):
 
     return np.vstack(feature)
 
-def scale(feature, norm_method):
-    if norm_method == 'L2':
-        feature_scaled = Normalizer().fit_transform(feature)
-    elif norm_method == 'Z-score':
-        feature_scaled = StandardScaler().fit_transform(feature)
-    elif norm_method == 'MinMax':
-        feature_scaled = MinMaxScaler().fit_transform(feature)
-    elif norm_method == 'L2+Z-score':
-        feature_scaled_0 = Normalizer().fit_transform(feature)
-        feature_scaled = StandardScaler().fit_transform(feature_scaled_0)
-    elif norm_method == 'L2+MinMax':
-        feature_scaled_0 = Normalizer().fit_transform(feature)
-        feature_scaled = MinMaxScaler().fit_transform(feature_scaled_0)
-    else:
-        feature_scaled = feature
-    return feature_scaled
-
 def main():
     k_range = [32, 64, 128, 256, 512, 1024, 2048]
-    scale_range = ['none', 'L2', 'Z-score', 'MinMax', 'L2+Z-score', 'L2+MinMax']
-    C_range = [0.001, 0.01, 0.1, 1.0, 10]
+    C_range = [[0.0005, 0.5], [0.001, 1], [0.005, 5], [0.01, 10]]
     for k in k_range:
         print("BOW, k:%d" % (k))
         X = BOW(k)
         print(X.shape)
+
         col_name = ['feature' + str(i) for i in range(k)]
         y = pd.read_csv(y_file_name, names=['label'])
-        for method in scale_range:
-            X_scaled = scale(X, method)
-            X_scaled = pd.DataFrame(data=X_scaled, columns=col_name)
-            X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.4)
-            for C in C_range:
-                linear_score = SVMmodel.runSVM(X_train, X_test, y_train, y_test, C, 'linear')
-                rbf_score = SVMmodel.runSVM(X_train, X_test, y_train, y_test, C, 'rbf')
-                with open('res_BOW.txt', "a") as f:
-                    f.write("BOW with k=%d, scale=%s, SVM with %s kernel, C=%f, score=%f\n"%(k, method, 'linear', C, linear_score))
-                    f.write("BOW with k=%d, scale=%s, SVM with %s kernel, C=%f, score=%f\n"%(k, method, 'rbf', C, rbf_score))
+
+        X_scaled = StandardScaler().fit_transform(X)
+        X_scaled = pd.DataFrame(data=X_scaled, columns=col_name)
+        X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.4)
+        for C in C_range:
+            linear_score = SVMmodel.runSVM(X_train, X_test, y_train, y_test, C[0], 'linear')
+            rbf_score = SVMmodel.runSVM(X_train, X_test, y_train, y_test, C[1], 'rbf')
+            with open('res_BOW.txt', "a") as f:
+                f.write("BOW with k=%d, scale=%s, SVM with %s kernel, C=%f, score=%f\n"%(k, 'Z-score', 'linear', C[0], linear_score))
+                f.write("BOW with k=%d, scale=%s, SVM with %s kernel, C=%f, score=%f\n"%(k, 'Z-score', 'rbf', C[1], rbf_score))
 
 if __name__ == '__main__':
     start = time.time()
