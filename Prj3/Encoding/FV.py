@@ -68,8 +68,8 @@ def main():
             linear_score = SVMmodel.runSVM(X_train_pca, X_test_pca, y_train, y_test, C, 'linear')
             rbf_score = SVMmodel.runSVM(X_train_pca, X_test_pca, y_train, y_test, C, 'rbf')
             with open('res_FV_PCA.txt', "a") as f:
-                f.write("FV with k=%d, Z-score, SVM with %d kernel, C=%f, score=%f\n"%(k, 'linear', C, linear_score))
-                f.write("FV with k=%d, Z-score, SVM with %d kernel, C=%f, score=%f\n" % (k, 'rbf', C, rbf_score))
+                f.write("FV with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n"%(k, 'linear', C, linear_score))
+                f.write("FV with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n" % (k, 'rbf', C, rbf_score))
 
         print("LDA")
         lda.fit(X_train)
@@ -79,8 +79,8 @@ def main():
             linear_score = SVMmodel.runSVM(X_train_lda, X_test_lda, y_train, y_test, C, 'linear')
             rbf_score = SVMmodel.runSVM(X_train_lda, X_test_lda, y_train, y_test, C, 'rbf')
             with open('res_FV_LDA.txt', "a") as f:
-                f.write("FV with k=%d, Z-score, SVM with %d kernel, C=%f, score=%f\n"%(k, 'linear', C, linear_score))
-                f.write("FV with k=%d, Z-score, SVM with %d kernel, C=%f, score=%f\n"%(k, 'rbf', C, rbf_score))
+                f.write("FV with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n"%(k, 'linear', C, linear_score))
+                f.write("FV with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n"%(k, 'rbf', C, rbf_score))
 
 if __name__ == '__main__':
     main()

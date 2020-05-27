@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import time
+import threading
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, Normalizer
@@ -15,6 +16,29 @@ y_file_name = "../AwA2-data/AwA2-labels.txt"
 
 f_class_dict = np.load('../f_class_dict.npy', allow_pickle=True).item()
 ld_sample = np.load('../LD_for_clustering.npy', allow_pickle=True)
+dict_list = np.load('f_class_dict_mul.npy', allow_pickle=True)
+
+class BOWThread(threading.Thread):
+    def __init__(self, class_dict, k, model):
+        threading.Thread.__init__(self)
+        self.class_dict = class_dict
+        self.k = k
+        self.model = model
+    
+    def run(self):
+        feature = []
+        for className, totalNum in self.class_dict.items():
+            print("SS at %s" % (className))
+            for idx in range(10001, totalNum + 1):
+                ld = np.load(SIFT_PATH + className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
+                bow = np.zeros((1, self.k))
+                for des in ld:
+                    bow[0][self.model.predict(des.reshape(1, -1))[0]] += 1
+                feature.append(bow)
+        self.val = np.vstack(feature)
+    
+    def get(self):
+        return self.val
 
 def BOW(k):
     feature = []
@@ -23,14 +47,15 @@ def BOW(k):
     model.fit(ld_sample)
     print("Clustering Ended")
 
-    for className, totalNum in f_class_dict.items():
-        print("SS at %s" % (className))
-        for idx in range(10001, totalNum + 1):
-            ld = np.load(SIFT_PATH + className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
-            bow = np.zeros((1, k))
-            for des in ld:
-                bow[0][model.predict(des.reshape(1, -1))[0]] += 1
-            feature.append(bow)
+    feature = [None for i in range(8)]
+    threadPool = [BOWThread(dict_list[i], k, model) for i in range(8)]
+    for i in range(8):
+        threadPool[i].start()
+    for i in range(8):
+        threadPool[i].join()
+    for i in range(8):
+        feature[i] = threadPool[i].get()
+
     return np.vstack(feature)
 
 def scale(feature, norm_method):
@@ -67,8 +92,8 @@ def main():
                 linear_score = SVMmodel.runSVM(X_train, X_test, y_train, y_test, C, 'linear')
                 rbf_score = SVMmodel.runSVM(X_train, X_test, y_train, y_test, C, 'rbf')
                 with open('res_BOW.txt', "a") as f:
-                    f.write("BOW with k=%d, scale=%s, SVM with %d kernel, C=%f, score=%f\n"%(k, method, 'linear', C, linear_score))
-                    f.write("BOW with k=%d, scale=%s, SVM with %d kernel, C=%f, score=%f\n"%(k, method, 'rbf', C, rbf_score))
+                    f.write("BOW with k=%d, scale=%s, SVM with %s kernel, C=%f, score=%f\n"%(k, method, 'linear', C, linear_score))
+                    f.write("BOW with k=%d, scale=%s, SVM with %s kernel, C=%f, score=%f\n"%(k, method, 'rbf', C, rbf_score))
 
 if __name__ == '__main__':
     start = time.time()
