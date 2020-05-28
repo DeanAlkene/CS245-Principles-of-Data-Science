@@ -75,7 +75,7 @@ def FV(k):
 def main():
     k_range = [8, 16, 32, 64]
     C_range = [[0.0005, 0.5], [0.001, 1], [0.005, 5], [0.01, 10]]
-    pca = KernelPCA(n_components=256, kernel='linear')
+    pca = KernelPCA(n_components=50, kernel='linear')
     lda = LinearDiscriminantAnalysis(n_components=40)
     for k in k_range:
         print("FV, k:%d" % (k))
@@ -100,7 +100,7 @@ def main():
                 f.write("FV with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n" % (k, 'rbf', C[1], rbf_score))
 
         print("LDA")
-        lda.fit(X_train)
+        lda.fit(X_train, y_train)
         X_train_lda = lda.transform(X_train)
         X_test_lda = lda.transform(X_test)
         for C in C_range:

@@ -59,7 +59,7 @@ def BOW(k):
     return np.vstack(feature)
 
 def main():
-    k_range = [32, 64, 128, 256, 512, 1024, 2048]
+    k_range = [8, 16]#[32, 64, 128, 256, 512, 1024, 2048]
     C_range = [[0.0005, 0.5], [0.001, 1], [0.005, 5], [0.01, 10]]
     for k in k_range:
         print("BOW, k:%d" % (k))

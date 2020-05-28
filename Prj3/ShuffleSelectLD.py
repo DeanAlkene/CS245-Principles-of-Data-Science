@@ -25,7 +25,7 @@ def shuffleSelector(prop):
     return np.vstack(ld)
 
 def main():
-    lds = shuffleSelector(10)
+    lds = shuffleSelector(150)
     print(lds.shape)
     np.save('LD_for_clustering', lds)
 
