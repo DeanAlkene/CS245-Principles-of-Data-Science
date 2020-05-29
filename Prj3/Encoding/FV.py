@@ -55,7 +55,7 @@ class FVProcess(Process):
 
 def FV(k):
     print("Start clustering")
-    model = GaussianMixture(n_components=k, verbose=2)
+    model = GaussianMixture(n_components=k, verbose=2, max_iter=500)
     model.fit(ld_sample)
     print("Clustering Ended")
 
@@ -73,7 +73,7 @@ def FV(k):
     return np.vstack(feature)
 
 def main():
-    k_range = [8, 16, 32, 64]
+    k_range = [4, 16, 32, 64]
     C_range = [[0.0005, 0.5], [0.001, 1], [0.005, 5], [0.01, 10]]
     pca = KernelPCA(n_components=50, kernel='linear')
     lda = LinearDiscriminantAnalysis(n_components=40)
