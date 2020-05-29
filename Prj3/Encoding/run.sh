@@ -1,4 +1,4 @@
-echo 'VLAD'
-python VLAD.py
+echo 'BOW'
+python BOW.py
 echo 'FV'
-python FV.py
+python FV_Simp.py

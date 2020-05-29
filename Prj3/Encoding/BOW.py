@@ -5,7 +5,7 @@ import time
 from multiprocessing import Process, Queue
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 import sys
 sys.path.append("..")
 import SVMmodel
@@ -59,7 +59,7 @@ def BOW(k):
     return np.vstack(feature)
 
 def main():
-    k_range = [8, 16]#[32, 64, 128, 256, 512, 1024, 2048]
+    k_range = [8, 16, 32, 64, 128, 256, 512, 1024]
     C_range = [[0.0005, 0.5], [0.001, 1], [0.005, 5], [0.01, 10]]
     for k in k_range:
         print("BOW, k:%d" % (k))
@@ -69,7 +69,8 @@ def main():
         col_name = ['feature' + str(i) for i in range(k)]
         y = pd.read_csv(y_file_name, names=['label'])
 
-        X_scaled = StandardScaler().fit_transform(X)
+        X_scaled = MinMaxScaler().fit_transform(X)
+        # X_scaled = StandardScaler().fit_transform(X)
         X_scaled = pd.DataFrame(data=X_scaled, columns=col_name)
         X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.4)
         for C in C_range:
