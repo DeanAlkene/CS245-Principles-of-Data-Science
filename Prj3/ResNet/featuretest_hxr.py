@@ -45,7 +45,7 @@ def extract(className, imgName):
         feature_list.append(feature.detach().cpu().numpy())
         features = np.row_stack(feature_list)
     if len(feature_list) == 0:
-        print("Fatal error at %s" % (className + '_' + str(idx)))
+        print("Fatal error at %s" % (imgName))
     return features
 
 class FEProcess(Process):
