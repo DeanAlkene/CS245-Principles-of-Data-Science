@@ -44,6 +44,8 @@ def extract(className, imgName):
         feature = feature.resize(feature.shape[0], feature.shape[1])
         feature_list.append(feature.detach().cpu().numpy())
         features = np.row_stack(feature_list)
+    if len(feature_list) == 0:
+        print("Fatal error at %s" % (className + '_' + str(idx)))
     return features
 
 class FEProcess(Process):
@@ -56,8 +58,6 @@ class FEProcess(Process):
             print("SS at %s" % (className))
             for idx in range(10001, totalNum + 1):
                 des = extract(className, className + '_' + str(idx))
-                if des == None:
-                    print("Fatal error at %s" % (className + '_' + str(idx)))
                 np.save(LD_PATH + className + '/' + className + '_' + str(idx), des)
     
 def main():
