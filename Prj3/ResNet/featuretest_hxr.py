@@ -5,7 +5,7 @@ from torchvision import datasets, models, transforms
 from torch.autograd import Variable
 from torch import nn, optim
 from SelectiveSearch import SelectiveSearchImg
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, freeze_support
 
 IMG_PATH = '../AwA2-data/JPEGImages/'
 LD_PATH = '../AwA2-data/DL_LD/'
@@ -61,7 +61,8 @@ class FEProcess(Process):
                 np.save(LD_PATH + className + '/' + className + '_' + str(idx), des)
     
 def main():
-    dict_list = np.load('../f_class_dict_1.npy', allow_pickle=True)
+    dict_list = np.load('../f_class_dict_2.npy', allow_pickle=True)
+    freeze_support()
     processPool = [FEProcess(dict_list[i]) for i in range(8)]
     for i in range(8):
         processPool[i].start()
