@@ -25,6 +25,11 @@ def SelectiveSearchImg(className, imgName):
         w, h = box[2] - box[0], box[3] - box[1]
         if w < 150 and h < 150:
             img = cv2.resize(image[box[0] : box[2], box[1] : box[3], :], (224, 224))
+            temp = np.empty((224, 224, 3))
+            temp[:, :, 0] = img[:, :, 0]
+            temp[:, :, 1] = img[:, :, 1]
+            temp[:, :, 2] = img[:, :, 2]
+            img = temp
             proposals.append(img)
     return proposals
 

@@ -5,16 +5,10 @@ from torchvision import datasets, models, transforms
 from torch.autograd import Variable
 from torch import nn, optim
 from SelectiveSearch import SelectiveSearchImg
+from multiprocessing import Process, Queue
 
 IMG_PATH = '../AwA2-data/JPEGImages/'
 LD_PATH = '../AwA2-data/DL_LD/'
-
-data_tf = transforms.Compose([transforms.ToTensor(),
-                              transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
-model = models.resnet152(pretrained=False)
-model.load_state_dict(torch.load('./model_res152.pkl'))
-exact_list = ['avgpool']
-exactor = FeatureExtractor(model, exact_list)
 
 class FeatureExtractor(nn.Module):
     def __init__(self, submodule, extracted_layers):
@@ -31,28 +25,46 @@ class FeatureExtractor(nn.Module):
                 outputs.append(x)
         return outputs
 
+data_tf = transforms.Compose([transforms.ToTensor(),
+                              transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+model = models.resnet152(pretrained=False)
+model.load_state_dict(torch.load('./model_res152.pkl'))
+exact_list = ['avgpool']
+exactor = FeatureExtractor(model, exact_list)
+
 def extract(className, imgName):
     props = SelectiveSearchImg(className, imgName)
     feature_list = []
     for img in props:
         with torch.no_grad():
-            img = Variable(img)
-        feature = exactor(data_tf(img))[0]
+            img = data_tf(img)
+        img = Variable(torch.unsqueeze(img, dim=0).float(), requires_grad=False)
+        feature = exactor(img)[0]
         feature = feature.resize(feature.shape[0], feature.shape[1])
         feature_list.append(feature.detach().cpu().numpy())
         features = np.row_stack(feature_list)
-    return feature_list
+    return features
+
+class FEProcess(Process):
+    def __init__(self, class_dict):
+        super(FEProcess, self).__init__()
+        self.class_dict = class_dict
+    
+    def run(self):
+        for className, totalNum in self.class_dict.items():
+            print("SS at %s" % (className))
+            for idx in range(10001, totalNum + 1):
+                des = extract(className, className + '_' + str(idx))
+                print(des.shape)
+                np.save(LD_PATH + className + '/' + className + '_' + str(idx), des)
     
 def main():
-    
-    f_class_dict = np.load('../f_class_dict.npy', allow_pickle=True).item()  #for load dict
-    des = extract('antelope', 'antelope_10001')
-    print(des.shape)
-    # for className, totalNum in f_class_dict.items():
-    #     print("SS at %s" % (className))
-    #     for idx in range(10001, totalNum + 1):
-    #         des = extract(className, className + '_' + str(idx))
-    #         np.save(LD_PATH + className + '/' + className + '_' + str(idx), des)
+    dict_list = np.load('../f_class_dict_mul.npy', allow_pickle=True)
+    processPool = [FEProcess(dict_list[i]) for i in range(8)]
+    for i in range(8):
+        processPool[i].start()
+    for i in range(8):
+        processPool[i].join()
 
 if __name__ == '__main__':
     main()
