@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 import torchvision
+import os
 from torchvision import datasets, models, transforms
 from torch.autograd import Variable
 from torch import nn, optim
@@ -57,8 +58,9 @@ class FEProcess(Process):
         for className, totalNum in self.class_dict.items():
             print("SS at %s" % (className))
             for idx in range(10001, totalNum + 1):
-                des = extract(className, className + '_' + str(idx))
-                np.save(LD_PATH + className + '/' + className + '_' + str(idx), des)
+                if not os.path.exists(LD_PATH + className + '/' + className + '_' + str(idx) + '.npy'):
+                    des = extract(className, className + '_' + str(idx))
+                    np.save(LD_PATH + className + '/' + className + '_' + str(idx), des)
     
 def main():
     dict_list = np.load('../f_class_dict_2.npy', allow_pickle=True)
