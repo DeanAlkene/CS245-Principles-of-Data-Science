@@ -470,6 +470,8 @@ In this experiment, we used the FV model to encode the descriptors extracted by 
 Our experiment results are shown in Tab. \ref{kbase5}. From the results we can find that FV performs better than BOW but worse than VLAD. This is because Fisher Vector encodes 2-order information but our pretrained model can't extract the exact feature from local proposals. Besides in general, as k increases, the experimental results get worse. We deem the reason is that when k is larger, feature vectors resulting from feature encoding contain more redundant information. As for why when using PCA to reduce dimensionality, linear kernel performs better than rbf kernel, we think the reason that rbf performs poor if model is too complicated to get initial parameter sampling.
 
 \section{Conclusion}
+In this project, we extract local descriptors by two methods, SIFT and Selective Search + Resnet, and then encoding the descriptors by BOW, VLAD and FV, finally, we compare their performance in the SVM classification tasks. We can conclude Selective Search + Resnet method performance better although we use pretrained ResNet since our poor calculating resources. We deem the reason is that selective search maintains diversification information and avoid the noise of exhaustive search. Besides, we can find complicated model, such as 2-order FV and rbf ones, do not always perform well and it depends on the actual datasets and tasks.
+
 
 \section{Futher discussion}
 \subsubsection{Impact of scale method on BOW experiment}
