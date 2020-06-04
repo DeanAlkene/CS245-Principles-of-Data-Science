@@ -7,7 +7,7 @@ from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, Normalizer
 from sklearn.svm import SVC
-from sklearn.decomposition import KernelPCA
+from sklearn.decomposition import KernelPCA, IncrementalPCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import sys
 sys.path.append("..")
@@ -35,7 +35,7 @@ class VLADProcess(Process):
         for className, totalNum in self.class_dict.items():
             print("SS at %s" % (className))
             for idx in range(10001, totalNum + 1):
-                ld = np.load(SIFT_PATH + className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
+                ld = np.load(DL_PATH + className + '/' + className + '_' + str(idx) + '.npy', allow_pickle=True)  # 2d np array
                 vlad = [np.zeros((1, ld.shape[1])) for i in range(self.k)]
                 for des in ld:
                     label = self.model.predict(des.reshape(1, -1))[0]
@@ -64,10 +64,11 @@ def VLAD(k):
     return np.vstack(feature)
 
 def main():
-    k_range = [4]
-    C_range = [[0.0005, 0.5], [0.001, 1], [0.005, 5], [0.01, 10]]
-    pca = KernelPCA(n_components=50, kernel='linear')
-    lda = LinearDiscriminantAnalysis(n_components=40)
+    k_range = [8, 16]
+    C_range = [[0.001, 5], [0.005, 10]]
+    #pca = KernelPCA(n_components=50, kernel='linear')
+    pca = IncrementalPCA(n_components=50, batch_size=1000)
+    #lda = LinearDiscriminantAnalysis(n_components=40)
     for k in k_range:
         print("VLAD, k:%d" % (k))
         X = VLAD(k)
@@ -90,16 +91,16 @@ def main():
                 f.write("VLAD with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n"%(k, 'linear', C[0], linear_score))
                 f.write("VLAD with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n" % (k, 'rbf', C[1], rbf_score))
 
-        print("LDA")
-        lda.fit(X_train, y_train)
-        X_train_lda = lda.transform(X_train)
-        X_test_lda = lda.transform(X_test)
-        for C in C_range:
-            linear_score = SVMmodel.runSVM(X_train_lda, X_test_lda, y_train, y_test, C[0], 'linear')
-            rbf_score = SVMmodel.runSVM(X_train_lda, X_test_lda, y_train, y_test, C[1], 'rbf')
-            with open('res_VLAD_LDA.txt', "a") as f:
-                f.write("VLAD with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n"%(k, 'linear', C[0], linear_score))
-                f.write("VLAD with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n"%(k, 'rbf', C[1], rbf_score))
+        #print("LDA")
+        #lda.fit(X_train, y_train)
+        #X_train_lda = lda.transform(X_train)
+        #X_test_lda = lda.transform(X_test)
+        #for C in C_range:
+        #    linear_score = SVMmodel.runSVM(X_train_lda, X_test_lda, y_train, y_test, C[0], 'linear')
+        #    rbf_score = SVMmodel.runSVM(X_train_lda, X_test_lda, y_train, y_test, C[1], 'rbf')
+        #    with open('res_VLAD_LDA.txt', "a") as f:
+        #        f.write("VLAD with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n"%(k, 'linear', C[0], linear_score))
+        #        f.write("VLAD with k=%d, Z-score, SVM with %s kernel, C=%f, score=%f\n"%(k, 'rbf', C[1], rbf_score))
 
 if __name__ == '__main__':
     start = time.time()

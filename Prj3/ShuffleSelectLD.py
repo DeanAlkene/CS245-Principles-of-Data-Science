@@ -5,10 +5,10 @@ SIFT_PATH = 'AwA2-data/SIFT_LD/'
 DL_PATH = 'AwA2-data/DL_LD/'
 
 def shuffleSelectorClass(className, tot, prop):
-    pool = np.load(SIFT_PATH + className + '/' + className + '_10001.npy', allow_pickle=True)
+    pool = np.load(DL_PATH + className + '/' + className + '_10001.npy', allow_pickle=True)
     #print(className + '_10001 ', end='')
     for i in range(10002, tot + 1):
-        tmp = np.load(SIFT_PATH + className + '/' + className + '_' + str(i) + '.npy', allow_pickle=True) # 2d np array
+        tmp = np.load(DL_PATH + className + '/' + className + '_' + str(i) + '.npy', allow_pickle=True) # 2d np array
         print(className + '_' + str(i) + ' ', end='')
         print(tmp.shape)
         pool = np.concatenate((pool, tmp))
@@ -25,7 +25,7 @@ def shuffleSelector(prop):
     return np.vstack(ld)
 
 def main():
-    lds = shuffleSelector(150)
+    lds = shuffleSelector(10)
     print(lds.shape)
     np.save('LD_for_clustering', lds)
 
