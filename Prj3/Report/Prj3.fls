@@ -1,0 +1,6 @@
+PWD /Users/kylinchan/learningmt/CS245-Projects/Prj3/Report
+INPUT /usr/local/texlive/2018/texmf.cnf
+INPUT /usr/local/texlive/2018/texmf-dist/web2c/texmf.cnf
+INPUT /usr/local/texlive/2018/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT /Users/kylinchan/learningmt/CS245-Projects/Prj3/Report/Prj3.bib
+OUTPUT /Users/kylinchan/learningmt/CS245-Projects/Prj3/Report/Prj3.log

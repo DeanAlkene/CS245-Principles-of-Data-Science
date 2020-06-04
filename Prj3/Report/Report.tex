@@ -92,6 +92,51 @@ Through the above steps, the location, scale and direction information of SIFT f
 \item Generate descriptors and ultimately form a 128-dimensional feature vector
 \item In the normalization process, the feature vector length is normalized to further remove the influence of lighting.
 \end{itemize}
+
+\subsection{Selective Search}
+
+Selective Search is a object recognition algorithm which combines the strength of both an exhaustive search and segmentation.\cite{2013Selective} We know that the problem of target detection is more complicated than image classification. An important reason is that there may be multiple objects in an image that need to be located and classified separately. Obviously, before training the classifier, you need to use some methods to divide the image into small areas. Selective search method has three main advantages: capture different scales, diversification, fast to compute. Selective search algorithm mainly includes two steps: hierarchical grouping algorithm and diversification strategies, which can be summed as follows:
+
+\subsubsection{Hierarchical Grouping Algorithm}
+
+Hierarchical grouping algorithm use the method of Felzenszwalb and Huttenlocher to generate the initial region of the image, and use the greedy algorithm to iteratively group the regions. In each grouping iteration, a larger area is formed and added to the area proposal list. Algorithm will create a regional proposal from smaller segments to larger segments in a bottom-up behavior, as shown in Fig. \ref{kFig1}.
+\begin{center}
+	\begin{figure}
+		\centering
+		\subfigure{
+			\includegraphics[width=8cm]{image/level.jpg}
+		}
+		\caption{Hierarchical Grouping Algorithm.\cite{2013Selective}}
+		\label{kFig1}
+	\end{figure}
+\end{center}
+\subsubsection{Diversification Strategies}
+In order to diversify the sampling in grouping, selective search algorithm present three diversification strategies:
+\begin{itemize}
+\item Use various color spaces.
+\item Use different similarity measures.
+\item Changing the starting area to make sampling.
+\end{itemize}
+
+
+\subsection{ResNet}
+Residual Network (ResNet) \cite{He2016Deep} is presented to ease the training of networks that are substantially deeper than those used previously and have the best performance in ILSVRC \& COCO 2015 competitions. We can conclude its motivation that ResNet add a skip connection in every building blocks to solve the degradation problem as the learning networks become deeper and deeper. The framework of ResNet can be show in Fig. \ref{kFig0}. We can express its principle by the following expression:
+$$x_{i}=x_{i-1}+F(x_{i-1})$$
+where $x_{i}$ is the network input and $x_{i-1}$ is the output, $F(\cdot)$ present the transform of network block.
+
+As an state-of-the-art model in deeplearning feild, its skip connection structure can be seen as a smoother in training process \cite{Veit2016Residual}, and the information can be maintained in forword training, which can be seen in the network loss \cite{touretzky1996advances}.
+
+\begin{center}
+	\begin{figure}
+		\centering
+		\subfigure{
+			\includegraphics[width=8cm]{image/resnet.jpg}
+		}
+		\caption{Residual learning: a building block.\cite{He2016Deep}}
+		\label{kFig0}
+	\end{figure}
+\end{center}
+
 \section{Experiments}
 \subsection{Sift descriptors}
 We used sift to extract the local descriptors of the images, and then used BOW, VLAD, FV to encode the features, and finally put them into the SVM for classification. As shown in fig. \ref{Fig1}, when using sift to extract local descriptors, we encountered some images that could not be extracted. We improved the image contrast to processe these images, and finally got the results.
@@ -307,6 +352,124 @@ In this experiment, we used the FV model to encode the descriptors extracted by 
 \end{table}
 
 Our experiment results are shown in Tab. \ref{base4}, \ref{base5}. From the results we can find that FV performs better than BOW and VLAD. This is because Fisher Vector encodes a vector with richer image information which contains 1-order information and 2-order information. Besides in general, as k increases, the experimental results get worse. We deem the reason is that when k is larger, feature vectors resulting from feature encoding contain more redundant information. As for why when using PCA to reduce dimensionality, rbf kernel performs better than linear kernel, we think it is the same as the reason for this phenomenon in VLAD experiment.
+
+\subsection{Selective Search + ResNet descriptors}
+
+We used selective search to extract the local proposal of the images and use pretrained ResNet to extract the local descriptor, then used BOW, VLAD, FV to encode the features, and finally put them into the SVM for classification. As shown in Fig. \ref{kFig3}, when using selective search to extract image proposals in (a), we can limit the size of aim proposals and get the proposal-dropped one in (b), which can help us save the resources of computing.
+\begin{center}
+	\begin{figure}
+		\centering
+		\subfigure[original selective-search image]{
+			\includegraphics[width=5cm]{image/ssdemo.png}
+		}
+		\subfigure[proposal-dropped image]{
+			\includegraphics[width=5cm]{image/ssdemo_less.png}
+		}
+		\caption{ssdemo}
+		\label{kFig3}
+	\end{figure}
+\end{center}
+\subsubsection{BOW}
+\label{sec:z-score}
+In this experiment, we used the BOW model to encode the descriptors extracted by selective search + pretrained RseNet, and set different clusters $k$ in $[8,16,32,64,128,256,512,1024]$. Besides, we normalized the feature vectors by z-score. After that, we fed encoded feature vectors into SVM for image classification and chose two different kernels of linear and rbf with the change of $C$.
+
+\begin{table}[htbp]
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.0}
+	\caption{Accuracy of Selective Search + pretrained RseNet features based on BOW(Z-Score) model}
+	\label{kbase1}%
+	\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c|c}
+		\hline
+		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+		\multicolumn{4}{c}{Selective Search + pretrained RseNet + BOW + SVM}\\
+		\cline{2-5}
+		& {C} & {linear kernel} & {C} & {rbf kernel}\\
+		\hline
+		8   & 0.001 & 0.0817 & 5 & 0.1080\\
+        8   & 0.005  & 0.1032 & 10 & 0.1036\\
+        \hline
+		16   & 0.001  & 0.1105 & 5.0 & 0.1386\\
+        16   & 0.005  & 0.1358 & 10 & 0.1299\\
+        \hline
+		32   & 0.001  & 0.1695 & 5.0 & 0.1847\\
+        32   & 0.005  & 0.1984 & 10 & 0.1718\\
+        \hline
+		64   & 0.001  & 0.2108 & 5.0 & 0.2117\\
+        64   & 0.005  & 0.2332 & 10 & 0.1977\\
+        \hline
+		128   & 0.001  & 0.2481 & 5.0 & 0.2424\\
+        128   & 0.005  & 0.2629 & 10 & 0.2322\\
+        \hline
+		256   & 0.001  & 0.2626 & 5.0 & \textbf{0.2574}\\
+        256   & 0.005  & 0.2734 & 10 & 0.2482\\
+        \hline
+		512   & 0.001  & 0.2586 & 5.0 & 0.2468\\
+        512   & 0.005  & \textbf{0.2642} & 10 & 0.2393\\
+        \hline
+		1024   & 0.001  & 0.2548 & 5.0 & 0.2376\\
+		1024   & 0.005  & 0.2561 & 10 & 0.2326\\
+		\hline
+	\end{tabular}
+\end{table}
+
+Our experiment results are shown in Tab. \ref{kbase1}. We can find that as k increases, the experimental results get better. We deem the reason is that when k is larger, the bag of words after codebook construction is larger, so the difference among the different types of images after feature encoding is also greater. From the results we can see BOW's performance is poor as its highest accuracy is only $0.2642$. It is obvious because when mapping, BOW uses the information of first level in codebook and information has been lost. Compared with SIFT method, we can find selective search + ResNet have poor performance, we deem the reason that We use pretrained ResNet rather than self-trained model.
+
+\subsubsection{VLAD}
+In this experiment, we used the VLAD model to encode the descriptors extracted by selective search + pretrained RseNet. The dimension of VLAD feature vector is $k*d$, where $k$ is the cluster number and $d$ is the dimension of each descriptor which equals 128. Because the feature dimension is too high, we use PCA for feature reduction. Besides, the experiments of VLAD consume time and computing resources, we can't set many different cluster numbers and large cluster numbers. So we only set $k$ in $[4,8]$ for experiments. After feature encoding and reduction, we fed encoded feature vectors into SVM for image classification and chose two different kernels of linear and rbf with the change of $C$.
+
+\begin{table}[htbp]
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.0}
+	\caption{Accuracy of Selective Search + pretrained RseNet features based on VLAD model after PCA}
+	\label{base3}%
+	\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c|c}
+		\hline
+		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+		\multicolumn{4}{c}{Selective Search + pretrained RseNet + VLAD + SVM + PCA}\\
+		\cline{2-5}
+		& {C} & {linear kernel} & {C} & {rbf kernel}\\
+		\hline
+		4   & 0.001  & 0.4805 & 5.0 & 0.0719\\
+        4   & 0.005  & \textbf{0.4864} & 10 & 0.0720\\
+        \hline
+		8   & 0.001 & 0.4281 & 5.0 & \textbf{0.1107}\\
+        8   & 0.005  & 0.4412 & 10 & 0.1098\\
+        \hline
+	\end{tabular}
+\end{table}
+
+Our experiment results are shown in Tab. \ref{kbase2}. We conclude rbf ones performs better than linear one because rbf depends on initial parameters sampling while model is complecated. Overall, VLAD performs better than BOW because it uses the residual of each descriptor with respect to its assigned cluster while BOW only involved simply counting the number of descriptors associated with each cluster in a codebook. And we can find in VLAD, selective search + learning-based method have better performance than SIFT one because the former maintains more complete local information of images.
+\subsubsection{Fisher Vector}
+\label{sec:FV}
+In this experiment, we used the FV model to encode the descriptors extracted by selective search + pretrained RseNet. The dimension of FV feature vector is $2*k*d$, where $k$ is the cluster number and $d$ is the dimension of each descriptor which equals 128. Because the feature dimension is too high, we use PCA for feature reduction like the VLAD experiment. Besides, the experiments of FV also consume time and computing resources, we can't set many different cluster numbers and large cluster numbers. So we only set $k$ in $[2,4]$ for experiments. After feature encoding and reduction, we fed encoded feature vectors into SVM for image classification and chose two different kernels of linear and rbf with the change of $C$.
+
+\begin{table}[htbp]
+	\centering
+	\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+	\renewcommand\arraystretch{1.0}
+	\caption{Accuracy of Selective Search + pretrained RseNet features based on FV model after PCA}
+	\label{kbase5}%
+	\begin{tabular}{@{}p{1cm}<{\centering}|c|c|c|c}
+		\hline
+		\multirow{2}{*}{\diagbox[height=2\line,width=1.42cm,font=\tiny]{$k$}{Acc.}{$\mathit{M}$}} &
+		\multicolumn{4}{c}{Selective Search + pretrained RseNet + FV + SVM + PCA}\\
+		\cline{2-5}
+		& {C} & {linear kernel} & {C} & {rbf kernel}\\
+		\hline
+		2   & 0.001 & 0.3147 & 5.0 & 0.1548\\
+        2   & 0.005  & 0.3440 & 10 & 0.1519\\
+		\hline
+		4   & 0.001  & 0.4637 & 5.0 & 0.0531\\
+        4   & 0.005  & \textbf{0.4674} & 10 & 0.0531\\
+		\hline
+	\end{tabular}
+\end{table}
+
+Our experiment results are shown in Tab. \ref{kbase5}. From the results we can find that FV performs better than BOW but worse than VLAD. This is because Fisher Vector encodes 2-order information but our pretrained model can't extract the exact feature from local proposals. Besides in general, as k increases, the experimental results get worse. We deem the reason is that when k is larger, feature vectors resulting from feature encoding contain more redundant information. As for why when using PCA to reduce dimensionality, linear kernel performs better than rbf kernel, we think the reason that rbf performs poor if model is too complicated to get initial parameter sampling.
+
+\section{Conclusion}
 
 \section{Futher discussion}
 \subsubsection{Impact of scale method on BOW experiment}
