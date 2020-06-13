@@ -1,12 +1,11 @@
 import pandas as pd
 import numpy as np
 
-PATH = 'Office-Home_resnet50/'
+PATH = '../Office-Home_resnet50/'
 
 def loadData(sourceName, targetName):
     '''
         Use to load source domain and target domain data from .csv file\n
-        Return value 'targetLabel' may be never used
     '''
     colName = [i for i in range(2048)]
     colName.append('label')
