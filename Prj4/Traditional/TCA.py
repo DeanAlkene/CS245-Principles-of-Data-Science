@@ -1,3 +1,4 @@
+#%env LOKY_PICKLER='cloudpickle'
 import sys
 sys.path.append('..')
 from utils import dataloader, SVM, TSNE
@@ -6,6 +7,7 @@ import scipy.linalg
 import sklearn.metrics
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
+import multiprocessing
 
 def kernel(ker, X1, X2, gamma):
     K = None
@@ -85,4 +87,5 @@ def runTCA():
                     f.write('%s->%s, kernel=%s, dim=%d, with acc=%f\n' % (p[0], p[1], k, n, score))
         print()
 if __name__ == '__main__':
+    multiprocessing.set_start_method('forkserver')
     runTCA()
