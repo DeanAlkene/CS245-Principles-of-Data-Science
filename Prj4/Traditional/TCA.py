@@ -86,6 +86,7 @@ def runTCA():
                 with open('TCA.txt', 'a') as f:
                     f.write('%s->%s, kernel=%s, dim=%d, with acc=%f\n' % (p[0], p[1], k, n, score))
         print()
+        
 if __name__ == '__main__':
     multiprocessing.set_start_method('forkserver')
     runTCA()
