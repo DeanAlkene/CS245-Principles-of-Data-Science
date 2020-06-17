@@ -57,3 +57,6 @@ Product->RealWorld, kernel=rbf, dim=32, with acc=0.706908
 Product->RealWorld, kernel=rbf, dim=64, with acc=0.727794
 Product->RealWorld, kernel=rbf, dim=128, with acc=0.732385
 Product->RealWorld, kernel=rbf, dim=256, with acc=0.732385
+Product->RealWorld, kernel=rbf, dim=512, with acc=0.731237
+Product->RealWorld, kernel=rbf, dim=1024, with acc=0.731696
+Product->RealWorld, kernel=rbf, dim=2048, with acc=0.731467

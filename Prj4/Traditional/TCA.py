@@ -70,8 +70,9 @@ def runTCA():
     #pairs = [('Art', 'RealWorld'), ('Clipart', 'RealWorld'), ('Product', 'RealWorld')]
     pairs = [('Product', 'RealWorld')]
     #kernels = ['primal', 'linear', 'rbf']
-    kernels = ['rbf']
-    dim_range = [32, 64, 128, 256, 512, 1024, 2048]
+    kernels = ['linear']
+    #dim_range = [32, 64, 128, 256, 512, 1024, 2048]
+    dim_range = [2048]
     for p in pairs:
         print("%s->%s" % (p[0], p[1]))
         X_train, y_train, X_test, y_test = dataloader.loadData(p[0], p[1])
@@ -84,7 +85,7 @@ def runTCA():
                 model = TCA(kernel_type=k, dim=n)
                 X_train_new, X_test_new = model.fit(X_train, X_test)
                 score = SVM.SVM(X_train_new, X_test_new, y_train, y_test)
-                TSNE.draw(X_train_new, X_test_new, p[0][0] + '_' + p[1][0] + '_TCA_' + k + '_' + str(n), p[0] + '->' + p[1])
+                #TSNE.draw(X_train_new, X_test_new, p[0][0] + '_' + p[1][0] + '_TCA_' + k + '_' + str(n), p[0] + '->' + p[1])
                 with open('TCA.txt', 'a') as f:
                     f.write('%s->%s, kernel=%s, dim=%d, with acc=%f\n' % (p[0], p[1], k, n, score))
         print()
