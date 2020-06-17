@@ -56,7 +56,7 @@ def runCORAL():
         X_train_new = model.fit(X_train, X_test)
         X_test_new = X_test
         score = SVM.SVM(X_train_new, X_test_new, y_train, y_test)
-        TSNE.draw(X_train, X_test, p[0][0] + '_' + p[1][0] + '_CORAL', p[0] + '->' + p[1])
+        TSNE.draw(X_train_new, X_test_new, p[0][0] + '_' + p[1][0] + '_CORAL', p[0] + '->' + p[1])
         with open('CORAL.txt', 'a') as f:
             f.write('%s->%s with acc=%f\n' % (p[0], p[1], score))
 
