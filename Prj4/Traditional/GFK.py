@@ -4,7 +4,6 @@ sys.path.append('..')
 from utils import dataloader, SVM, TSNE
 import numpy as np
 import scipy.io
-import bob.learn
 import bob.learn.linear
 import bob.math
 from sklearn.neighbors import KNeighborsClassifier
@@ -192,7 +191,7 @@ def runGFK():
         for n in dim_range:
             print("dim: %d" % (n))
             model = GFK(dim=n)
-            X_train_new, X_test_new = model.fit(X_train, X_test)
+            _, X_train_new, X_test_new = model.fit(X_train, X_test)
             score = SVM.SVM(X_train_new, X_test_new, y_train, y_test)
             TSNE.draw(X_train, X_test, p[0][0] + '_' + p[1][0] + '_GFK_' + str(n), p[0] + '->' + p[1])
             with open('GFK.txt', 'a') as f:

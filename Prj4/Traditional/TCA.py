@@ -67,8 +67,10 @@ class TCA:
         return Xs_new, Xt_new
 
 def runTCA():
-    pairs = [('Art', 'RealWorld'), ('Clipart', 'RealWorld'), ('Product', 'RealWorld')]
-    kernels = ['primal', 'linear', 'rbf']
+    #pairs = [('Art', 'RealWorld'), ('Clipart', 'RealWorld'), ('Product', 'RealWorld')]
+    pairs = [('Product', 'RealWorld')]
+    #kernels = ['primal', 'linear', 'rbf']
+    kernels = ['rbf']
     dim_range = [32, 64, 128, 256, 512, 1024, 2048]
     for p in pairs:
         print("%s->%s" % (p[0], p[1]))
