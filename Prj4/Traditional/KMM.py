@@ -7,6 +7,7 @@ import sklearn.metrics
 import matplotlib.pyplot as plt
 from cvxopt import matrix, solvers
 from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
 import multiprocessing
 
 def kernel(ker, X1, X2, gamma):
@@ -63,6 +64,7 @@ class KMM:
 def runKMM():
     pairs = [('Art', 'RealWorld'), ('Clipart', 'RealWorld'), ('Product', 'RealWorld')]
     kernels = ['linear', 'rbf']
+    params_dict = {'ARC': 10.0, 'ARK': 'rbf', 'CRC': 0.01, 'CRK': 'linear', 'PRC': 10.0, 'PRK': 'rbf'}
     for p in pairs:
         print("%s->%s" % (p[0], p[1]))
         X_train, y_train, X_test, y_test = dataloader.loadData(p[0], p[1])
@@ -73,14 +75,16 @@ def runKMM():
             print("kernel: %s" % (k))
             model = KMM(kernel_type=k)
             weight = model.fit(X_train, X_test)
-            plt.figure()
-            plt.plot(weight)
-            plt.title(p[0] + '->' + p[1])
-            plt.ylabel('weight')
-            plt.savefig(p[0][0] + '_' + p[1][0] + '_weight_' + k)
-            #score = SVM.SVM(X_train, X_test, y_train, y_test, weight)
-            #with open('KMM.txt', 'a') as f:
-            #    f.write('%s->%s, kernel=%s, with acc=%f\n' % (p[0], p[1], k, score))
+            # plt.figure()
+            # plt.plot(weight)
+            # plt.title(p[0] + '->' + p[1])
+            # plt.ylabel('weight')
+            # plt.savefig(p[0][0] + '_' + p[1][0] + '_weight_' + k)
+            clf = SVC(C=params_dict[p[0][0] + p[1][0] + 'C'], kernel=params_dict[p[0][0] + p[1][0] + 'K'])
+            clf.fit(X_train, y_train, weight.reshape(-1))
+            score = clf.score(X_test, y_test)
+            with open('KMM.txt', 'a') as f:
+               f.write('%s->%s, kernel=%s, with acc=%f\n' % (p[0], p[1], k, score))
         print()
 
 if __name__ == '__main__':
