@@ -181,7 +181,7 @@ class GFK:
 
 def runGFK():
     pairs = [('Art', 'RealWorld'), ('Clipart', 'RealWorld'), ('Product', 'RealWorld')]
-    dim_range = [32, 64, 128, 256, 512, 1024, 2048]
+    dim_range = [32, 64, 128, 256, 512, 1024]
     for p in pairs:
         print("%s->%s" % (p[0], p[1]))
         X_train, y_train, X_test, y_test = dataloader.loadData(p[0], p[1])

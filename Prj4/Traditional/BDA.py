@@ -120,7 +120,7 @@ class BDA:
             N = 0
             M0 = e * e.T * C
             if Y_tar_pseudo is not None and len(Y_tar_pseudo) == nt:
-                for c in range(1, C + 1):
+                for c in range(C):
                     e = np.zeros((n, 1))
                     Ns = len(Ys[np.where(Ys == c)])
                     Nt = len(Y_tar_pseudo[np.where(Y_tar_pseudo == c)])
