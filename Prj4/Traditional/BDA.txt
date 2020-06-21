@@ -1,7 +1,0 @@
-Art->RealWorld, kernel=primal, dim=32, with acc=0.709433
-Art->RealWorld, kernel=primal, dim=64, with acc=0.750516
-Art->RealWorld, kernel=primal, dim=128, with acc=0.757172
-Art->RealWorld, kernel=primal, dim=256, with acc=0.753500
-Art->RealWorld, kernel=primal, dim=512, with acc=0.754648
-Art->RealWorld, kernel=primal, dim=1024, with acc=0.754877
-Art->RealWorld, kernel=primal, dim=2048, with acc=0.755107
