@@ -107,13 +107,47 @@ Most traditional and deep learning migration algorithms are parametric methods, 
 	\begin{figure}[htbp]
 		\centering
 		\label{kFig1}
-		\includegraphics[width=7cm]{image/easyTL.png}
+		\includegraphics[width=8cm]{image/easyTL.png}
 		\caption{procedure of EasyTL\cite{Wang2019Easy}}
 	\end{figure}
 \end{center}
 
 
 \subsection{Deep Adaptation Network (DAN)}
+
+Recent research shows that deep neural networks can learn transferable features, which can be well extended to new fields to adapt to tasks. Deep Adaptation Network (DAN) use deep net to optimize the loss function and distribution distance in Regenerative Nuclear Hilbert Space (RKHS) \cite{Long2015Learning}.
+
+Denote $\mathcal{H}_{k}$ as the reproducing kernel Hilbert space (RKHS) endowed with a characteristic kernel $k$. The average embedding of the distribution $p$ in $\mathcal{H}_{k}$ is a unique element $k(p)$, making $\mathbf{E}_{\mathbf{x} \sim p} f(\mathbf{x})=\left\langle f( \mathbf{x}), \mu_{k}(p)\right\rangle_{\mathcal{H}_{k}}$ for all $f \in \mathcal{H}_{k}$. Define the MK-MMD $d_{k}(p, q)$between the probability distributions $p$ and $q$ as the average embedding distance RKHS of $p$ and $q$, and define the square formula of MK-MMD as
+
+$$
+d_{k}^{2}(p, q) \triangleq\left\|\mathbf{E}_{p}\left[\phi\left(\mathbf{x}^{s}\right)\right]-\mathbf{E}_{q}\left[\phi\left(\mathbf{x}^{t}\right)\right]\right\|_{\mathcal{H}_{k}}^{2}
+$$
+and the kernel defined by the multiple cores is
+$$
+\mathcal{K} \triangleq\left\{k=\sum_{u=1}^{m} \beta_{u} k_{u}: \sum_{u=1}^{m} \beta_{u}=1, \beta_{u} \geqslant 0, \forall u\right\}
+$$
+
+Global optimization goal consists of two parts: loss function and distribution distance. The loss function is used to measure the difference between the predicted value and the true value.
+
+DAN use adaptive method based on mk-mmd and CNNs to onercome that the target domain has no or only limited label information, so it is impossible to adapt CNN directly to the target domain through fine-tuning, or it is easy to overfit. Fig. \ref{kFig2} gives a description of the proposed DAN model.
+
+\begin{center}
+	\begin{figure}[htbp]
+		\centering
+		\label{kFig2}
+		\includegraphics[width=8cm]{image/DAN.png}
+		\caption{The DAN architecture for learning transferable features.Since deep features eventually transition from general to specific along the network, (1) the features extracted by convolutional layers conv1–conv3 are general, hence these layers are frozen, (2) the features extracted by layers conv4–conv5 are slightly less transferable, hence these layers are learned via fine-tuning, and (3) fully connected layers fc6–fc8 are tailored to fit specific tasks, hence they are not transferable and should be adapted with MK-MMD.\cite{Long2015Learning}}
+	\end{figure}
+\end{center}
+
+DAN fine-tuned the source of the labeled examples, requiring that under the hidden representation of the fully connected layers $f$ $c6$ $f$ $c8$, the distribution of the source and target becomes similar. This can be achieved by adding a multi-layer adaptive regularizer (1) based on mk-mmd to the risk (3) of CNN:
+
+$$
+\min _{\Theta} \frac{1}{n_{a}} \sum_{i=1}^{n_{a}} J\left(\theta\left(\mathbf{x}_{i}^{a}\right), y_{i}^{a}\right)+\lambda \sum_{\ell=l_{1}}^{l_{2}} d_{k}^{2}\left(\mathcal{D}_{s}^{\ell}, \mathcal{D}_{t}^{\ell}\right)
+$$
+
+
+where $\lambda > 0$ is a penalty parameter, $l_1$ and $l_2$ are layer indices between which the regularizer is effective.
 
 \section{Experiments}
 
