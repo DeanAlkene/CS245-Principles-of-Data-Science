@@ -59,33 +59,64 @@ Domain Adaptation, Transfer Learning
 In this project, we tried different unsupervised domain adaptation methods on the Office-Home dataset, which contains 65 categories of things from 4 domains. The four domains are Art, Clipart, Product and Real-World. There are two parts in this section. Firstly, we will introduce several traditional transfer learning
 methods we used in our project, including KMM, CORAL, GFK TCA and EasyTL. Then we will introduce deep transfer learning method DAN to compare with the traditional transfer learning methods.
 
-\subsection{Traditional Transfer Learning Methods}
-
-\subsubsection{Transfer Component Analysis (TCA)}
+\subsection{Transfer Component Analysis (TCA)}
 
 
+For domain adaptation, Transfer Component Analysis (TCA) \cite{Sinno2011Domain} tries to learn some transfer components across domains in a Reproducing Kernel Hilbert Space (RKHS) using Maximum Mean Discrepancy (MMD). It minimizes the distance between domain distributions by projecting data onto the learned transfer components.
 
-\subsubsection{Easy Transfer Learning (EasyTL)}
+The basic assumption of TCA is 
+$$P\left(X_{s}\right) \neq P\left(X_{t}\right)$$
+where $X_{s}$ denotes source domain data and $P\left(X_{s}\right)$ denotes its marginal distributions, $X_{t}$ denotes target domain data and $P\left(X_{t}\right)$ denotes its marginal distributions. The motivation of TCA is to find a map $\Phi$ which could preserve the most data properties after projection, which means obtain the most variance, i.e.
+$$P\left(\phi\left(\mathbf{x}_{s}\right)\right) \approx P\left(\phi\left(\mathbf{x}_{t}\right)\right)$$
+or we can find conditional distribution of the two will also be similar as:
+$$
+\left.\left.P\left(y_{s} \mid \phi\left(\mathbf{x}_{s}\right)\right)\right) \approx P\left(y_{t} \mid \phi\left(\mathbf{x}_{t}\right)\right)\right)
+$$
+We ccan give the maximum mean discrepancy (MMD) formula as:
+$$
+M M D(X, Y)=\left\|\frac{1}{n_{1}} \sum_{i=1}^{n_{1}} \Phi\left(x_{i}\right)-\frac{1}{n_{2}} \sum_{j=1}^{n_{2}} \Phi\left(y_{j}\right)\right\|^{2}
+$$
+where $n_1$, $n_2$ are the number of instances of the two domains. Then by changing the solution of this function to the solution of the kernel function, we can get: 
+$$
+\operatorname{Dist}\left(X_{S}^{\prime}, X_{T}^{\prime}\right)=\operatorname{tr}(K L)
+$$
+where
+$$
+K=\left[\begin{array}{ll}
+K_{S, S} & K_{S, T} \\
+K_{T, S} & K_{T, T}
+\end{array}\right] \in \mathbb{R}^{\left(n_{1}+n_{2}\right) \times\left(n_{1}+n_{2}\right)}
+$$,
+then, Q Yang\cite{Sinno2011Domain} decomposed $K$ to transfer this problem to:
+$$
+\left\{\begin{array}{l}
+\min t r\left(W^{T} K L K W\right)+\mu t r\left(W^{T} W\right) \\
+\text { s.t. } W^{T} K H K W=I_{m}
+\end{array}\right.
+$$
+Finally, we can get the solution $W*$ as the $m$ leading eigenvectors of
+$$
+(K L K+\mu I)^{-1} K H K
+$$
 
-\subsection{Deep Transfer Learning Methods}
+\subsection{Easy Transfer Learning (EasyTL)}
 
-\subsubsection{Deep Adaptation Network (DAN)}
+
+\subsection{Deep Adaptation Network (DAN)}
 
 \section{Experiments}
 
 In this part, we will show the experimental results and comparative analysis of the results through two types of traditional transfer learning methods and deep transfer learning methods.
 
-\subsection{Traditional Transfer Learning Methods}
 
-\subsubsection{Transfer Component Analysis (TCA)}
-
+\subsection{Transfer Component Analysis (TCA)}
 
 
-\subsubsection{Easy Transfer Learning (EasyTL)}
 
-\subsection{Deep Transfer Learning Methods}
+\subsection{Easy Transfer Learning (EasyTL)}
 
-\subsubsection{Deep Adaptation Network (DAN)}
+
+\subsection{Deep Adaptation Network (DAN)}
 
 \section{Conclusion}
 
