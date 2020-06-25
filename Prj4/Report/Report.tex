@@ -394,10 +394,6 @@ From the results we can see that the dimension of geodesic flow kernel will affe
 	\end{figure}
 \end{center}
 
-\subsubsection{Transfer Component Analysis (TCA)}
-
-In this experiment, we test TCA method on kernels amount $[primal, linear, rbf]$, and various aim dimension in $[32,64,128,256,512,1024,2048]$, and different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. \ref{kbase1} . To figure out why TCA can have better performance, we plot the source domain data and target domain data in the same figure. Here, we can see the data distribution of case A-R, C-R and P-R in Fig. \ref{kFig3}.
-
 \begin{table}[htbp]
 \caption{Accuracy of TCA-based Method}
 \label{kbase1}%
@@ -415,11 +411,17 @@ Kn   & primal          & linear         & rbf           & primal           & lin
 \end{tabular}
 \end{table}
 
+\subsubsection{Transfer Component Analysis (TCA)}
+
+In this experiment, we test TCA method on kernels amount $[primal, linear, rbf]$, and various aim dimension in $[32,64,128,256,512,1024,2048]$, and different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. \ref{kbase1} . To figure out why TCA can have better performance, we plot the source domain data and target domain data in the same figure. Here, we can see the data distribution of case A-R, C-R and P-R in Fig. \ref{kFig3}.
+
 Unlike the sample-based transfer learning method like KMM, TCA is a
 feature-based transfer learning method. As we can see from Fig. \ref{kFig3}, after using TCA, the area where the source domain data distribution coincides with the target domain data distribution is larger. And it's clear that TCA has different degrees of improvement for the accuracy of the three cases (A-R, C-R, P-R) and TCA performance is better than KMM performance.
 
 
 \subsubsection{Easy Transfer Learning (EasyTL)}
+
+In the previous experiments, we find that the model performs good need extensive parameter tuing and a large mount of time to fix or train. With regard to Easy Transfer Learning (EasyTL), it's proved to maintain good performance while avoiding extensive parameter tuning. According to previous related work, there are four kinds of methods for Intra-domain alignment, they are RAW(do not use Intra-domain alignment), PCA, CORAL, GFK. We test Raw and Coral in this experiment.
 
 In this experiment, we test EasyTL method on intra\_align amount $[raw, coral]$, and various dist metrics in $[euclidean,ma,cosine,rbf]$, and different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. \ref{tab:ETL}. 
 
@@ -481,7 +483,7 @@ In this experiment, we test EasyTL method on intra\_align amount $[raw, coral]$,
 \end{tabular}\label{tab:ETL}
 \end{table}
 
-We can find with ma and rbf distance metrics the EasyTL performs poor, and we deem the reason that EasyTL can't performs well with complicated model like rbf. And we can find with coral intra\_align, EasyTL performs better than raw one.
+We can find with ma and rbf distance metrics the EasyTL performs poor, and we deem the reason that EasyTL can't performs well with complicated model like rbf. And we can find with coral intra\_align, EasyTL performs better than raw one. Compared with othor methods in our work, we can find EasyTL have relatively better performance while cost less time, we deem the reason that EasyTL obtains the softmax probability (floating point weight) through linear programming. In this way, EasyTL not only considers the relationship between the sample and the center, but also considers the relationship with other samples.
 
 \begin{center}
 	\begin{figure}
@@ -517,7 +519,7 @@ We can find with ma and rbf distance metrics the EasyTL performs poor, and we de
 
 \subsubsection{Deep Adaptation Network (DAN)}
 
-In this experiment, we test DAN method via different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. \ref{tab9} . To figure out The loss and accuracy of the training process, we can see them in Fig. \ref{kFig4} and Fig. \ref{kFig5}.
+In this experiment, we test DAN method via different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. \ref{tab9} . To figure out The loss and accuracy of the training process, we can see them in Fig. \ref{kFig4} and Fig. \ref{kFig5}. 
 
 \begin{table}[H]
 	\centering
@@ -534,6 +536,8 @@ In this experiment, we test DAN method via different domain transfer tasks in [A
 		\hline
 	\end{tabular}\label{tab9}
 \end{table}
+
+We know that with regard to DAN, global optimization goal consists of two parts: loss function and distribution distance. The loss function is used to measure the difference between the predicted value and the true value. Therefore every iteration makes the distribution between source domain and target domain closer. We can see it in the iteration acuracy tendency, but it's time-consuming and for some case, it performs poor due to the interval between two aim domain.
 
 
 \section{Conclusion}
