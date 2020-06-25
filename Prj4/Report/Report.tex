@@ -18,6 +18,7 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage{float}
 \usepackage{xcolor}
 \usepackage{indentfirst}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -59,8 +60,45 @@ Domain Adaptation, Transfer Learning
 In this project, we tried different unsupervised domain adaptation methods on the Office-Home dataset, which contains 65 categories of things from 4 domains. The four domains are Art, Clipart, Product and Real-World. There are two parts in this section. Firstly, we will introduce several traditional transfer learning
 methods we used in our project, including KMM, CORAL, GFK TCA and EasyTL. Then we will introduce deep transfer learning method DAN to compare with the traditional transfer learning methods.
 
-\subsection{Transfer Component Analysis (TCA)}
+\subsection{Traditional Transfer Learning Methods}
+\subsubsection{Kernel Mean Matching (KMM)}
+Huang et al. proposed Kernel Mean Matching\cite{gretton2009covariate} to estimate the probability density of data samples. The ultimate goal is to weight the samples to make the probability distribution of sourch domain and target domain closer. The core of the method is the measurement of the difference in the distribution of the two areas. Specifically, the weighted data of the two areas is mapped into the RKHS, and the difference between the average values of the samples in each area is obtained. This distribution measurement method is called the maximum mean difference. After learning the weights of samples with similar distributions, standard machine learning algorithms can be trained and predicted. For example, using SVM:
+\begin{equation}
+step1: \min\limits_{\beta_i}\left\|\frac{1}{n_s}\sum_{i=1}^{n_s}\beta_{i}\phi(x_i^s)-\frac{1}{n_t}\sum_{i=1}^{n_t}\phi(x_i^t)\right\|^2
+\end{equation}
+\begin{equation}
+step2: \min\limits_{w,b,\xi_i}\frac{1}{2}\left\|w\right\|^2+C\sum_i\beta_i\xi_i
+\end{equation}
+\begin{equation}
+s.t. y_i(w^T\phi(x_i)+b)\ge 1-\xi_i, \xi_i\ge 0, \forall i
+\end{equation}
+\subsubsection{CORrelation ALignment (CORAL)}
+The goal of CORAL is to minimize the second-order distance between source domain and target domain, that is, covariance. \par
+The main formula is as follows:
+\begin{equation}
+\min_A\left\|\widehat{C_s}-C_t\right\|^2_F=\min_A\left\|A^TC_sA-C_t\right\|^2_F
+\end{equation}
+\begin{equation}
+C_s = U_s\Sigma_sU_s^T,C_t = U_t\Sigma_tU_t^T
+\end{equation}\par
+The optimal solution:
+\begin{equation} A^*=U_s\Sigma_s^{-\frac{1}{2}}U_s^TU_t[1:r]\Sigma_t[1:r]^{\frac{1}{2}}U_t[1:r]^T
+\end{equation}
+\begin{equation}
+r = min(rank(C_s),rank(C_t))
+\end{equation}
+\subsubsection{Geodesic Flow Kernel (GFK)}
+Geodestic Flow Kernel's\cite{gong2012geodesic} main idea based on the Domain Adaption method of geodetic flow cores (preferably displayed in color). They embed the source data set and the target data set into the Glassman manifold. Then, they construct a flow between two points of the geodesic line and integrate the infinite flow $\Phi(t)$ in the subspace. Specifically, the original features are projected into these subspaces to form an infinite dimensional feature vector $z_h$. The inner product between these feature vectors defines a kernel function that can be calculated in a closed form on the original feature space. The kernel encapsulates incremental changes between subspaces, and these changes are the basis for the differences and commonalities between the two domains. Therefore, the learning algorithm uses this kernel to derive a low-dimensional representation of domain invariance.
+The main idea is shown in fig .\ref{fig:gfk}.
+\begin{center}
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=5cm]{img/gfk.png}
+		\caption{}
+	\end{figure}\label{fig:gfk}
+\end{center}
 
+\subsubsection{Transfer Component Analysis (TCA)}
 
 For domain adaptation, Transfer Component Analysis (TCA) \cite{Sinno2011Domain} tries to learn some transfer components across domains in a Reproducing Kernel Hilbert Space (RKHS) using Maximum Mean Discrepancy (MMD). It minimizes the distance between domain distributions by projecting data onto the learned transfer components.
 
@@ -99,7 +137,7 @@ $$
 (K L K+\mu I)^{-1} K H K
 $$
 
-\subsection{Easy Transfer Learning (EasyTL)}
+\subsubsection{Easy Transfer Learning (EasyTL)}
 
 Most traditional and deep learning migration algorithms are parametric methods, which require a lot of time and money to train those hyperparameters. In order to overcome these drawbacks, Easy Transfer Learning (EasyTL) \cite{Wang2019Easy} learns non-parametric transfer features through intra-domain alignment, and learns transmission classification through intra-domain programming. EasyTL can also improve the performance of existing TL methods through in-domain programming as the final classifier, the procedure of EasyTL can be shown in Fig. \ref{kFig1}. 
 
@@ -112,8 +150,9 @@ Most traditional and deep learning migration algorithms are parametric methods, 
 	\end{figure}
 \end{center}
 
+\subsection{Deep Transfer Learning Methods}
 
-\subsection{Deep Adaptation Network (DAN)}
+\subsubsection{Deep Adaptation Network (DAN)}
 
 Recent research shows that deep neural networks can learn transferable features, which can be well extended to new fields to adapt to tasks. Deep Adaptation Network (DAN) use deep net to optimize the loss function and distribution distance in Regenerative Nuclear Hilbert Space (RKHS) \cite{Long2015Learning}.
 
@@ -154,26 +193,175 @@ where $\lambda > 0$ is a penalty parameter, $l_1$ and $l_2$ are layer indices be
 In this part, we will show the experimental results and comparative analysis of the results through two types of traditional transfer learning methods and deep transfer learning methods.
 
 
-\subsection{Transfer Component Analysis (TCA)}
-
-In this experiment, we test TCA method on kernels amount $[primal, linear, rbf]$, and various aim dimension in $[32,64,128,256,512,1024,2048]$, and different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. . To figure out why TCA can have better performance, we plot the source domain data and target domain data in the same figure. Here, we can see the data distribution of case A-R, C-R and P-R in Fig. \ref{kFig3}.
+\subsection{Baseline}
+Before using transfer learning methods, we applied linear SVM and rbf kernel SVM directly and used the results as baseline of this experiment. Besides, we used $GridSearchCV$ to find the optimal value of parameters. The results are shown in Table .\ref{tab:base}. And we visualize the source domain and target domain, the result is shown in the fig. \ref{fig:base}.
 
 \begin{table}[htbp]
-\caption{Accuracy of STFT features based on BOW(Z-Score) model}
-\label{base1}%
-\begin{tabular}{@{}p{1cm}<{\centering}|l|l|l|l|l|l|l|l|l|l|}
-\hline
-\multirow{2}{*}{} & \multicolumn{3}{l|}{Art-\textgreater{}RealWorld} & \multicolumn{3}{l|}{Clipart-\textgreater{}RealWorld} & \multicolumn{3}{l|}{Product-\textgreater{}RealWorld} \\ \cline{2-10} 
-                  &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
-32                &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
-64                &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
-128               &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
-256               &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
-512               &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
-1024              &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
-2048              &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
-\end{tabular}
+	\centering
+	\caption{the result of baseline}
+\begin{tabular}{|l|c|c|c|}
+	\hline
+	\diagbox{dataset}{result} & accuracy & C & kernel \\
+	\hline
+	Art->RealWorld & 0.7484  & 10.0 & rbf \\
+	\hline
+	Clipart->RealWorld & 0.6577 & 0.01 & linear \\
+	\hline
+	Product->RealWorld & 0.7294 & 10.0 & rbf \\
+	\hline
+\end{tabular}\label{tab:base}
 \end{table}
+
+\begin{center}
+	\begin{figure}[htbp]
+		\centering
+		\subfigure[A->RealWorld]{
+			\includegraphics[width=2.3cm]{img/A_R_baseline.png}
+		}
+		\quad
+		\subfigure[C->RealWorld]{
+			\includegraphics[width=2.3cm]{img/C_R_baseline.png}
+		}
+		\quad
+		\subfigure[P->RealWorld]{
+			\includegraphics[width=2.3cm]{img/P_R_baseline.png}
+		}
+		\caption{baseline}
+		\label{fig:base}
+	\end{figure}
+\end{center}
+
+\subsection{Traditional Transfer Learning Methods}
+\subsubsection{KMM}
+In this experiment, we used the KMM method to assign different weights on source domain samples in order to make the probability distribution of the weighted source and target domains as close as possible. And our experiment results are shown in Table \ref{tab:kmm}.\par
+From the results, we can see that rbf and linear KMM perform similarly, and there is almost no improvement compared to baseline. So we visualized the result of KMM for Art-Realworld in fig .\ref{fig:kmm}.We speculate that the reason why the experimental performance has hardly improved is that the weights given by KMM to most samples are similar, which may not help to narrow the sample distribution of the source domain and target domain. In addition, the sample distribution of the source domain and target domain is not particularly different, and may be one of the reasons.
+\begin{table}[H]
+	\centering
+	\caption{the result of KMM}
+	\begin{tabular}{|l|c|c|}
+		\hline
+		\diagbox{dataset}{result} & accuracy  & kernel \\
+		\hline
+		Art->RealWorld & \textbf{0.7528} & linear \\
+		\hline
+		Clipart->RealWorld & 0.6518 & linear \\
+		\hline
+		Product->RealWorld & 0.7296 & linear \\
+		\hline
+		Art->RealWorld & \textbf{0.7528}  & rbf \\
+		\hline
+		Clipart->RealWorld & 0.6513 & rbf \\
+		\hline
+		Product->RealWorld & 0.7294 & rbf \\
+		\hline
+	\end{tabular}\label{tab:kmm}
+\end{table}
+
+\begin{center}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=5cm]{img/A_R_weight_rbf.png}
+		\caption{Samlpe weights of Art-Realword of RBF}
+	\end{figure}\label{fig:kmm}
+\end{center}
+
+\subsubsection{CORAL}
+In this experiment, we used the CORAL method to minimize the second-order distance between source domain and target domain. And our experiment results are shown in Table \ref{tab:CORAL}.\par
+From the results we can see that only the experiment results of Product-Realworld are slightly better than the baseline. We visualize the source domain processed by the CORAL method and compare it with the baseline. We can't find that the obvious data distribution is getting closer. We speculate that the reason CORAL is not performing well is that it is not suitable for no-deep models.
+\begin{table}[H]
+	\centering
+	\caption{the result of CORAL}
+\begin{tabular}{|l|c|}
+	\hline
+	\diagbox{dataset}{result} & accuracy \\
+	\hline
+	Art->RealWorld & 0.7381 \\
+	\hline
+	Clipart->RealWorld & 0.6513 \\
+	\hline
+	Product->RealWorld & 0.7369 \\
+	\hline
+\end{tabular}\label{tab:CORAL}
+\end{table}
+
+\begin{center}
+	\begin{figure}[H]
+		\centering
+		\subfigure[baseline]{
+			\includegraphics[width=3cm]{img/P_R_baseline.png}
+		}
+		\quad
+		\subfigure[CORAL]{
+			\includegraphics[width=3cm]{img/P_R_CORAL.png}
+		}
+		\caption{baseline and CORAL for Product-Realworld}
+		\label{fig:CORAL}
+	\end{figure}
+\end{center}
+
+\subsubsection{GFK}
+In this experiment we changed the dimension of geodesic flow kernel for comparative experiment. The experimental results are shown in the Table \ref{tab:GFK}.\par
+From the results we can see that the dimension of geodesic flow kernel will affect the experiment, and the optimal dimension in this project is 128, that is, the source domain and target domain can maintain maximum consistency in the 128-dimensional subspace.For the three data sets, GFK's experimental results have improved compared to the baseline. We visualize the source domain and target domain after GFK processing, and compare with the baseline, as shown in the Fig .\ref{fig:GFK}. We can find that GFK makes the sample distribution of source domain and target domain indeed closer.
+\begin{table}[H]
+	\centering
+	\caption{the result of GFK}
+	\begin{tabular}{|l|c|c|}
+		\hline
+		\diagbox{dataset}{result} & accuracy & dimension \\
+		\hline
+		Art->RealWorld & 0.7190 & \multirow{3}*{32}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6336 & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7117 &\\
+		\hline
+		Art->RealWorld & 0.7456 & \multirow{3}*{64}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6561 & \\
+		\cline{1-2}
+		Product->RealWorld & \textbf{0.7335} &\\
+		\hline
+		Art->RealWorld & \textbf{0.7537} & \multirow{3}*{128}\\
+		\cline{1-2}
+		Clipart->RealWorld & \textbf{0.6598} & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7310 &\\
+		\hline
+		Art->RealWorld & 0.7482 & \multirow{3}*{256}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6566 & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7300 &\\
+		\hline
+		Art->RealWorld & 0.7475 & \multirow{3}*{512}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6575 & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7284 &\\
+		\hline
+		Art->RealWorld & 0.7475 & \multirow{3}*{1024}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6580 & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7296 &\\
+		\hline
+	\end{tabular}\label{tab:GFK}
+\end{table}
+
+\begin{center}
+	\begin{figure}[H]
+		\centering
+		\subfigure[baseline]{
+			\includegraphics[width=3cm]{img/A_R_baseline.png}
+		}
+		\quad
+		\subfigure[GFK(128)]{
+			\includegraphics[width=3cm]{img/A_R_GFK_128.png}
+		}
+		\caption{baseline and GFK for Art-Realworld}
+		\label{fig:GFK}
+	\end{figure}
+\end{center}
 
 \begin{center}
 	\begin{figure}
@@ -206,13 +394,150 @@ In this experiment, we test TCA method on kernels amount $[primal, linear, rbf]$
 	\end{figure}
 \end{center}
 
-\subsection{Easy Transfer Learning (EasyTL)}
+\subsubsection{Transfer Component Analysis (TCA)}
+
+In this experiment, we test TCA method on kernels amount $[primal, linear, rbf]$, and various aim dimension in $[32,64,128,256,512,1024,2048]$, and different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. \ref{kbase1} . To figure out why TCA can have better performance, we plot the source domain data and target domain data in the same figure. Here, we can see the data distribution of case A-R, C-R and P-R in Fig. \ref{kFig3}.
+
+\begin{table}[htbp]
+\caption{Accuracy of TCA-based Method}
+\label{kbase1}%
+\begin{tabular}{@{}p{0.3cm}<{\centering}|l|l|l|l|l|l|l|l|l|l|}
+\hline
+Task & \multicolumn{3}{l|}{Art-\textgreater{}RealWorld} & \multicolumn{3}{l|}{Clipart-\textgreater{}RealWorld} & \multicolumn{3}{l|}{Product-\textgreater{}RealWorld} \\ \hline
+Kn   & primal          & linear         & rbf           & primal           & linear           & rbf            & primal           & linear           & rbf            \\ \hline
+32       & 71.59           & 69.82          & 70.74         & 64.45            & 62.61            & 63.44          & 71.29            & 69.34            & 70.69          \\ \hline
+64       & 75.28           & 72.89          & 73.74         & 65.92            & 63.71            & 65.32          & 73.35            & 71.33            & 72.78          \\ \hline
+128      & 75.49           & 73.28          & 74.27         & 65.32            & 63.78            & 65.27          & 73.67            & 71.56            & 73.24          \\ \hline
+256      & 75.74           & 73.40          & 74.18         & 66.12            & 63.85            & 65.23          & 73.63            & 71.70            & 73.24          \\ \hline
+512      & 75.58           & 73.40          & 74.27         & 66.12            & 63.81            & 65.25          & 73.56            & 71.70            & 73.12          \\ \hline
+1024     & 75.53           & 73.40          & 74.23         & 66.10            & 63.81            & 65.25          & 73.63            & 71.70            & 73.16          \\ \hline
+2048     & 75.60           & 73.40          & 74.27         & 66.08            & 63.81            & 65.25          & 73.65            & 71.70            & 73.14          \\ \hline
+\end{tabular}
+\end{table}
+
+Unlike the sample-based transfer learning method like KMM, TCA is a
+feature-based transfer learning method. As we can see from Fig. \ref{kFig3}, after using TCA, the area where the source domain data distribution coincides with the target domain data distribution is larger. And it's clear that TCA has different degrees of improvement for the accuracy of the three cases (A-R, C-R, P-R) and TCA performance is better than KMM performance.
 
 
-\subsection{Deep Adaptation Network (DAN)}
+\subsubsection{Easy Transfer Learning (EasyTL)}
+
+In this experiment, we test EasyTL method on intra\_align amount $[raw, coral]$, and various dist metrics in $[euclidean,ma,cosine,rbf]$, and different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. \ref{tab:ETL}. 
+
+\begin{table}[htbp]
+	\centering
+	\caption{the result of EasyTL}
+\begin{tabular}{|l|c|c|c|}
+	\hline
+	\diagbox{dataset}{result} & accuracy & dist & intra\_align \\
+	\hline
+	Art->RealWorld & 0.7448  & euclidean & raw \\
+	\hline
+	Art->RealWorld & 0.7565  & euclidean & coral \\
+	\hline
+	Art->RealWorld & 0.0592  & ma & raw \\
+	\hline
+	Art->RealWorld & 0.0566  & ma & coral \\
+	\hline
+	Art->RealWorld & 0.7372  & cosine & raw \\
+	\hline
+	Art->RealWorld & 0.7539  & cosine & coral \\
+	\hline
+	Art->RealWorld & 0.0153  & rbf & raw \\
+	\hline
+	Art->RealWorld & 0.0153  & rbf & coral \\
+	\hline
+	Clipart->RealWorld & 0.6520 & euclidean & raw \\
+	\hline
+	Clipart->RealWorld & 0.6768 & euclidean & coral \\
+	\hline
+	Clipart->RealWorld & 0.0433 & ma & raw \\
+	\hline
+	Clipart->RealWorld & 0.0527 & ma & coral \\
+	\hline
+	Clipart->RealWorld & 0.6628 & cosine & raw \\
+	\hline
+	Clipart->RealWorld & 0.6823 & cosine & coral \\
+	\hline
+	Clipart->RealWorld & 0.0146 & rbf & raw \\
+	\hline
+	Clipart->RealWorld & 0.0146 & rbf & coral \\
+	\hline
+	Product->RealWorld & 0.7378 & euclidean & raw \\
+	\hline
+	Product->RealWorld & 0.7514 & euclidean & coral \\
+	\hline
+	Product->RealWorld & 0.0658 & ma & raw \\
+	\hline
+	Product->RealWorld & 0.0530 & ma & coral \\
+	\hline
+	Product->RealWorld & 0.7376 & cosine & raw \\
+	\hline
+	Product->RealWorld & 0.7502 & cosine & coral \\
+	\hline
+	Product->RealWorld & 0.0174 & rbf & raw \\
+	\hline
+	Product->RealWorld & 0.0174 & rbf & coral \\
+	\hline
+\end{tabular}\label{tab:ETL}
+\end{table}
+
+We can find with ma and rbf distance metrics the EasyTL performs poor, and we deem the reason that EasyTL can't performs well with complicated model like rbf. And we can find with coral intra\_align, EasyTL performs better than raw one.
+
+\begin{center}
+	\begin{figure}
+		\centering
+		\subfigure[A-R loss via DAN]{
+			\includegraphics[width=2.2cm]{image/ARLoss.png}
+		}
+		\quad
+		\subfigure[P-R loss via DAN]{
+			\includegraphics[width=2.2cm]{image/ARLoss.png}
+		}
+		\quad
+		\subfigure[C-R loss via DAN]{
+			\includegraphics[width=2.2cm]{image/CRLoss.png}
+		}
+		\caption{Loss tendency in DAN}
+		\label{kFig4}
+	\end{figure}
+\end{center}
+
+\begin{center}
+	\begin{figure}
+		\centering
+		\subfigure[Accuracy comprison via DAN]{
+			\includegraphics[width=8cm]{image/Acc.png}
+		}
+		\caption{Accuracy tendency in DAN}
+		\label{kFig5}
+	\end{figure}
+\end{center}
+
+\subsection{Deep Transfer Learning Methods}
+
+\subsubsection{Deep Adaptation Network (DAN)}
+
+In this experiment, we test DAN method via different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. \ref{tab9} . To figure out The loss and accuracy of the training process, we can see them in Fig. \ref{kFig4} and Fig. \ref{kFig5}.
+
+\begin{table}[H]
+	\centering
+	\caption{the result of KMM}
+	\begin{tabular}{|l|c|}
+		\hline
+		\diagbox{dataset}{result} & accuracy(\%) \\
+		\hline
+		Art->RealWorld & 75.63\\
+		\hline
+		Clipart->RealWorld & 67.68 \\
+		\hline
+		Product->RealWorld & 75.14 \\
+		\hline
+	\end{tabular}\label{tab9}
+\end{table}
+
 
 \section{Conclusion}
+In this project, we try totally 6 methods about transfer learning. We can find deep network method DAN achieves best performance and hardly affected by the initial parameters settings. TCA is fast and gives a not bad result. compared with above, EasyTL is a good choice because it can achieve a very good performance without extensive parameters tuning and a lot of training time.
 
-\cite{lowe1999object}
 \bibliography{Prj4}
 \end{document}
