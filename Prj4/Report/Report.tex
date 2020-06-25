@@ -150,6 +150,20 @@ Most traditional and deep learning migration algorithms are parametric methods, 
 	\end{figure}
 \end{center}
 
+Instead of learning $\mathbf{y}^{t}$ directly, Easy Transfer Learning algorithm focuses on learning the probability annotation matrix $\mathbf{M}$. In this way, the cost function can be formalized as:
+$$
+\mathcal{J}=\sum_{j}^{n_{t}} \sum_{c}^{C} D_{c j} M_{c j}
+$$
+where the distance value $D_{c j}$ is an entry in a distance matrix
+D. $D_{c j}$ denotes the distance between $\mathbf{x}_{j}^{t}$ and the $c$ -th class center of the source domain $\Omega_{s}^{(c)}$.
+
+We can use constrains optimazition to get the softmax function, which give the label estimation value:
+$$
+y_{j}^{t}=\underset{r}{\arg \max } \frac{M_{r j}}{\sum_{c}^{C} M_{c j}} \text { for } r \in\{1, \cdots, C\}
+$$
+
+It is noticeable that this classifier does not involve any param- eters to tune explicitly. This is significantly different from well-established classifiers such as SVM that needs to tune numerous hyperparameters. In fact, intra-domain programming can be used alone for TL problems.
+
 \subsection{Deep Transfer Learning Methods}
 
 \subsubsection{Deep Adaptation Network (DAN)}
@@ -483,7 +497,7 @@ In this experiment, we test EasyTL method on intra\_align amount $[raw, coral]$,
 \end{tabular}\label{tab:ETL}
 \end{table}
 
-We can find with ma and rbf distance metrics the EasyTL performs poor, and we deem the reason that EasyTL can't performs well with complicated model like rbf. And we can find with coral intra\_align, EasyTL performs better than raw one. Compared with othor methods in our work, we can find EasyTL have relatively better performance while cost less time, we deem the reason that EasyTL obtains the softmax probability (floating point weight) through linear programming. In this way, EasyTL not only considers the relationship between the sample and the center, but also considers the relationship with other samples.
+We can find with ma and rbf distance metrics the EasyTL performs poor, and we deem the reason that EasyTL can't performs well with complicated model like rbf. And we can find with coral intra\_align, EasyTL performs better than raw one. Compared with othor methods in our work, we can find EasyTL have relatively better performance while cost less time, we deem the reason that EasyTL obtains the softmax probability (floating point weight) through linear programming. In this way, EasyTL not only considers the relationship between the sample and the center, but also considers the relationship with other samples. 
 
 \begin{center}
 	\begin{figure}
