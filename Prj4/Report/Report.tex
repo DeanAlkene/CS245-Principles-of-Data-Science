@@ -73,7 +73,7 @@ step2: \min\limits_{w,b,\xi_i}\frac{1}{2}\left\|w\right\|^2+C\sum_i\beta_i\xi_i
 s.t. y_i(w^T\phi(x_i)+b)\ge 1-\xi_i, \xi_i\ge 0, \forall i
 \end{equation}
 \subsubsection{CORrelation ALignment (CORAL)}
-The goal of CORAL is to minimize the second-order distance between source domain and target domain, that is, covariance. \par
+The goal of CORAL is to minimize the second-order distance between source domain and target domain, that is, covariance. It linearly transforms the second-order statistics of source distribution and target distribution. Although it is very simple, it works well for unsupervised areas. However, it relies on linear transformation, not end-to-end: it needs to first extract features, apply the transformation, and then train the SVM classifier in a separate step.\par
 The main formula is as follows:
 \begin{equation}
 \min_A\left\|\widehat{C_s}-C_t\right\|^2_F=\min_A\left\|A^TC_sA-C_t\right\|^2_F
