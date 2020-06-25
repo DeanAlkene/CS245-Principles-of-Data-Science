@@ -156,7 +156,55 @@ In this part, we will show the experimental results and comparative analysis of 
 
 \subsection{Transfer Component Analysis (TCA)}
 
+In this experiment, we test TCA method on kernels amount $[primal, linear, rbf]$, and various aim dimension in $[32,64,128,256,512,1024,2048]$, and different domain transfer tasks in [Art->RealWorld, Clipart->RealWorld, Product->RealWorld]. We can show our experimental results in Tab. . To figure out why TCA can have better performance, we plot the source domain data and target domain data in the same figure. Here, we can see the data distribution of case A-R, C-R and P-R in Fig. \ref{kFig3}.
 
+\begin{table}[htbp]
+\caption{Accuracy of STFT features based on BOW(Z-Score) model}
+\label{base1}%
+\begin{tabular}{@{}p{1cm}<{\centering}|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\multirow{2}{*}{} & \multicolumn{3}{l|}{Art-\textgreater{}RealWorld} & \multicolumn{3}{l|}{Clipart-\textgreater{}RealWorld} & \multicolumn{3}{l|}{Product-\textgreater{}RealWorld} \\ \cline{2-10} 
+                  &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
+32                &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
+64                &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
+128               &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
+256               &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
+512               &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
+1024              &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
+2048              &                &                &                &                  &                 &                 &                  &                 &                 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{center}
+	\begin{figure}
+		\centering
+		\subfigure[Art, RealWorld distribution before TCA]{
+			\includegraphics[width=3.5cm]{image/A_R_baseline.png}
+		}
+		\quad
+		\subfigure[Art, RealWorld distribution after TCA]{
+			\includegraphics[width=3.5cm]{image/A_R_TCA_primal_256.png}
+		}
+		\quad
+		\subfigure[Clipart, RealWorld distribution after TCA]{
+			\includegraphics[width=3.5cm]{image/C_R_baseline.png}
+		}
+		\quad
+		\subfigure[Clipart, RealWorld distribution after TCA]{
+			\includegraphics[width=3.5cm]{image/C_R_TCA_primal_256.png}
+		}
+		\quad
+		\subfigure[Product, RealWorld distribution after TCA]{
+			\includegraphics[width=3.5cm]{image/P_R_baseline.png}
+		}
+		\quad
+		\subfigure[Product, RealWorld distribution after TCA]{
+			\includegraphics[width=3.5cm]{image/P_R_TCA_primal_128.png}
+		}
+		\caption{TCA and baselines}
+		\label{kFig3}
+	\end{figure}
+\end{center}
 
 \subsection{Easy Transfer Learning (EasyTL)}
 
