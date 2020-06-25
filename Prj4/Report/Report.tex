@@ -89,7 +89,19 @@ r = min(rank(C_s),rank(C_t))
 \end{equation}
 \subsubsection{Geodesic Flow Kernel (GFK)}
 Geodestic Flow Kernel's\cite{gong2012geodesic} main idea based on the Domain Adaption method of geodetic flow cores (preferably displayed in color). They embed the source data set and the target data set into the Glassman manifold. Then, they construct a flow between two points of the geodesic line and integrate the infinite flow $\Phi(t)$ in the subspace. Specifically, the original features are projected into these subspaces to form an infinite dimensional feature vector $z_h$. The inner product between these feature vectors defines a kernel function that can be calculated in a closed form on the original feature space. The kernel encapsulates incremental changes between subspaces, and these changes are the basis for the differences and commonalities between the two domains. Therefore, the learning algorithm uses this kernel to derive a low-dimensional representation of domain invariance.
-The main idea is shown in fig .\ref{fig:gfk}.
+The main idea is shown in fig .\ref{fig:gfk}. And the approach consists of the following steps:
+\begin{enumerate}
+	\item Determinetheoptimaldimensionalityofthesubspaces to embed domains. 
+	\item  Construct the geodesic curve. Let $P_S,P_T$ denote the two sets of basis of the subsapces for the source and target domains.
+	\begin{equation}
+	\Phi(t)=P_{S} U_{1} \Gamma(t)-R_{S} U_{2} \Sigma(t)
+	\end{equation}
+	\begin{equation}\boldsymbol{P}_{\mathcal{S}}^{\mathrm{T}} \boldsymbol{P}_{\mathcal{T}}=\boldsymbol{U}_{1} \boldsymbol{\Gamma} \boldsymbol{V}^{\mathrm{T}}, \quad \boldsymbol{R}_{\mathcal{S}}^{\mathrm{T}} \boldsymbol{P}_{\mathcal{T}}=-\boldsymbol{U}_{2} \boldsymbol{\Sigma} \boldsymbol{V}^{\mathrm{T}}
+	\end{equation}
+	\item Compute the geodesic ﬂow kernel.
+	\begin{equation}\left\langle z_{i}^{\infty}, z_{j}^{\infty}\right\rangle=\int_{0}^{1}\left(\Phi(t)^{\mathrm{T}} x_{i}\right)^{\mathrm{T}}\left(\Phi(t)^{\mathrm{T}} x_{j}\right) d t=x_{i}^{\mathrm{T}} G x_{j}\end{equation}
+	\item Use the kernel to construct a classiﬁer with labeled data. 
+\end{enumerate}
 \begin{center}
 	\begin{figure}[htbp]
 		\centering
