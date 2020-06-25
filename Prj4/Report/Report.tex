@@ -18,6 +18,7 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage{float}
 \usepackage{xcolor}
 \usepackage{indentfirst}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -149,10 +150,230 @@ $$
 
 where $\lambda > 0$ is a penalty parameter, $l_1$ and $l_2$ are layer indices between which the regularizer is effective.
 
+\subsection{Traditional Transfer Learning Methods}
+\subsubsection{Kernel Mean Matching (KMM)}
+Huang et al. proposed Kernel Mean Matching\cite{gretton2009covariate} to estimate the probability density of data samples. The ultimate goal is to weight the samples to make the probability distribution of sourch domain and target domain closer. The core of the method is the measurement of the difference in the distribution of the two areas. Specifically, the weighted data of the two areas is mapped into the RKHS, and the difference between the average values of the samples in each area is obtained. This distribution measurement method is called the maximum mean difference. After learning the weights of samples with similar distributions, standard machine learning algorithms can be trained and predicted. For example, using SVM:
+\begin{equation}
+step1: \min\limits_{\beta_i}\left\|\frac{1}{n_s}\sum_{i=1}^{n_s}\beta_{i}\phi(x_i^s)-\frac{1}{n_t}\sum_{i=1}^{n_t}\phi(x_i^t)\right\|^2
+\end{equation}
+\begin{equation}
+step2: \min\limits_{w,b,\xi_i}\frac{1}{2}\left\|w\right\|^2+C\sum_i\beta_i\xi_i
+\end{equation}
+\begin{equation}
+s.t. y_i(w^T\phi(x_i)+b)\ge 1-\xi_i, \xi_i\ge 0, \forall i
+\end{equation}
+\subsubsection{CORrelation ALignment (CORAL)}
+The goal of CORAL is to minimize the second-order distance between source domain and target domain, that is, covariance. \par
+The main formula is as follows:
+\begin{equation}
+\min_A\left\|\widehat{C_s}-C_t\right\|^2_F=\min_A\left\|A^TC_sA-C_t\right\|^2_F
+\end{equation}
+\begin{equation}
+C_s = U_s\Sigma_sU_s^T,C_t = U_t\Sigma_tU_t^T
+\end{equation}\par
+The optimal solution:
+\begin{equation} A^*=U_s\Sigma_s^{-\frac{1}{2}}U_s^TU_t[1:r]\Sigma_t[1:r]^{\frac{1}{2}}U_t[1:r]^T
+\end{equation}
+\begin{equation}
+r = min(rank(C_s),rank(C_t))
+\end{equation}
+\subsubsection{Geodesic Flow Kernel (GFK)}
+Geodestic Flow Kernel's\cite{gong2012geodesic} main idea based on the Domain Adaption method of geodetic flow cores (preferably displayed in color). They embed the source data set and the target data set into the Glassman manifold. Then, they construct a flow between two points of the geodesic line and integrate the infinite flow Φ(t) in the subspace. Specifically, the original features are projected into these subspaces to form an infinite dimensional feature vector $z_h$. The inner product between these feature vectors defines a kernel function that can be calculated in a closed form on the original feature space. The kernel encapsulates incremental changes between subspaces, and these changes are the basis for the differences and commonalities between the two domains. Therefore, the learning algorithm uses this kernel to derive a low-dimensional representation of domain invariance.
+The main idea is shown in fig .\ref{fig:gfk}.
+\begin{center}
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=5cm]{img/gfk.png}
+		\caption{}
+	\end{figure}\label{fig:gfk}
+\end{center}
+
+\subsubsection{Transfer Component Analysis (TCA)}
+
+
+
+\subsubsection{Easy Transfer Learning (EasyTL)}
+
+\subsection{Deep Transfer Learning Methods}
+
+\subsubsection{Deep Adaptation Network (DAN)}
+>>>>>>> Stashed changes
+
 \section{Experiments}
 
 In this part, we will show the experimental results and comparative analysis of the results through two types of traditional transfer learning methods and deep transfer learning methods.
 
+
+\subsection{Baseline}
+Before using transfer learning methods, we applied linear SVM and rbf kernel SVM directly and used the results as baseline of this experiment. Besides, we used $GridSearchCV$ to find the optimal value of parameters. The results are shown in Table .\ref{tab:base}. And we visualize the source domain and target domain, the result is shown in the fig. \ref{fig:base}.
+
+\begin{table}[htbp]
+	\centering
+	\caption{the result of baseline}
+\begin{tabular}{|l|c|c|c|}
+	\hline
+	\diagbox{dataset}{result} & accuracy & C & kernel \\
+	\hline
+	Art->RealWorld & 0.7484  & 10.0 & rbf \\
+	\hline
+	Clipart->RealWorld & 0.6577 & 0.01 & linear \\
+	\hline
+	Product->RealWorld & 0.7294 & 10.0 & rbf \\
+	\hline
+\end{tabular}\label{tab:base}
+\end{table}
+
+\begin{center}
+	\begin{figure}[htbp]
+		\centering
+		\subfigure[A->RealWorld]{
+			\includegraphics[width=2.3cm]{img/A_R_baseline.png}
+		}
+		\quad
+		\subfigure[C->RealWorld]{
+			\includegraphics[width=2.3cm]{img/C_R_baseline.png}
+		}
+		\quad
+		\subfigure[P->RealWorld]{
+			\includegraphics[width=2.3cm]{img/P_R_baseline.png}
+		}
+		\caption{baseline}
+		\label{fig:base}
+	\end{figure}
+\end{center}
+
+\subsection{Traditional Transfer Learning Methods}
+\subsubsection{KMM}
+In this experiment, we used the KMM method to assign different weights on source domain samples in order to make the probability distribution of the weighted source and target domains as close as possible. And our experiment results are shown in Table \ref{tab:kmm}.\par
+From the results, we can see that rbf and linear KMM perform similarly, and there is almost no improvement compared to baseline. So we visualized the result of KMM for Art-Realworld in fig .\ref{fig:kmm}.We speculate that the reason why the experimental performance has hardly improved is that the weights given by KMM to most samples are similar, which may not help to narrow the sample distribution of the source domain and target domain. In addition, the sample distribution of the source domain and target domain is not particularly different, and may be one of the reasons.
+\begin{table}[H]
+	\centering
+	\caption{the result of KMM}
+	\begin{tabular}{|l|c|c|}
+		\hline
+		\diagbox{dataset}{result} & accuracy  & kernel \\
+		\hline
+		Art->RealWorld & \textbf{0.7528} & linear \\
+		\hline
+		Clipart->RealWorld & 0.6518 & linear \\
+		\hline
+		Product->RealWorld & 0.7296 & linear \\
+		\hline
+		Art->RealWorld & \textbf{0.7528}  & rbf \\
+		\hline
+		Clipart->RealWorld & 0.6513 & rbf \\
+		\hline
+		Product->RealWorld & 0.7294 & rbf \\
+		\hline
+	\end{tabular}\label{tab:kmm}
+\end{table}
+
+\begin{center}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=5cm]{img/A_R_weight_rbf.png}
+		\caption{Samlpe weights of Art-Realword of RBF}
+	\end{figure}\label{fig:kmm}
+\end{center}
+
+\subsubsection{CORAL}
+In this experiment, we used the CORAL method to minimize the second-order distance between source domain and target domain. And our experiment results are shown in Table \ref{tab:CORAL}.\par
+From the results we can see that only the experiment results of Product-Realworld are slightly better than the baseline. We visualize the source domain processed by the CORAL method and compare it with the baseline. We can't find that the obvious data distribution is getting closer. We speculate that the reason CORAL is not performing well is that it is not suitable for no-deep models.
+\begin{table}[H]
+	\centering
+	\caption{the result of CORAL}
+\begin{tabular}{|l|c|}
+	\hline
+	\diagbox{dataset}{result} & accuracy \\
+	\hline
+	Art->RealWorld & 0.7381 \\
+	\hline
+	Clipart->RealWorld & 0.6513 \\
+	\hline
+	Product->RealWorld & 0.7369 \\
+	\hline
+\end{tabular}\label{tab:CORAL}
+\end{table}
+
+\begin{center}
+	\begin{figure}[H]
+		\centering
+		\subfigure[baseline]{
+			\includegraphics[width=3cm]{img/P_R_baseline.png}
+		}
+		\quad
+		\subfigure[CORAL]{
+			\includegraphics[width=3cm]{img/P_R_CORAL.png}
+		}
+		\caption{baseline and CORAL for Product-Realworld}
+		\label{fig:CORAL}
+	\end{figure}
+\end{center}
+
+\subsubsection{GFK}
+In this experiment we changed the dimension of geodesic flow kernel for comparative experiment. The experimental results are shown in the Table \ref{tab:GFK}.\par
+From the results we can see that the dimension of geodesic flow kernel will affect the experiment, and the optimal dimension in this project is 128, that is, the source domain and target domain can maintain maximum consistency in the 128-dimensional subspace.For the three data sets, GFK's experimental results have improved compared to the baseline. We visualize the source domain and target domain after GFK processing, and compare with the baseline, as shown in the Fig .\ref{fig:GFK}. We can find that GFK makes the sample distribution of source domain and target domain indeed closer.
+\begin{table}[H]
+	\centering
+	\caption{the result of GFK}
+	\begin{tabular}{|l|c|c|}
+		\hline
+		\diagbox{dataset}{result} & accuracy & dimension \\
+		\hline
+		Art->RealWorld & 0.7190 & \multirow{3}*{32}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6336 & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7117 &\\
+		\hline
+		Art->RealWorld & 0.7456 & \multirow{3}*{64}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6561 & \\
+		\cline{1-2}
+		Product->RealWorld & \textbf{0.7335} &\\
+		\hline
+		Art->RealWorld & \textbf{0.7537} & \multirow{3}*{128}\\
+		\cline{1-2}
+		Clipart->RealWorld & \textbf{0.6598} & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7310 &\\
+		\hline
+		Art->RealWorld & 0.7482 & \multirow{3}*{256}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6566 & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7300 &\\
+		\hline
+		Art->RealWorld & 0.7475 & \multirow{3}*{512}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6575 & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7284 &\\
+		\hline
+		Art->RealWorld & 0.7475 & \multirow{3}*{1024}\\
+		\cline{1-2}
+		Clipart->RealWorld & 0.6580 & \\
+		\cline{1-2}
+		Product->RealWorld & 0.7296 &\\
+		\hline
+	\end{tabular}\label{tab:GFK}
+\end{table}
+
+\begin{center}
+	\begin{figure}[H]
+		\centering
+		\subfigure[baseline]{
+			\includegraphics[width=3cm]{img/A_R_baseline.png}
+		}
+		\quad
+		\subfigure[GFK(128)]{
+			\includegraphics[width=3cm]{img/A_R_GFK_128.png}
+		}
+		\caption{baseline and GFK for Art-Realworld}
+		\label{fig:GFK}
+	\end{figure}
+\end{center}
+>>>>>>> Stashed changes
 
 \subsection{Transfer Component Analysis (TCA)}
 
