@@ -267,7 +267,7 @@ From the results, we can see that rbf and linear KMM perform similarly, and ther
 
 \subsubsection{CORAL}
 In this experiment, we used the CORAL method to minimize the second-order distance between source domain and target domain. And our experiment results are shown in Table \ref{tab:CORAL}.\par
-From the results we can see that only the experiment results of Product-Realworld are slightly better than the baseline. We visualize the source domain processed by the CORAL method and compare it with the baseline. We can't find that the obvious data distribution is getting closer. We speculate that the reason CORAL is not performing well is that it is not suitable for no-deep models.
+From the results we can see that only the experiment results of Product-Realworld are slightly better than the baseline. We visualize the source domain processed by the CORAL method and compare it with the baseline. We can't find that the obvious data distribution is getting closer. We speculate that the reason CORAL is not performing well is that it is not suitable for no-deep models. In addition, we checked the dataset and found that there are few pictures in some categories, which may lead to insufficient training of the model and affect the accuracy of the test. Hoffman J and others proposed the deep CORAL method based on CORAL\cite{tzeng2017adversarial}, which uses the CORAL loss function for neural network training, which greatly improves the experimental results. Unfortunately, due to limited computing resources, we did not use this method for experiment.
 \begin{table}[H]
 	\centering
 	\caption{the result of CORAL}
@@ -301,7 +301,7 @@ From the results we can see that only the experiment results of Product-Realworl
 
 \subsubsection{GFK}
 In this experiment we changed the dimension of geodesic flow kernel for comparative experiment. The experimental results are shown in the Table \ref{tab:GFK}.\par
-From the results we can see that the dimension of geodesic flow kernel will affect the experiment, and the optimal dimension in this project is 128, that is, the source domain and target domain can maintain maximum consistency in the 128-dimensional subspace.For the three data sets, GFK's experimental results have improved compared to the baseline. We visualize the source domain and target domain after GFK processing, and compare with the baseline, as shown in the Fig .\ref{fig:GFK}. We can find that GFK makes the sample distribution of source domain and target domain indeed closer.
+From the results we can see that the dimension of geodesic flow kernel will affect the experiment, and the optimal dimension in this project is 128, that is, the source domain and target domain can maintain maximum consistency in the 128-dimensional subspace. We speculate that when d is too small, the subspace cannot maintain the variance of the source domain to construct a good classifier. But when d is too large, the two subspaces start to appear in orthogonal directions, which will destroy the experimental results. For the three data sets, GFK's experimental results have improved compared to the baseline. We visualize the source domain and target domain after GFK processing, and compare with the baseline, as shown in the Fig .\ref{fig:GFK}. We can find that GFK makes the sample distribution of source domain and target domain indeed closer.
 \begin{table}[H]
 	\centering
 	\caption{the result of GFK}
